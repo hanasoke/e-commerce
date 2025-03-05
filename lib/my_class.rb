@@ -1,5 +1,20 @@
+require 'mysql2'
+
 class MyClass
-  def self.hanas
-    "Hanas Bayu Pratama, B.Sc"
+  def initialize
+    @client = Mysql2::Client.new(
+      host: 'localhost',
+      username: 'root',
+      password: '',
+      database: 'e-commerce',
+      port: 3319
+    )
   end
-end
+
+  def fetch_data
+    results = @client.query("SELECT * FROM sellers")
+    results.each do |row|
+      puts row 
+    end 
+  end 
+end 
