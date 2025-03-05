@@ -1,3 +1,4 @@
+require 'rspec'
 require 'mysql2'
 require_relative '../lib/my_class'
 
