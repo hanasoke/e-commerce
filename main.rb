@@ -30,8 +30,18 @@ def current_profile
 end 
 
 # Routes 
+
+# Login
 get '/' do 
     @errors = []
     $title = 'Login'
     erb :'sign/login', layout: :'layouts/sign/template'
 end 
+
+# Register 
+get '/register' do 
+    @errors = []
+    @title = "Register Dashboard"
+    erb :'sign/register', layout: :'layouts/sign/template'
+end 
+
