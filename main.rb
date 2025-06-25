@@ -83,7 +83,7 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     # validate email 
     email_errors = validate_email(email)
     errors.concat(email_errors)
-    
+
     errors
 end 
 
@@ -109,7 +109,13 @@ get '/register' do
     erb :'sign/register', layout: :'layouts/sign/template'
 end 
 
-post '/register' do 
-    # Validate inputs 
-    @errors = validate_user(params[:name], params[:username], params[:email], params[:password], params[:])
+# post '/register' do 
+#     # Validate inputs 
+#     @errors = validate_user(params[:name], params[:username], params[:email], params[:password], params[:])
+# end 
+
+get '/reset_password' do 
+    @errors = []
+    @title = "Reset Password"
+    erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
