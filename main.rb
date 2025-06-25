@@ -11,11 +11,11 @@ require 'write_xlsx'
 require 'stringio'
 
 enable :sessions 
-register Sinatra::flash
+register Sinatra::Flash
 
 # Allow access from any IP 
 
-set :bind, '128.0.0.2'
+set :bind, '127.0.0.4'
 
 # Different server port
 set :port, 4002
@@ -31,4 +31,7 @@ end
 
 # Routes 
 get '/' do 
-    $title = ''
+    @errors = []
+    $title = 'Login'
+    erb :'sign/login', layout: :'layouts/sign/template'
+end 

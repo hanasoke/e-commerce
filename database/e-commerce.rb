@@ -1,11 +1,11 @@
 require 'sqlite3'
 
-DB = SQLite3::Database.new('e-commerce.db')
+DB = SQLite3::Database.new('e_commerce.db')
 DB.results_as_hash = true
 
 # Profiles Table 
 DB.execute <<-SQL 
-    CREATE TABLE IF NOT EXISTS e-commerce (
+    CREATE TABLE IF NOT EXISTS users (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE,
         username TEXT UNIQUE,
@@ -14,8 +14,8 @@ DB.execute <<-SQL
         birthdate TEXT,
         address TEXT,
         phone INT,
-        photo TEXT
-        reset_token TEXT
+        photo TEXT,
+        reset_token TEXT,
         access INTEGER
     );
 SQL
