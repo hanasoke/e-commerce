@@ -6,43 +6,53 @@
 
         <div class="card-body">
             <form>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 mb-md-0">
-                            <input class="form-control" id="first_name" type="text" placeholder="Enter your first name" />
-                            <label for="first_name">First name</label>
-                            <div class="text-danger text-alert">Cannot Be Null</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
-                            <label for="inputLastName">Last name</label>
-                            <div class="text-danger text-alert">Cannot Be Null</div>
-                        </div>
-                    </div>
+                <div class="col col-md-12 mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                    <div class="text-danger text-alert">Error Message</div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                    <label for="inputEmail">Email address</label>
-                    <div class="text-danger text-alert">Cannot Be Null</div>
+                
+                <div class="col col-md-12 mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="username" class="form-control" id="username" name="username">
+                    <div class="text-danger text-alert">Error Message</div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 mb-md-0">
-                            <input class="form-control" id="inputPassword" type="password" placeholder="Create a password" />
-                            <label for="inputPassword">Password</label>
-                            <div class="text-danger text-alert">Cannot Be Null</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 mb-md-0">
-                            <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" />
-                            <label for="inputPasswordConfirm">Confirm Password</label>
-                            <div class="text-danger text-alert">Cannot Be Null</div>
-                        </div>
-                    </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                    <div class="text-danger text-alert">Error Message</div>
                 </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                    <div class="text-danger text-alert">Error Message</div>
+                </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="birthdate" class="form-label">Birthdate</label>
+                    <input type="date" class="form-control" id="birthdate" name="birthdate">
+                    <div class="text-danger text-alert">Error Message</div>
+                </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" rows="3"></textarea>
+                    <div class="text-danger text-alert">Error Message</div>
+                </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="number" class="form-control" id="phone" name="phone" min="0">
+                    <div class="text-danger text-alert">Error Message</div>
+                </div>
+
+                <div class="col col-md-12 mb-3">
+                    <label for="photo" class="form-label">Photo</label>
+                    <input class="form-control" type="file" id="photo">
+                </div>
+
                 <div class="mt-4 mb-0">
                     <div class="d-grid"><a class="btn btn-primary btn-block" href="/">Create Account</a></div>
                 </div>
