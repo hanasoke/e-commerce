@@ -34,7 +34,7 @@ end
 # Login
 get '/' do 
     @errors = []
-    $title = 'Login'
+    @title = 'Login'
     erb :'sign/login', layout: :'layouts/sign/template'
 end 
 
