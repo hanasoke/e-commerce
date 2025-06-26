@@ -5,6 +5,15 @@
         </div>
         
         <div class="card-body">
+
+            <% if session[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= session[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session[:success] = nil %>
+            <% end %>
+
             <form action="/login" method="post">
                 <div class="form-floating mb-3">
                     <input class="form-control" id="email" name="email" type="email" placeholder="Input Your Email" />
