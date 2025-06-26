@@ -137,6 +137,28 @@ get '/login' do
     erb :'sign/login', layout: :'layouts/sign/template'
 end 
 
+post '/login' do 
+    @errors = []
+    email = params[:email].to_s.strip 
+    password = params[:password]
+
+    # Find user by email 
+    user = DB.get_first_row("SELECT * FROM users WHERE LOWER(email) = ?", [email.downcase])
+
+    if user && BCrypt::Password.new(user['password']) == password
+
+        # Successful login
+        session[:user_id] = user['user_id']
+        session[:success] = "Login successful."
+        redirect '/'
+    else 
+        # Failed login 
+        @errors << "Invalid email or password."
+        @title = 'Login'
+        erb :'sign/login', layout: :'layouts/sign/template'
+    end 
+end 
+
 # Register 
 get '/register' do 
     @errors = []
