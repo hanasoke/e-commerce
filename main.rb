@@ -87,7 +87,35 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
+def validate_photo(photo)
+    errors = []
 
+    # Check if the photo parameter is valid and has expected structure
+    if photo.nil? || !photo.is_a?(Hash) || photo[:tempfile].nil?
+        errors << 'Photo is required.'
+    else 
+        # Check file type
+        valid_types = ["image/jpeg", "image/png", "image/gif"]
+        if !photo[:type] || !valid_types.include?(photo[:type])
+            errors << "Photo must be a JPG, PNG, or GIF file."
+        end 
+
+        # Check file sizee (5MB max, 40KB min)
+        max_size = 4 * 1024 * 1024 # 4MB in bytes
+        min_size = 40 * 1024       # 40KB in bytes
+        file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
+
+        if file_size.nil? 
+            errors << "Photo file size could not be determined."
+        elsif file_size > max_size 
+            errors << "Photo size must be less than 4MB."
+        elsif file_size < min_size 
+            errors << "Photo size must be greater than 40KB."
+        end 
+    end 
+
+    errors 
+end 
 
 before do 
 
@@ -109,10 +137,48 @@ get '/register' do
     erb :'sign/register', layout: :'layouts/sign/template'
 end 
 
-# post '/register' do 
-#     # Validate inputs 
-#     @errors = validate_user(params[:name], params[:username], params[:email], params[:password], params[:])
-# end 
+post '/register' do 
+    # Validate inputs 
+    @errors = validate_user(params[:name], params[:username], params[:email], params[:password], params[:birthdate], params[:address], params[:phone], params[:access])
+
+    # Flash message
+    session[:success] = "Your Account has been registered."
+
+    photo = params['photo']
+    @errors += validate_photo(photo) if photo # Add photo validation errors 
+
+    photo_filename = nil 
+
+    if @errors.empty?
+        # Handle photo upload
+        if photo && photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}",
+            File.open("./public/uploads/#{photo_filename}", 'wb') do |f|
+                f.write(photo[:tempfile].read)
+            end
+        end 
+
+        name = params[:name]
+        username = params[:username]
+        email = params[:email]
+        password = BCrypt::Password.create(params[:password])
+        birthdate = params[:birthdate]
+        address = params[:address]
+        phone = params[:phone]
+        access = params[:access]
+
+        begin
+            DB.execute("INSERT INTO users (name, username, email, password, birthdate, address, phone, photo, access) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", [name, username, email, password, birthdate, address, phone, photo_filename, access])
+
+            redirect '/'
+        
+        rescue SQLite3::ConstraintException
+            @errors << "Username already exists"
+        end 
+
+    end 
+    erb :'sign/login', layout: :'layouts/sign/template'
+end 
 
 get '/reset_password' do 
     @errors = []
