@@ -19,17 +19,8 @@ set :bind, '127.0.0.4'
 # Different server port
 set :port, 4002
 
-# Helper methods
-def logged_in?
-    session[:user_id] != nil 
-end 
-
-def current_profile 
-    @current_profile ||= DB.execute("SELECT * FROM users WHERE user_id = ?", [session[:user_id]]).first if logged_in?
-end 
-
 # validate email 
-def validate_email(email)
+def validate_email(email, user_id = nil)
     errors = []
 
     # Regular expression for email validation
@@ -42,11 +33,13 @@ def validate_email(email)
         # check if email matches the regular expression
         errors << "Email format is invalid"
     else 
-        #Check for Email fields 
-        query = user_id ? "SELECT user_id FROM users WHERE LOWER (email) = ? AND user_id != ?" : "SELECT user_id FROM users WHERE LOWER(email) = ?"
-
-        existing_email = DB.execute(query, id ? [email.downcase, id] : [email.downcase]).first
-        errors << "Email already exist. Please choose a different name." if existing_email
+        if user_id 
+            query = "SELECT user_id FROM users WHERE LOWER(email) = ? AND user_id != ?"
+            existing_email = DB.get_first_row(query, [email.downcase, user_id])
+        else 
+            query = "SELECT user_id FROM users WHERE LOWER(email) = ?"
+            existing_email = DB.get_first_row(query, [email.downcase])
+        end 
     end 
 
     errors
@@ -81,7 +74,7 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     end
 
     # validate email 
-    email_errors = validate_email(email)
+    email_errors = validate_email(email, user_id)
     errors.concat(email_errors)
 
     errors
@@ -119,7 +112,7 @@ end
 
 before do 
 
-end 
+end  
 
 # Routes 
 
@@ -137,76 +130,80 @@ get '/login' do
     erb :'sign/login', layout: :'layouts/sign/template'
 end 
 
-post '/login' do 
+post '/login' do
     @errors = []
-    email = params[:email].to_s.strip 
+    email = params[:email].to_s.strip
     password = params[:password]
-
-    # Find user by email 
+  
+    # Find user by email
     user = DB.get_first_row("SELECT * FROM users WHERE LOWER(email) = ?", [email.downcase])
-
+  
     if user && BCrypt::Password.new(user['password']) == password
-
         # Successful login
         session[:user_id] = user['user_id']
         session[:success] = "Login successful."
         redirect '/'
-    else 
-        # Failed login 
+    else
+        # Failed login
         @errors << "Invalid email or password."
         @title = 'Login'
         erb :'sign/login', layout: :'layouts/sign/template'
-    end 
-end 
+    end
+end
+  
 
 # Register 
 get '/register' do 
     @errors = []
-    @title = "Register Dashboard"
+    @title = "Register"
     erb :'sign/register', layout: :'layouts/sign/template'
 end 
 
 post '/register' do 
-    # Validate inputs 
-    @errors = validate_user(params[:name], params[:username], params[:email], params[:password], params[:birthdate], params[:address], params[:phone], params[:access])
+    name = params[:name]
+    username = params[:username]
+    email = params[:email]
+    password = params[:password]
+    birthdate = params[:birthdate]
+    address = params[:address]
+    phone = params[:phone]
+    access = params[:access]
+    photo = params[:photo]
 
-    # Flash message
-    session[:success] = "Your Account has been registered."
+    # Validate user input 
+    @errors = validate_user(name, username, email, password, birthdate, address, phone, access)
 
-    photo = params['photo']
-    @errors += validate_photo(photo) if photo # Add photo validation errors 
+    # Validate photo 
+    @errors += validate_photo(photo)
 
-    photo_filename = nil 
-
+    # If no errors, process registration 
     if @errors.empty?
-        # Handle photo upload
-        if photo && photo[:tempfile]
-            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}",
-            File.open("./public/uploads/#{photo_filename}", 'wb') do |f|
-                f.write(photo[:tempfile].read)
-            end
+        photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+        photo_path = "./public/uploads/users/#{photo_filename}"
+
+        # Save photo to public/uploads/
+        File.open(photo_path, 'wb') do |f|
+            f.write(photo[:tempfile].read)
         end 
 
-        name = params[:name]
-        username = params[:username]
-        email = params[:email]
-        password = BCrypt::Password.create(params[:password])
-        birthdate = params[:birthdate]
-        address = params[:address]
-        phone = params[:phone]
-        access = params[:access]
+        begin 
+            hashed_password = BCrypt::Password.create(password)
 
-        begin
-            DB.execute("INSERT INTO users (name, username, email, password, birthdate, address, phone, photo, access) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", [name, username, email, password, birthdate, address, phone, photo_filename, access])
+            DB.execute(
+                "INSERT INTO users (name, username, email, password, birthdate, address, phone, photo, access) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [name, username, email, hashed_password, birthdate, address, phone, photo_filename, access]
+            )
 
-            redirect '/'
+            session[:success] = "Account successfully created. Please login."
+            redirect '/login'
         
-        rescue SQLite3::ConstraintException
-            @errors << "Username already exists"
+        rescue SQLite3::ConstraintException => e 
+            @errors << "Account creation failed: #{e.message}"
         end 
-
     end 
-    erb :'sign/login', layout: :'layouts/sign/template'
+
+    @title = "Register"
+    erb :'sign/register', layout: :'layouts/sign/template'
 end 
 
 get '/reset_password' do 
