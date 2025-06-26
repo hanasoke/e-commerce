@@ -53,7 +53,7 @@ def validate_email(email)
 end 
 
 # validate user 
-def validate_user(name, username, email, password, birthdate, address, phone, access, id = nil)
+def validate_user(name, username, email, password, birthdate, address, phone, access, user_id = nil)
     errors = []
 
     # name validation
@@ -123,8 +123,15 @@ end
 
 # Routes 
 
-# Login
+# Homepage 
 get '/' do 
+    @errors = []
+    @title = 'HomePage'
+    erb :'user/index', layout: :'layouts/user/template'
+end 
+
+# Login
+get '/login' do 
     @errors = []
     @title = 'Login'
     erb :'sign/login', layout: :'layouts/sign/template'
