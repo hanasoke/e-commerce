@@ -19,19 +19,16 @@
                 <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<%= params[:name]%>" >
-                    <div class="text-danger text-alert">Error Message</div>
                 </div>
                 
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="username" class="form-label">Username</label>
                         <input type="username" class="form-control" id="username" name="username" placeholder="Username" value="<%= params[:username]%>" >
-                        <div class="text-danger text-alert">Error Message</div>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>">
-                        <div class="text-danger text-alert">Error Message</div>
                     </div>
                 </div>
 
@@ -39,12 +36,10 @@
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="number" class="form-control" id="phone" name="phone" min="0" value="<%= params[:phone]%>" >
-                        <div class="text-danger text-alert">Error Message</div>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" value="<%= params[:email]%>" >
-                        <div class="text-danger text-alert">Error Message</div>
                     </div>
                 </div>
 
@@ -52,7 +47,6 @@
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="birthdate" class="form-label">Birthdate</label>
                         <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= params[:birthdate]%>" >
-                        <div class="text-danger text-alert">Error Message</div>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="photo" class="form-label">Photo</label>
@@ -60,15 +54,18 @@
                     </div>
                 </div>
 
-                <div class="col col-md-12 mb-3">
+                <div class="col-md-12 mb-3">
                     <label for="address" class="form-label">Address</label>
                     <textarea class="form-control" id="address" rows="3" value="<%= params[:address]%>" ></textarea>
-                    <div class="text-danger text-alert">Error Message</div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <input type="hidden" class="form-control" id="access" name="access" value="1" >
                 </div>
 
                 <div class="mt-4 mb-0">
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Submit</>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </form>
