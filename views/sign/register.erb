@@ -35,7 +35,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="number" class="form-control" id="phone" name="phone" min="0" value="<%= params[:phone]%>" >
+                        <input type="text" class="form-control" id="phone" name="phone" value="<%= params[:phone]%>" pattern="[0-9]{10,15}" title="Phone number must be 10 to 15 digits">
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="email" class="form-label">Email</label>

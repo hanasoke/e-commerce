@@ -65,10 +65,8 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     # phone validation 
     if phone.nil? || phone.strip.empty? 
         errors << "Phone Cannot be Blank."
-    elsif phone.to_s !~ /\A\d+(\.\d{1,2})?\z/
-        errors << "Phone must be a valid number."
-    elsif phone.to_i <= 0
-        errors << "Phone must be a positive number."
+    elsif phone !~ /\A[0-9]{10,15}\z/
+        errors << "Phone must be 10 to 15 digits and contain only numbers."
     end
 
     # validate email 
