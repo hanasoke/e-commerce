@@ -19,6 +19,15 @@ set :bind, '127.0.0.4'
 # Different server port
 set :port, 4002
 
+# Helper methods 
+def logged_in?
+    session[:user_id] != nil 
+end
+
+def current_user 
+    @current_user ||= DB.execute("SELECT * FROM users WHERE user_id = ?", [session[:user_id]]).first if logged_in?
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
@@ -47,29 +56,59 @@ end
 def validate_user(name, username, email, password, birthdate, address, phone, access, user_id = nil)
     errors = []
 
-    # name validation
-    errors << "Name cannot be blank." if name.nil? || name.strip.empty?
+    # Name validation
+    if name.nil? || name.strip.empty?
+        errors << "Name cannot be blank."
+    else 
+        query = "SELECT user_id FROM users WHERE LOWER(name) = ?"
+        query += " AND user_id != ?" if user_id
+        name_exists = DB.get_first_row(query, user_id ? [name.downcase, user_id] : [name.downcase])
+        errors << "Name is already taken." if name_exists
+    end 
 
-    #  username validation
-    errors << "Username cannot be blank." if username.nil? || username.strip.empty?
+    # Username validation
+    if username.nil? || username.strip.empty?
+        errors << "Username cannot be blank."
+    else 
+        query = "SELECT user_id FROM users WHERE LOWER(username) = ?"
+        query += " AND user_id != ?" if user_id 
+        username_exists = DB.get_first_row(query, user_id ? [username.downcase, user_id] : [username.downcase])
+        errors << "Username is already taken." if username_exists
+    end 
 
-    # name validation 
-    errors << "Password cannot be blank." if password.nil? || password.strip.empty?
+    # Password validation 
+    if password.nil? || password.strip.empty?
+        errors << "Password cannot be blank." 
+    else 
+        # Avoid password that is same as others (by comparing hashes)
+        existing_passwords = DB.execute("SELECT password FROM users")
+        existing_passwords.each do |row| 
+            existing_hash = row['password']
+            begin 
+                if BCrypt::Password.new(existing_hash) == password
+                    errors << "Password is already used by another user"
+                    break
+                end 
+            rescue BCrypt::Errors::InvalidHash 
+                # Skip invalid hash formats
+            end 
+        end 
+    end 
 
-    # birthdate validation 
+    # Birthdate validation 
     errors << "Birthdate cannot be blank." if birthdate.nil? || birthdate.strip.empty?
 
-    # address
+    # Address
     errors << "Address cannot be blank." if address.nil? || address.strip.empty?
 
-    # phone validation 
+    # Phone validation 
     if phone.nil? || phone.strip.empty? 
         errors << "Phone Cannot be Blank."
     elsif phone !~ /\A[0-9]{10,15}\z/
         errors << "Phone must be 10 to 15 digits and contain only numbers."
     end
 
-    # validate email 
+    # Validate Email 
     email_errors = validate_email(email, user_id)
     errors.concat(email_errors)
 
