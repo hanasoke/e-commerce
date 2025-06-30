@@ -110,10 +110,6 @@ def validate_photo(photo)
     errors 
 end 
 
-before do 
-
-end  
-
 # Routes 
 
 # Homepage 
