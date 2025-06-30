@@ -33,13 +33,11 @@ def validate_email(email, user_id = nil)
         # check if email matches the regular expression
         errors << "Email format is invalid"
     else 
-        if user_id 
-            query = "SELECT user_id FROM users WHERE LOWER(email) = ? AND user_id != ?"
-            existing_email = DB.get_first_row(query, [email.downcase, user_id])
-        else 
-            query = "SELECT user_id FROM users WHERE LOWER(email) = ?"
-            existing_email = DB.get_first_row(query, [email.downcase])
-        end 
+        # Check for Email fields 
+        query = user_id ? "SELECT user_id FROM users WHERE LOWER (email) = ? AND user_id != ?" : "SELECT user_id FROM users WHERE LOWER(email) = ?"
+        existing_email = DB.execute(query, user_id ? [email.downcase, user_id] : [email.downcase]).first
+
+        errors << "Email already exists. Please choose a different name." if existing_email
     end 
 
     errors
