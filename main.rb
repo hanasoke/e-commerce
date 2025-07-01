@@ -246,5 +246,6 @@ end
 get '/admin' do 
     @errors = []
     @title = "Admin"
+    @users = DB.execute("SELECT * FROM users")
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
