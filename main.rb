@@ -245,6 +245,6 @@ end
 
 get '/admin' do 
     @errors = []
-    @title = "Admin Dashboard"
+    @title = "Admin"
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
