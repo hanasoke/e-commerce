@@ -173,7 +173,7 @@ post '/login' do
         # Successful login
         session[:user_id] = user['user_id']
         session[:success] = "Login successful."
-        redirect '/'
+        redirect '/admin'
     else
         # Failed login
         @errors << "Invalid email or password."
@@ -242,3 +242,9 @@ get '/reset_password' do
     @title = "Reset Password"
     erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
+
+get '/admin' do 
+    @errors = []
+    @title = "Admin Dashboard"
+    erb :'admin/index', layout: :'layouts/admin/layout'
+end
