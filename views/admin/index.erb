@@ -61,7 +61,7 @@
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Age</th>
+                        <th>Birthdate</th>
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Photo</th>
@@ -69,17 +69,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% @users.each_with_index do |user, index| %>
                     <tr>
-                        <th>1</th>
-                        <th>Sumbing</th>
-                        <th>sumbing</th>
-                        <th>sumbing@gmail.com</th>
-                        <th>40</th>
-                        <th>Senopati</th>
-                        <th>0322132</th>
-                        <th>sumbing.png</th>
+                        <td><%= index + 1 %></td>
+                        <td><%= user['name'] %></td>
+                        <td><%= user['username'] %></td>
+                        <td><%= user['email'] %></td>
+                        <td><%= user['birthdate'] %></td>
+                        <td><%= user['address'] %></td>
+                        <td><%= user['phone']%></td>
+                        <td>
+                            <% if user['photo'] %>
+                            <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 300px"/>
+                            <% else %>
+                                <p>No Photo Available</p>
+                            <% end %>
+                        </td>
                         <th>3</th>
                     </tr>
+                    <% end %>
                 </tbody>
             </table>
         </div>
