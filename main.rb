@@ -165,6 +165,7 @@ post '/login' do
     @errors = []
     email = params[:email].to_s.strip
     password = params[:password]
+    remember = params[:remember]
   
     # Find user by email
     user = DB.get_first_row("SELECT * FROM users WHERE LOWER(email) = ?", [email.downcase])
@@ -173,6 +174,17 @@ post '/login' do
         # Successful login
         session[:user_id] = user['user_id']
         session[:success] = "Login successful."
+
+        if remember 
+            response.set_cookie('remember_email', {
+                value: email,
+                path: '/',
+                expires: Time.now + (60 * 60 * 24 * 30) # 30 days
+            })
+        else 
+            response.delete_cookie('remember_email')
+        end 
+
         redirect '/admin'
     else
         # Failed login
