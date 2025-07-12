@@ -290,5 +290,7 @@ get '/edit_user/:user_id' do
     @users = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:id]]).first
     @errors = []
 
-    
+
 end 
+
+get '/error_page' do 
