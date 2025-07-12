@@ -283,3 +283,12 @@ get '/admin' do
     @users = DB.execute("SELECT * FROM users")
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
+
+get '/edit_user/:user_id' do 
+    @errors = []
+    @title = "Edit A User"
+    @users = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:id]]).first
+    @errors = []
+
+    
+end 
