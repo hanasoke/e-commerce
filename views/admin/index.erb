@@ -66,6 +66,7 @@
                         <th>Phone</th>
                         <th>Photo</th>
                         <th>Access</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,12 +81,19 @@
                         <td><%= user['phone']%></td>
                         <td>
                             <% if user['photo'] %>
-                            <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px"/>
+                                <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px"/>
                             <% else %>
                                 <p>No Photo Available</p>
                             <% end %>
                         </td>
                         <th><%= user['access']%></th>
+                        <th>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-danger">Delete</button>
+                                <button type="button" class="btn btn-info text-white">View</button>
+                                <button type="button" class="btn btn-primary">Edit</button>
+                            </div>
+                        </th>
                     </tr>
                     <% end %>
                 </tbody>
