@@ -115,6 +115,28 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
+def editing_user(name, username, email, birthdate, address, phone, access, id = nil)
+
+    errors = []
+
+    errors << "Name cannot be blank." if name.nil? || name.strip.empty?
+    errors << "Username cannot be blank." if username.nil? || username.strip.empty?
+    
+    errors << "Birthdate cannot be blank." if birthdate.nil? || birthdate.strip.empty?
+
+    errors << "Address cannot be blank." if address.nil? || address.strip.empty?
+
+    errors << "Phone cannot be blank."if phone.nil? || phone.strip.empty?
+
+    errors << "Access cannot be blank." if access.nil? || access.strip.empty?
+
+    # Validate email 
+    errors.concat(validate_email(email))
+    errors
+end 
+
+def validate_user(name, username, email, password, birthdate, address, phone, access, user_id = nil)
+
 def validate_photo(photo)
     errors = []
 
