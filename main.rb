@@ -317,7 +317,7 @@ post '/edit_user/:user_id' do
 
             # Uploaded image to uploads folder 
             File.open("./public/uploads/users/#{photo_filename}", 'wb') do |f| 
-                f.write(photo[:tempfile]..read)
+                f.write(photo[:tempfile].read)
             end
         end 
 
@@ -343,10 +343,10 @@ post '/edit_user/:user_id' do
             'birthdate' => params[:birthdate] || original_user['birthdate'],
             'address' => params[:address] || original_user['address'],
             'phone' => params[:phone] || original_user['phone'],
-            'photo' photo_filename || original_user['photo'],
+            'photo' => photo_filename || original_user['photo'],
             'access' => params[:access] || original_user['access']
         }
-        erb :'admin/index',  layout: :'layouts/admin/layout'
+        erb :'admin/user_dashboard/edit',  layout: :'layouts/admin/layout'
     end 
 end 
 
