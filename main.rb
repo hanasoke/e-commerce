@@ -135,8 +135,6 @@ def editing_user(name, username, email, birthdate, address, phone, access, id = 
     errors
 end 
 
-def validate_user(name, username, email, password, birthdate, address, phone, access, user_id = nil)
-
 def validate_photo(photo)
     errors = []
 
@@ -289,8 +287,10 @@ get '/edit_user/:user_id' do
     @title = "Edit A User"
     @users = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:id]]).first
     @errors = []
-
-
+    erb :'admin/user_dashboard/edit', layout: :'layouts/admin/ayout'
 end 
 
 get '/error_page' do 
+    redirect '/error_admin' unless logged_in?
+    error
+end 
