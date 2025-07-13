@@ -298,6 +298,58 @@ get '/edit_user/:user_id' do
     erb :'admin/user_dashboard/edit', layout: :'layouts/admin/layout'
 end 
 
+# Update a user
+post '/edit_user/:user_id' do 
+    @errors = validate_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+
+    # error photo variable check
+    photo = params['photo']
+
+    # Validate only if a new photo is provided 
+    @errors += validate_photo(photo) if photo && photo[:tempfile]
+
+    photo_filename = nil 
+
+    if @errors.empty?
+        # Handle file image upload 
+        if photo && photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+
+            # Uploaded image to uploads folder 
+            File.open("./public/uploads/users/#{photo_filename}", 'wb') do |f| 
+                f.write(photo[:tempfile]..read)
+            end
+        end 
+
+        # Flash Message
+        session[:success] = "A User has been successfully updated."
+
+        # Update the user
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", 
+        [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:access], params[:user_id]])
+
+        redirect '/admin'
+    
+    else 
+        # Handle validation errors and re-render the edit form 
+        original_user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
+
+        # Merge user input with original data to retain user edits
+        @user = {
+            'user_id' => params[:user_id], 
+            'name' => params[:name] || original_user['name'],
+            'username' => params[:username] || original_user['username'],
+            'email' => params[:email] || original_user['email'],
+            'birthdate' => params[:birthdate] || original_user['birthdate'],
+            'address' => params[:address] || original_user['address'],
+            'phone' => params[:phone] || original_user['phone'],
+            'photo' photo_filename || original_user['photo'],
+            'access' => params[:access] || original_user['access']
+        }
+        erb :'admin/index',  layout: :'layouts/admin/layout'
+    end 
+end 
+
 get '/error_page' do 
     redirect '/error_admin' unless logged_in?
     @errors = []
