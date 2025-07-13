@@ -276,6 +276,8 @@ get '/reset_password' do
 end 
 
 get '/admin' do 
+    redirect '/login' unless logged_in?
+
     @errors = []
     @title = "Admin"
     @users = DB.execute("SELECT * FROM users")
@@ -286,14 +288,14 @@ get '/edit_user/:user_id' do
     redirect '/login' unless logged_in?
 
     @title = "Edit A User"
-    @users = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:id]]).first
+    @user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
     @errors = []
 
-    if @users.nil?
+    if @user.nil?
         session[:error] = 'A User is not founded!'
         redirect '/error_page'
     end 
-    erb :'admin/user_dashboard/edit', layout: :'layouts/admin/ayout'
+    erb :'admin/user_dashboard/edit', layout: :'layouts/admin/layout'
 end 
 
 get '/error_page' do 

@@ -88,10 +88,10 @@
                         </td>
                         <th><%= user['access']%></th>
                         <th>
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-danger">Delete</button>
+                            <div class="btn-group" role="group" aria-label="Button Group">
+                                <button type="submit" class="btn btn-danger">Delete</button>
                                 <button type="button" class="btn btn-info text-white">View</button>
-                                <button type="button" class="btn btn-primary">Edit</button>
+                                <a href="/edit_user/<%= user['user_id']%>" class="btn btn-primary">Edit</a>
                             </div>
                         </th>
                     </tr>
