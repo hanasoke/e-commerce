@@ -1,0 +1,6 @@
+<%if session[:error] %>
+<div class="alert alert-danger" role="alert">
+  <div><%= session[:error] %></div>
+</div>
+<% session[:error] = nil %>
+<% end %>

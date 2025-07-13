@@ -283,14 +283,23 @@ get '/admin' do
 end
 
 get '/edit_user/:user_id' do 
-    @errors = []
+    redirect '/login' unless logged_in?
+
     @title = "Edit A User"
     @users = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:id]]).first
     @errors = []
+
+    if @users.nil?
+        session[:error] = 'A User is not founded!'
+        redirect '/error_page'
+    end 
     erb :'admin/user_dashboard/edit', layout: :'layouts/admin/ayout'
 end 
 
 get '/error_page' do 
     redirect '/error_admin' unless logged_in?
-    error
+    @errors = []
+    @title = "Error Page"
+
+    erb :'errors/admin_error', layout: :'layouts/admin/layout'
 end 
