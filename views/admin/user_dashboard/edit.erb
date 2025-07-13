@@ -37,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="<%= @user['email'] %>" >
+                    <input type="email" class="form-control" id="email" name="email" value="<%= @user['email'] %>" >
                     <% if @errors.any? { |e| e.include?('Email') } %>
                         <div class="form-text text-danger">
                             <%= @errors.find { |e| e.include?('Email')}%>
@@ -77,7 +77,7 @@
                     <% if @user['photo'] %>
                         <img class="img-thumbnail mb-2" src="/uploads/users/<%= @user['photo'] %>" alt="<%= @user['name'] %>" style="max-width: 200px">
                     <% end %>
-                    <input type="file" class="form-control" id="photo">
+                    <input type="file" class="form-control" id="photo" name="photo">
                     <% if @errors.any? { |e| e.include?('Photo') } %>
                         <div class="form-text text-danger">
                             <%= @errors.find { |e| e.include?('Photo')}%>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="access" class="form-label">Access</label>
-                    <select id="access" class="form-select" aria-label="Default select example">
+                    <select id="access" class="form-select" name="access">
                         <option selected value="<%= @user['access'] %>"><%= @user['access'] %></option>
                         <option value="1">1</option>
                         <option value="2">2</option>

@@ -115,7 +115,7 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
-def editing_user(name, username, email, birthdate, address, phone, access, id = nil)
+def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
 
     errors = []
 
@@ -300,7 +300,7 @@ end
 
 # Update a user
 post '/edit_user/:user_id' do 
-    @errors = validate_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+    @errors = editing_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
 
     # error photo variable check
     photo = params['photo']
