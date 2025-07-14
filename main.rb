@@ -387,3 +387,4 @@ get '/logout' do
     session.clear 
     session[:success] = success_message
     redirect '/login'
+end 
