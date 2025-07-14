@@ -131,7 +131,7 @@ def editing_user(name, username, email, birthdate, address, phone, access, user_
     errors << "Access cannot be blank." if access.nil? || access.strip.empty?
 
     # Validate email 
-    errors.concat(validate_email(email))
+    errors.concat(validate_email(email, user_id))
     errors
 end 
 
@@ -165,6 +165,24 @@ def validate_photo(photo)
     errors 
 end 
 
+def validate_user_login(email, password)
+    errors = []
+
+    # Password check
+    errors << "Password cannot be blank." if password.nil? || password.strip.empty?
+
+    # Email format check
+    email_regex = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
+    if email.nil? || email.strip.empty?
+        errors << "Email cannot be blank."
+    elsif email !~ email_regex
+        errors << "Email format is invalid."
+    end
+
+    errors
+end
+
+
 # Routes 
 
 # Homepage 
@@ -184,36 +202,39 @@ get '/login' do
 end 
 
 post '/login' do
-    @errors = []
     email = params[:email].to_s.strip
     password = params[:password]
     remember = params[:remember]
-  
-    # Find user by email
-    user = DB.get_first_row("SELECT * FROM users WHERE LOWER(email) = ?", [email.downcase])
-  
-    if user && BCrypt::Password.new(user['password']) == password
-        # Successful login
-        session[:user_id] = user['user_id']
-        session[:success] = "Login successful."
 
-        if remember 
-            response.set_cookie('remember_email', {
-                value: email,
-                path: '/',
-                expires: Time.now + (60 * 60 * 24 * 30) # 30 days
-            })
-        else 
-            response.delete_cookie('remember_email')
-        end 
+    @errors = validate_user_login(email, password)
+  
+    if @errors.empty? 
+        # Find user by email
+        user = DB.get_first_row("SELECT * FROM users WHERE LOWER(email) = ?", [email.downcase])
 
-        redirect '/admin'
-    else
-        # Failed login
-        @errors << "Invalid email or password."
-        @title = 'Login'
-        erb :'sign/login', layout: :'layouts/sign/template'
-    end
+        if user && BCrypt::Password.new(user['password']) == password
+            # Successful login
+            session[:user_id] = user['user_id']
+            session[:success] = "Login successful."
+
+            if remember 
+                response.set_cookie('remember_email', {
+                    value: email,
+                    path: '/',
+                    expires: Time.now + (60 * 60 * 24 * 30) # 30 days
+                })
+            else 
+                response.delete_cookie('remember_email')
+            end 
+
+            redirect '/admin'
+        else
+            @errors << "Invalid email or password."
+        end
+    end 
+
+    @title = 'Login'
+    erb :'sign/login', layout: :'layouts/sign/template'
 end
   
 

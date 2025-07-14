@@ -14,6 +14,16 @@
                 <% session[:success] = nil %>
             <% end %>
 
+            <% if @errors && @errors.any? %>
+                <% @errors.each do |error| %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% end %>
+            <% end %>
+
+
             <form action="/login" method="post">
 
                 <% remember_email = request.cookies['remember_email'] %>
