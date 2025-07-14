@@ -55,7 +55,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control" name="address" id="address" value="<%= @user['address'] %>">
+                    <textarea name="address" id="address" class="form-control"><%= @user['address'] %></textarea>
                     <% if @errors.any? { |e| e.include?('Address') } %>
                         <div class="form-text text-danger">
                             <%= @errors.find { |e| e.include?('Address')}%>
