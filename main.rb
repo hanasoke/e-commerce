@@ -380,3 +380,10 @@ get '/error_page' do
 
     erb :'errors/admin_error', layout: :'layouts/admin/layout'
 end 
+
+# Logout 
+get '/logout' do 
+    success_message = "You have been logged out successfully."
+    session.clear 
+    session[:success] = success_message
+    redirect '/login'
