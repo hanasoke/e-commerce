@@ -169,6 +169,8 @@ end
 
 # Homepage 
 get '/' do 
+    redirect '/login' unless logged_in?
+    
     @errors = []
     @title = 'HomePage'
     erb :'user/index', layout: :'layouts/user/template'
