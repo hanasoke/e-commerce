@@ -374,7 +374,7 @@ post '/edit_user/:user_id' do
 end 
 
 get '/error_page' do 
-    redirect '/error_admin' unless logged_in?
+    redirect '/login' unless logged_in?
     @errors = []
     @title = "Error Page"
 
@@ -396,4 +396,14 @@ post '/delete_user/:user_id' do
 
     DB.execute("DELETE FROM users WHERE user_id = ?", [params[:user_id]])
     redirect '/admin'
+end 
+
+# Detail a user
+get '/detail_user/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "View the user profile"
+    @user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
+    @errors = []
+    erb :'admin/user_dashboard/view', layout: :'layouts/admin/layout'
 end 
