@@ -388,3 +388,12 @@ get '/logout' do
     session[:success] = success_message
     redirect '/login'
 end 
+
+# DELETE a user
+post '/delete_user/:user_id' do
+    # Flash message
+    session[:success] = "A user has been successfully deleted."
+
+    DB.execute("DELETE FROM users WHERE user_id = ?", [params[:user_id]])
+    redirect '/admin'
+end 

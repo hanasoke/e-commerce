@@ -89,12 +89,33 @@
                         <th><%= user['access']%></th>
                         <th>
                             <div class="btn-group" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user['user_id']%>">Delete</button>
                                 <button type="button" class="btn btn-info text-white">View</button>
                                 <a href="/edit_user/<%= user['user_id']%>" class="btn btn-primary">Edit</a>
                             </div>
                         </th>
                     </tr>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteModal<%= user['user_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user['user_id'] %>" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title fs-5" id="deleteModalLabel<%= user['user_id']%>">Confirm Deletion</h3>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure want to delete this User ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <form action="/delete_user/<%= user['user_id'] %>" method="POST">
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                     <% end %>
                 </tbody>
             </table>
