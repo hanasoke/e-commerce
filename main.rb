@@ -411,5 +411,6 @@ end
 # Show Forgot Password Page
 get '/forgot_password' do 
     @errors = []
-    erb :'password/'
+    erb :'sign/forgot_password', layout: :'layouts/sign/template'
 end 
+
