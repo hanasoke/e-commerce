@@ -407,3 +407,9 @@ get '/detail_user/:user_id' do
     @errors = []
     erb :'admin/user_dashboard/view', layout: :'layouts/admin/layout'
 end 
+
+# Show Forgot Password Page
+get '/forgot_password' do 
+    @errors = []
+    erb :'password/'
+end 
