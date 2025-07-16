@@ -414,3 +414,7 @@ get '/forgot_password' do
     erb :'sign/forgot_password', layout: :'layouts/sign/template'
 end 
 
+post '/forgot_password'
+    email = params[:email]
+    @errors = []
+end 
