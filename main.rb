@@ -414,7 +414,39 @@ get '/forgot_password' do
     erb :'sign/forgot_password', layout: :'layouts/sign/template'
 end 
 
-post '/forgot_password'
+post '/forgot_password' do
     email = params[:email]
     @errors = []
+
+    session[:success] = "Password reset link sent to your email."
+
+    if email.strip.empty? 
+        @errors << "Email cannot be blank."
+    elsif !DB.execute("SELECT * FROM users WHERE email = ?", [email]).first 
+        @errors << "Email not found in our records."
+    else 
+        # Generate reset token (basic implementation, use a secure library in production)
+        reset_token = SecureRandom.hex(20)
+        DB.execute("UPDATE users SET reset_token = ? WHERE email = ?", [reset_token, email])
+
+        # Simulate sending an email (in production, send a real email)
+        reset_url = "http://127.0.0.4:4002/reset_password/#{reset_token}"
+        puts "Reset password link: #{reset_url}" # Replace with email sending logic
+        redirect '/login'
+    end 
+
+    erb :'sign/forgot_password', layout: :'layouts/sign/template'
+end 
+
+# Show Reset Password Page
+get '/reset_password/:token' do 
+    @reset_token = params[:token]
+    @user = DB.execute("SELECT * FROM users WHERE reset_token = ?", [@reset_token]).first
+
+    if @user.nil?
+        session[:error] = "Invalid or expired reset token."
+        redirect '/login'
+    end 
+
+    erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
