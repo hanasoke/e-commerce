@@ -453,3 +453,13 @@ get '/reset_password/:token' do
 
     erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
+
+# Handle Reset Password Submission
+post 'reset_password' do 
+    reset_token = params[:reset_token]
+    password = params[:password]
+    re_password = params[:re_password]
+    @errors = []
+
+    
+end 
