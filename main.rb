@@ -455,11 +455,29 @@ get '/reset_password/:token' do
 end 
 
 # Handle Reset Password Submission
-post 'reset_password' do 
+post '/reset_password' do 
     reset_token = params[:reset_token]
     password = params[:password]
     re_password = params[:re_password]
     @errors = []
 
-    
+    if password.strip.empty? || re_password.strip.empty?
+        @errors << "Password fields cannot be blank."
+    elsif password != re_password
+        @errors << "Password do not match."
+    else
+        user = DB.execute("SELECT * FROM users WHERE reset_token = ?", [reset_token]).first
+
+        if user.nil?
+            @errors << "Invalid or expired reset token."
+        else 
+            hashed_password = BCrypt::Password.create(password)
+            DB.execute("UPDATE users SET password = ?, reset_token = NULL WHERE user_id = ?", [hashed_password, user['user_id']])
+            session[:success] = "Password reset successfully. Please log in."
+            redirect '/login'
+        end 
+    end 
+
+    @reset_token = reset_token 
+    erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
