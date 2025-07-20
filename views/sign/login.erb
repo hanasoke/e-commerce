@@ -25,9 +25,14 @@
 
             <form action="/login" method="post">
                 <% remember_email = request.cookies['remember_email'] %>
-                <div class="form-floating mb-3">
-                    <input class="form-control" id="email" name="email" type="email" placeholder="Input Your Email" value="<%= remember_email %>" />
-                    <label for="email">Email address</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <div class="form-floating position-relative">
+                        <input class="form-control" id="email" name="email" type="email" placeholder="Input Your Email" value="<%= remember_email %>" />
+                        <label for="email">Email address</label>
+                    </div>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" onclick="togglePassword('password', this)" style="cursor:pointer;">
