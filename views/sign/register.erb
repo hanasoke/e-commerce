@@ -18,20 +18,20 @@
             <form action="/register" method="post" enctype="multipart/form-data">
                 <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<%= params[:name]%>" >
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="<%= params[:name]%>" >
                 </div>
                 
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<%= params[:username]%>" >
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Input Your Username" value="<%= params[:username]%>" >
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>">
-                            <span class="input-group-text" onclick="togglePassword('password', this)" style="cursor: pointer;">
-                                <i class="fa-solid fa-eye"></i>
+                            <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>" placeholder="input your password">
+                            <span class="input-group-text" onclick="togglePassword('password', this)" style="cursor:pointer;">
+                                <i class="fa-solid fa-eye-slash passwordeyes"></i>
                             </span>
                         </div>
                     </div>
