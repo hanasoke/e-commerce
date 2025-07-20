@@ -236,7 +236,6 @@ post '/login' do
     @title = 'Login'
     erb :'sign/login', layout: :'layouts/sign/template'
 end
-  
 
 # Register 
 get '/register' do 
