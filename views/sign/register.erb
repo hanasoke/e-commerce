@@ -18,18 +18,18 @@
             <form action="/register" method="post" enctype="multipart/form-data">
                 <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="<%= params[:name]%>" >
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="<%= params[:name]%>"/>
                 </div>
                 
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Input Your Username" value="<%= params[:username]%>" >
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Input Your Username" value="<%= params[:username]%>"/>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>" placeholder="input your password">
+                            <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>" placeholder="Input Your Password">
                             <span class="input-group-text" onclick="togglePassword('password', this)" style="cursor:pointer;">
                                 <i class="fa-solid fa-eye-slash passwordeyes"></i>
                             </span>
@@ -40,28 +40,28 @@
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" value="<%= params[:phone]%>" pattern="[0-9]{10,15}" title="Phone number must be 10 to 15 digits">
+                        <input type="text" class="form-control" id="phone" name="phone" value="<%= params[:phone]%>" pattern="[0-9]{10,15}" title="Phone number must be 10 to 15 digits" placeholder="Input Your Phone"/>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<%= params[:email]%>" >
+                        <input type="email" class="form-control" id="email" name="email" value="<%= params[:email]%>" placeholder="Input Your Email"/>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="birthdate" class="form-label">Birthdate</label>
-                        <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= params[:birthdate]%>" >
+                        <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= params[:birthdate]%>"/>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="photo" class="form-label">Photo</label>
-                        <input class="form-control" type="file" id="photo" name="photo" />
+                        <input class="form-control" type="file" id="photo" name="photo"/>
                     </div>
                 </div>
 
                 <div class="col-md-12 mb-3">
                     <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" name="address" rows="3"><%= params[:address] %></textarea>
+                    <textarea class="form-control" id="address" name="address" rows="3"  placeholder="Input Your Address"><%= params[:address] %></textarea>
                 </div>
 
                 <div class="col-md-12 mb-3">
