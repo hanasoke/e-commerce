@@ -191,6 +191,13 @@ end
 
 # Homepage 
 get '/' do 
+    @errors = []
+    @title = 'HomePage'
+    erb :'user/no_account/index', layout: :'layouts/user/template'
+end 
+
+# No Account 
+get '/account' do 
     redirect '/login' unless logged_in?
     
     @errors = []
@@ -221,17 +228,29 @@ post '/login' do
             session[:user_id] = user['user_id']
             session[:success] = "Login successful."
 
+            # Check access level and redirect accordingly 
+            if user['access'] == 1
+                # Redirect to the user page for regular users
+                redirect '/account'
+            elsif user['access'] == 2 
+                # Redirect to the viewer page for user without account
+                redirect '/'
+            elsif user['access'] == 3
+                # Redirect to the admin page for admins
+                redirect '/admin'
+            else 
+                @errors << "Invalid access level"
+            end 
+
             if remember 
                 response.set_cookie('remember_email', {
                     value: email,
-                    path: '/',
+                    path: '/account',
                     expires: Time.now + (60 * 60 * 24 * 30) # 30 days
                 })
             else 
                 response.delete_cookie('remember_email')
             end 
-
-            redirect '/admin'
         else
             @errors << "Invalid email or password."
         end
