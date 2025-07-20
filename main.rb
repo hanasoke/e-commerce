@@ -80,6 +80,10 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     if password.nil? || password.strip.empty?
         errors << "Password cannot be blank." 
     else 
+        # Prevent password from being the same as the name
+        if name && password.strip.downcase == name.strip.downcase 
+            errors << "Password cannot be the same as your name."
+        end 
         # Avoid password that is same as others (by comparing hashes)
         existing_passwords = DB.execute("SELECT password FROM users")
         existing_passwords.each do |row| 
