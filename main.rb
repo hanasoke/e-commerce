@@ -193,16 +193,25 @@ end
 get '/' do 
     @errors = []
     @title = 'HomePage'
-    erb :'user/no_account/index', layout: :'layouts/user/template'
+    erb :'user/no_account/index', layout: :'layouts/no_user/template'
 end 
 
-# No Account 
+# Account 
 get '/account' do 
     redirect '/login' unless logged_in?
     
     @errors = []
     @title = 'HomePage'
     erb :'user/index', layout: :'layouts/user/template'
+end 
+
+# Account 
+get '/seller' do 
+    redirect '/login' unless logged_in?
+    
+    @errors = []
+    @title = 'Seller'
+    erb :'seller/index', layout: :'layouts/user/template'
 end 
 
 # Login
@@ -233,8 +242,8 @@ post '/login' do
                 # Redirect to the user page for regular users
                 redirect '/account'
             elsif user['access'] == 2 
-                # Redirect to the viewer page for user without account
-                redirect '/'
+                # Redirect to the viewer page for sellers
+                redirect '/seller'
             elsif user['access'] == 3
                 # Redirect to the admin page for admins
                 redirect '/admin'
