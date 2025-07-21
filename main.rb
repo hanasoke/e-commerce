@@ -24,6 +24,11 @@ def logged_in?
     session[:user_id] != nil 
 end
 
+def user_count 
+    result = DB.get_first_value("SELECT COUNT(*) FROM users")
+    result.to_i
+end 
+
 def current_user 
     @current_user ||= DB.execute("SELECT * FROM users WHERE user_id = ?", [session[:user_id]]).first if logged_in?
 end 
