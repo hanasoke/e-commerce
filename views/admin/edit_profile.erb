@@ -6,57 +6,57 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-user me-1"></i>
-            Edit <%= @user['name']%>
+            Edit <%= @profile['name']%>
         </div>
         <div class="card-body">
             <div class="mb-3 row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @user['name'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @profile['name'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="username" class="col-sm-2 col-form-label">Username</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="username" value="<%= @user['username'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="username" value="<%= @profile['username'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="email" value="<%= @user['email'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="email" value="<%= @profile['email'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= @user['birthdate'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= @profile['birthdate'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="address" class="col-sm-2 col-form-label">Address</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="address" value="<%= @user['address'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="address" value="<%= @profile['address'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= @user['phone'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= @profile['phone'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="access" class="col-sm-2 col-form-label" for="photo">Photo</label>
                 <div class="col-sm-10">
-                    <% if @user['photo'] %>
-                        <img src="/uploads/users/<%= @user['photo'] %>" style="max-width: 200px">
+                    <% if @profile['photo'] %>
+                        <img src="/uploads/users/<%= @profile['photo'] %>" style="max-width: 200px">
                     <% end %>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="access" class="col-sm-2 col-form-label">Access</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @user['access'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
                 </div>
             </div>
             <!-- Back Button -->

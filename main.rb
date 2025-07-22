@@ -517,3 +517,31 @@ post '/reset_password' do
     @reset_token = reset_token 
     erb :'sign/reset_password', layout: :'layouts/sign/template'
 end 
+
+get '/admin_view_profile/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "View Profile"
+    @profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
+    @errors = []
+
+    if @profile.nil? 
+        session[:error] = "Profile is not founded!"
+        redirect '/error_page'
+    end 
+    erb :'admin/view_profile', layout: :'layouts/admin/layout'
+end 
+
+get '/admin_edit_profile/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "Edit Profile"
+    @profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
+    @errors = []
+
+    if @profile.nil? 
+        session[:error] = "Profile is not founded!"
+        redirect '/error_page'
+    end 
+    erb :'admin/edit_profile', layout: :'layouts/admin/layout'
+end 
