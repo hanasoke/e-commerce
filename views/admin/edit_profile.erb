@@ -59,8 +59,11 @@
                     <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
                 </div>
             </div>
+            <!-- Submit Button -->
+            <a class="btn btn-outline-primary float-end" href="#">Submit</a>
+
             <!-- Back Button -->
-            <a class="btn btn-outline-secondary float-start" href="/admin"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
+            <a class="btn btn-outline-secondary float-start" href="/admin_view_profile/<%= current_user['user_id'] %>">Back</a>
         </div>
     </div>
 </div>

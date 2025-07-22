@@ -59,6 +59,8 @@
                     <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
                 </div>
             </div>
+            <!-- Edit Button -->
+            <a class="btn btn-outline-success float-end" href="/admin_edit_profile/<%= current_user['user_id'] %>">Edit My Profile</a>
             <!-- Back Button -->
             <a class="btn btn-outline-secondary float-start" href="/admin"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
         </div>
