@@ -129,6 +129,7 @@ def editing_user(name, username, email, birthdate, address, phone, access, user_
     errors = []
 
     errors << "Name cannot be blank." if name.nil? || name.strip.empty?
+
     errors << "Username cannot be blank." if username.nil? || username.strip.empty?
     
     errors << "Birthdate cannot be blank." if birthdate.nil? || birthdate.strip.empty?
@@ -544,4 +545,10 @@ get '/admin_edit_profile/:user_id' do
         redirect '/error_page'
     end 
     erb :'admin/edit_profile', layout: :'layouts/admin/layout'
+end 
+
+post '/admin_edit_profile/:user_id' do 
+
+    @errors = editing_user()
+
 end 
