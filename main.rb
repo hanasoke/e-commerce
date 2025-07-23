@@ -559,7 +559,21 @@ post '/admin_edit_profile/:user_id' do
 
     photo_filename = nil 
 
-    
+    if @errors.empty? 
+        # Handle file upload 
+        if photo && photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+            File.open("./public/uploads/#{photo_filename}", 'wb') do |f|
+                f.write(photo[:tempfile].read)
+            end 
+        end 
+
+        # Flash message
+        session[:success] = "Your Profile has been successfully updated"
+
+        # Update the profile in the database
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email, ]])
+    end 
 
     def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
 
