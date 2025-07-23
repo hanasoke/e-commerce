@@ -549,6 +549,18 @@ end
 
 post '/admin_edit_profile/:user_id' do 
 
-    @errors = editing_user()
+    @errors = editing_userediting_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+
+    # error photo variable check 
+    photo = params['photo']
+
+    # validate only if a new photo is provided
+    @errors += validate_photo(photo) if photo && photo[:tempfile]
+
+    photo_filename = nil 
+
+    
+
+    def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
 
 end 
