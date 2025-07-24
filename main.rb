@@ -572,9 +572,9 @@ post '/admin_edit_profile/:user_id' do
         session[:success] = "Your Profile has been successfully updated"
 
         # Update the profile in the database
-        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email, ]])
-    end 
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
 
-    def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
+        redirect '/admin_view_profile'
+    end 
 
 end 
