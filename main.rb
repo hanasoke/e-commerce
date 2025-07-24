@@ -574,7 +574,22 @@ post '/admin_edit_profile/:user_id' do
         # Update the profile in the database
         DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
 
-        redirect '/admin_view_profile'
-    end 
+        redirect '/admin'
+    else 
+        # Handle validation errors and re-render the edit form 
+        original_profile = DB.execute("SELECT * FROM users WHERE id = ?", [params[:user_id]]).first
 
+        # Merge user input with original data to retain user edit 
+        @profile = {
+            'user_id' => params[:user_id],
+            'name' => params[:name] || original_profile['name'],
+            'username' => params[:username] || original_profile['username'],
+            'email' => params[:email] || original_profile['email'],
+            'birthdate' => params[:birthdate] || original_profile['birthdate'],
+            'address' => params[:address] || original_profile['address']
+            'phone' => params[:phone] || original_profile['phone'],
+            'photo' => photo_filename || original_profile['photo']
+        }
+        erb :'admin/edit_profile', layout: :'layout/admin/layout'
+    end 
 end 
