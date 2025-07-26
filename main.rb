@@ -549,11 +549,10 @@ end
 
 post '/admin_edit_profile/:user_id' do 
 
-    @errors = editing_userediting_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+    @errors = editing_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
 
     # error photo variable check 
     photo = params['photo']
-
     # validate only if a new photo is provided
     @errors += validate_photo(photo) if photo && photo[:tempfile]
 
@@ -572,12 +571,12 @@ post '/admin_edit_profile/:user_id' do
         session[:success] = "Your Profile has been successfully updated"
 
         # Update the profile in the database
-        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:access], params[:user_id]])
 
         redirect '/admin'
     else 
         # Handle validation errors and re-render the edit form 
-        original_profile = DB.execute("SELECT * FROM users WHERE id = ?", [params[:user_id]]).first
+        original_profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
 
         # Merge user input with original data to retain user edit 
         @profile = {
@@ -586,9 +585,10 @@ post '/admin_edit_profile/:user_id' do
             'username' => params[:username] || original_profile['username'],
             'email' => params[:email] || original_profile['email'],
             'birthdate' => params[:birthdate] || original_profile['birthdate'],
-            'address' => params[:address] || original_profile['address']
+            'address' => params[:address] || original_profile['address'],
             'phone' => params[:phone] || original_profile['phone'],
-            'photo' => photo_filename || original_profile['photo']
+            'photo' => photo_filename || original_profile['photo'],
+            'access' => params[:access] || original_profile['access']
         }
         erb :'admin/edit_profile', layout: :'layout/admin/layout'
     end 
