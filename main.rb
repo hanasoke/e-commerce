@@ -145,6 +145,27 @@ def editing_user(name, username, email, birthdate, address, phone, access, user_
     errors
 end 
 
+def editing_profile(name, username, email, birthdate, address, phone, access, user_id = nil)
+
+    errors = []
+
+    errors << "Name cannot be blank." if name.nil? || name.strip.empty?
+
+    errors << "Username cannot be blank." if username.nil? || username.strip.empty?
+    
+    errors << "Birthdate cannot be blank." if birthdate.nil? || birthdate.strip.empty?
+
+    errors << "Address cannot be blank." if address.nil? || address.strip.empty?
+
+    errors << "Phone cannot be blank."if phone.nil? || phone.strip.empty?
+
+    errors << "Access cannot be blank." if access.nil? || access.strip.empty?
+
+    # Validate email 
+    errors.concat(validate_email(email, user_id))
+    errors
+end
+
 def validate_photo(photo)
     errors = []
 
@@ -537,8 +558,7 @@ get '/admin_edit_profile/:user_id' do
     redirect '/login' unless logged_in?
 
     @title = "Edit Profile"
-    @profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
-    @errors = []
+    @profile = current_user
 
     if @profile.nil? 
         session[:error] = "Profile is not founded!"
@@ -549,7 +569,7 @@ end
 
 post '/admin_edit_profile/:user_id' do 
 
-    @errors = editing_user(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+    @errors = editing_profile(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
 
     # error photo variable check 
     photo = params['photo']
@@ -562,7 +582,7 @@ post '/admin_edit_profile/:user_id' do
         # Handle file upload 
         if photo && photo[:tempfile]
             photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
-            File.open("./public/uploads/#{photo_filename}", 'wb') do |f|
+            File.open("./public/uploads/users/#{photo_filename}", 'wb') do |f|
                 f.write(photo[:tempfile].read)
             end 
         end 
@@ -571,7 +591,7 @@ post '/admin_edit_profile/:user_id' do
         session[:success] = "Your Profile has been successfully updated"
 
         # Update the profile in the database
-        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:access], params[:user_id]])
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:access], params[:user_id]]) 
 
         redirect '/admin'
     else 
