@@ -21,7 +21,7 @@
                     <% end %>
                 </div>
             </div>
-            <form action="/admin_edit_profile/<%= @profile['user_id'] %>" enctype="multipart/form-data">
+            <form action="/admin_edit_profile/<%= @profile['user_id'] %>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">
                 </div>
