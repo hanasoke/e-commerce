@@ -9,6 +9,18 @@
             Edit <%= @profile['name']%>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <% if @errors&.any? %>
+                        <% @errors.each do |error| %>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <div><%= error %></div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
             <form action="/admin_edit_profile/<%= @profile['user_id'] %>" enctype="multipart/form-data">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">

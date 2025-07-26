@@ -544,13 +544,8 @@ get '/admin_view_profile/:user_id' do
     redirect '/login' unless logged_in?
 
     @title = "View Profile"
-    @profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
+    @profile = current_user
     @errors = []
-
-    if @profile.nil? 
-        session[:error] = "Profile is not founded!"
-        redirect '/error_page'
-    end 
     erb :'admin/view_profile', layout: :'layouts/admin/layout'
 end 
 
@@ -559,11 +554,7 @@ get '/admin_edit_profile/:user_id' do
 
     @title = "Edit Profile"
     @profile = current_user
-
-    if @profile.nil? 
-        session[:error] = "Profile is not founded!"
-        redirect '/error_page'
-    end 
+    @errors = []
     erb :'admin/edit_profile', layout: :'layouts/admin/layout'
 end 
 
