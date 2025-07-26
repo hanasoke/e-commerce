@@ -619,6 +619,6 @@ post '/admin_edit_profile/:user_id' do
             'photo' => photo_filename || original_profile['photo'],
             'access' => params[:access] || original_profile['access']
         }
-        erb :'admin/edit_profile', layout: :'layout/admin/layout'
+        erb :'admin/edit_profile', layout: :'layouts/admin/layout'
     end 
 end 
