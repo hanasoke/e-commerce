@@ -243,7 +243,7 @@ get '/seller' do
     
     @errors = []
     @title = 'Seller'
-    erb :'seller/index', layout: :'layouts/user/template'
+    erb :'seller/index', layout: :'layouts/seller/template'
 end 
 
 # Login
