@@ -38,7 +38,12 @@ def validate_email(email, user_id = nil)
     errors = []
 
     # Regular expression for email validation
-    email_regex = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
+
+    # all email
+    # email_regex = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
+
+    # only yahoo & gmail 
+    email_regex = /\A[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.(com|co\.id))\z/i
 
     # check if email is blank
     if email.nil? || email.strip.empty?
