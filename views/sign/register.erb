@@ -5,15 +5,6 @@
         </div>
 
         <div class="card-body">
-            <!-- Display errors if present -->
-            <% if @errors&.any? %> 
-                <% @errors.each do |error| %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><%= error %> </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <% end %>
-            <% end %>
             <form action="/register" method="post" enctype="multipart/form-data">
                 <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Name</label>
@@ -23,6 +14,11 @@
                         </span>
                         <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="<%= params[:name]%>"/>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Name') } %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Name')} %>
+                        </div>
+                    <% end %>
                 </div>
                 
                 <div class="row mb-3">
@@ -34,6 +30,11 @@
                             </span>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Input Your Username" value="<%= params[:username]%>"/>
                         </div>
+                        <% if @errors.any? { |e| e.include?('Username') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Username')} %>
+                            </div>
+                        <% end %>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="password" class="form-label">Password</label>
@@ -43,6 +44,11 @@
                             </span>
                             <input type="password" class="form-control" id="password" name="password" value="<%= params[:password]%>" placeholder="Input Your Password">
                         </div>
+                        <% if @errors.any? { |e| e.include?('Password') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Password')} %>
+                            </div>
+                        <% end %>
                     </div>
                 </div>
 
@@ -55,6 +61,11 @@
                             </span>
                             <input type="text" class="form-control" id="phone" name="phone" value="<%= params[:phone]%>" pattern="[0-9]{10,15}" title="Phone number must be 10 to 15 digits" placeholder="Input Your Phone"/>
                         </div>
+                        <% if @errors.any? { |e| e.include?('Phone') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Phone')} %>
+                            </div>
+                        <% end %>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="email" class="form-label">Email</label>
@@ -64,6 +75,11 @@
                             </span>
                             <input type="email" class="form-control" id="email" name="email" value="<%= params[:email]%>" placeholder="Input Your Email"/>
                         </div>
+                        <% if @errors.any? { |e| e.include?('Email') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Email')} %>
+                            </div>
+                        <% end %>
                     </div>
                 </div>
 
@@ -71,10 +87,20 @@
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="birthdate" class="form-label">Birthdate</label>
                         <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= params[:birthdate]%>"/>
+                        <% if @errors.any? { |e| e.include?('Birthdate') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Birthdate')} %>
+                            </div>
+                        <% end %>
                     </div>
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="photo" class="form-label">Photo</label>
                         <input class="form-control" type="file" id="photo" name="photo"/>
+                        <% if @errors.any? { |e| e.include?('Photo') } %>
+                            <div class="form-text text-danger">
+                                <%= @errors.find { |e| e.include?('Photo')} %>
+                            </div>
+                        <% end %>
                     </div>
                 </div>
 
@@ -86,6 +112,11 @@
                         </span>
                         <textarea class="form-control" id="address" name="address" rows="3"  placeholder="Input Your Address"><%= params[:address] %></textarea>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Address') } %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Address')} %>
+                        </div>
+                    <% end %>
                 </div>
 
                 <div class="col-md-12 mb-3">
