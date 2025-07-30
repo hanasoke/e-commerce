@@ -458,6 +458,20 @@ get '/detail_user/:user_id' do
     @title = "View the user profile"
     @user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first
     @errors = []
+
+    if @user && @user['birthdate']
+        birthdate = Date.parse(@user['birthdate']) rescue nil 
+        if birthdate 
+            today = Date.today 
+            age = today.year - birthdate.year 
+            @user['age'] = age
+        else 
+            @user['age'] = 'Invalid birthdate'
+        end 
+    else 
+        @profile['age'] = 'Not available'
+    end
+
     erb :'admin/user_dashboard/view', layout: :'layouts/admin/layout'
 end 
 
@@ -540,6 +554,20 @@ get '/admin_view_profile/:user_id' do
 
     @title = "View Profile"
     @profile = current_user
+    
+    if @profile && @profile['birthdate']
+        birthdate = Date.parse(@profile['birthdate']) rescue nil 
+        if birthdate 
+            today = Date.today 
+            age = today.year - birthdate.year 
+            @profile['age'] = age
+        else 
+            @profile['age'] = 'Invalid birthdate'
+        end 
+    else 
+        @profile['age'] = 'Not available'
+    end 
+
     @errors = []
     erb :'admin/view_profile', layout: :'layouts/admin/layout'
 end 
