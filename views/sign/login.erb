@@ -24,13 +24,14 @@
             <% end %>
 
             <form action="/login" method="post">
-                <% remember_email = request.cookies['remember_email'] %>
+                <% remembered_email = request.cookies['remember_email'] %>
+                <% remembered_password = request.cookies['remember_password'] %>
                 <div class="input-group mb-3">
                     <span class="input-group-text">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
                     <div class="form-floating position-relative">
-                        <input class="form-control" id="login_email" name="email" type="email" placeholder="Input Your Email" value="<%= params[:email]%>" />
+                        <input class="form-control" id="login_email" name="email" type="email" placeholder="Input Your Email" value="<%= params[:email] || remembered_email %>" />
                         <label for="email">Email address</label>
                     </div>
                 </div>
@@ -39,12 +40,12 @@
                         <i class="fa-solid fa-eye-slash passwordeyes"></i>
                     </span>
                     <div class="form-floating position-relative">
-                        <input class="form-control" id="password" name="password" type="password" placeholder="Input Your Password" value="<%= params[:password]%>" />
+                        <input class="form-control" id="password" name="password" type="password" placeholder="Input Your Password" value="<%= params[:password] || remembered_password %>" />
                         <label for="password">Password</label>
                     </div>
                 </div>
                 <div class="form-check mb-3">
-                    <% remember_checked = remember_email ? 'checked' : '' %>
+                    <% remember_checked = remembered_email ? 'checked' : '' %>
                     <input class="form-check-input" id="remember" name="remember" type="checkbox" <%= remember_checked %> />
                     <label class="form-check-label" for="remember">Remember Me</label>
                 </div>

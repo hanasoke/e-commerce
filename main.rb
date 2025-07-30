@@ -289,8 +289,15 @@ post '/login' do
                     path: '/account',
                     expires: Time.now + (60 * 60 * 24 * 30) # 30 days
                 })
+
+                response.set_cookie('remember_password', {
+                    value: password,
+                    path: '/account',
+                    expires: Time.now + (60 * 60 * 24 * 30)
+                })
             else 
                 response.delete_cookie('remember_email')
+                response.delete_cookie('remember_password')
             end 
         else
             @errors << "Invalid email or password."
