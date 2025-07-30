@@ -19,3 +19,13 @@ DB.execute <<-SQL
         access INTEGER
     );
 SQL
+
+# sellers Table
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS sellers (
+        seller_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        identity_photo TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(user_id)
+    );
+SQL
