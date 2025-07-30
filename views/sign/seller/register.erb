@@ -1,0 +1,39 @@
+<div class="col-lg-8">
+    <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
+        <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Create An Account</h3>
+        </div>
+
+        <div class="card-body">
+            <form action="/register" method="post" enctype="multipart/form-data">
+                <div class="col-md-12 mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="#"/>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label for="formFile" class="form-label">Default file input example</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <input type="hidden" class="form-control" id="access" name="access" value="1" >
+                </div>
+
+                <div class="mt-4 mb-0">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-center py-3">
+            <div class="small">Have an account?<a href="/login">Go to login</a></div>
+        </div>
+    </div>
+</div>

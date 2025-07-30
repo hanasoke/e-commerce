@@ -626,3 +626,12 @@ get '/seller_dashboard' do
     @errors = []
     erb :'seller/seller_panel/index', layout: :'layouts/seller/seller_panel/layout'
 end 
+
+get '/seller_register' do 
+    redirect '/login' unless logged_in? 
+
+    @title = "Seller Register"
+    @profile = current_user
+    @errors = []
+    erb :'sign/seller/register', layout: :'layouts/sign/template'
+end
