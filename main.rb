@@ -621,8 +621,8 @@ post '/admin_edit_profile/:user_id' do
             redirect '/login'
         when 3
             # Flash message
-            session[:success] = "You Are Admin Now"
-            redirect '/admin'
+            session[:success] = "Your Profile has been successfully updated"
+            redirect "/admin_view_profile/#{params[:user_id]}"
         else 
             @errors << "Invalid access level"
         end 
