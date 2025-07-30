@@ -7,12 +7,22 @@
         <div class="card-body">
             <form action="/register" method="post" enctype="multipart/form-data">
                 <div class="col-md-12 mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">Seller Name</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Input Your Name" value="#"/>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= @profile['name'] %>" readonly disabled />
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label for="email" class="form-label">Seller Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= @profile['email'] %>" readonly disabled />
                     </div>
                 </div>
 
