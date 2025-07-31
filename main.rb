@@ -733,7 +733,7 @@ get '/user_profile/:user_id' do
     erb :'user/profile/view', layout: :'layouts/user/template'
 end 
 
-get '/user_profile_edit/:user_id' do 
+get '/editan' do 
     redirect '/login' unless logged_in? 
 
     @title = "User Profile Edit"
