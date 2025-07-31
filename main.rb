@@ -710,6 +710,26 @@ get '/seller_profile_view/:user_id' do
     erb :'seller/profile/view', layout: :'layouts/seller/template'
 end 
 
+get '/seller_profile_view/:user_id' do 
+    redirect '/login' unless logged_in? 
+
+    @title = "Seller Profile Edit"
+    @profile = current_user
+
+    @errors = []
+    erb :'seller/profile/edit', layout: :'layouts/seller/template'
+end 
+
+get '/seller_profile_edit/:user_id' do 
+    redirect '/login' unless logged_in? 
+
+    @title = "User Profile Edit"
+    @profile = current_user
+
+    @errors = []
+    erb :'user/profile/edit', layout: :'layouts/user/template'
+end 
+
 get '/user_profile/:user_id' do 
     redirect '/login' unless logged_in? 
 
