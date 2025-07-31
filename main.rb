@@ -670,7 +670,7 @@ get '/seller_profile' do
     @title = "Seller Profile"
     @profile = current_user
     @errors = []
-    erb :'seller/profile/view', layout: :'layouts/seller/template'
+    erb :'seller/profile/view', layout: :'layouts/seller/seller_panel/layout'
 end 
 
 get '/user_profile' do 
