@@ -28,7 +28,7 @@
                 Grade
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/user_profile">User</a></li>
+                <li><a class="dropdown-item" href="/user_profile/<%= current_user['user_id'] %>">User</a></li>
               </ul>
             </li>
           </ul>
@@ -39,7 +39,7 @@
               <a class="nav-link text-white" href="#">My Wishlists</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="/seller_register">Open Store</a>
+              <a class="nav-link text-white" href="/seller_register/<%= current_user['user_id'] %>">Open Store</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="/logout">Log Out</a>

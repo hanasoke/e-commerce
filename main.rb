@@ -646,7 +646,7 @@ post '/admin_edit_profile/:user_id' do
     end 
 end 
 
-get '/seller_dashboard' do 
+get '/seller_dashboard/:user_id' do 
     redirect '/login' unless logged_in?
 
     @title = "Seller Dashboard"
@@ -655,7 +655,7 @@ get '/seller_dashboard' do
     erb :'seller/seller_panel/index', layout: :'layouts/seller/seller_panel/layout'
 end 
 
-get '/seller_register' do 
+get '/seller_register/:user_id' do 
     redirect '/login' unless logged_in? 
 
     @title = "Seller Register"
@@ -664,7 +664,7 @@ get '/seller_register' do
     erb :'sign/seller/register', layout: :'layouts/sign/template'
 end
 
-get '/seller_profile' do 
+get '/seller_profile/:user_id' do 
     redirect '/login' unless logged_in? 
 
     @title = "Seller Profile"
@@ -687,7 +687,7 @@ get '/seller_profile' do
     erb :'seller/profile/view', layout: :'layouts/seller/seller_panel/layout'
 end 
 
-get '/seller_profile_view' do 
+get '/seller_profile_view/:user_id' do 
     redirect '/login' unless logged_in? 
 
     @title = "Seller Profile"
@@ -710,7 +710,7 @@ get '/seller_profile_view' do
     erb :'seller/profile/view', layout: :'layouts/seller/template'
 end 
 
-get '/user_profile' do 
+get '/user_profile/:user_id' do 
     redirect '/login' unless logged_in? 
 
     @title = "User Profile"
@@ -731,4 +731,13 @@ get '/user_profile' do
 
     @errors = []
     erb :'user/profile/view', layout: :'layouts/user/template'
+end 
+
+get '/user_profile_edit/:user_id' do 
+    redirect '/login' unless logged_in? 
+
+    @title = "User Profile Edit"
+    @profile = current_user
+
+
 end 

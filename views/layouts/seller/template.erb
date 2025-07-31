@@ -29,9 +29,9 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Admin</a></li>
-                <li><a class="dropdown-item" href="/seller_profile_view">User</a></li>
+                <li><a class="dropdown-item" href="/seller_profile_view/<%= current_user['user_id'] %>">User</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/seller_profile">Seller</a></li>
+                <li><a class="dropdown-item" href="/seller_profile/<%= current_user['user_id'] %>">Seller</a></li>
               </ul>
             </li>
           </ul>
