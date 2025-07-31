@@ -687,6 +687,29 @@ get '/seller_profile' do
     erb :'seller/profile/view', layout: :'layouts/seller/seller_panel/layout'
 end 
 
+get '/seller_profile_view' do 
+    redirect '/login' unless logged_in? 
+
+    @title = "Seller Profile"
+    @profile = current_user
+    
+    if @profile && @profile['birthdate']
+        birthdate = Date.parse(@profile['birthdate']) rescue nil 
+        if birthdate 
+            today = Date.today 
+            age = today.year - birthdate.year 
+            @profile['age'] = age
+        else 
+            @profile['age'] = 'Invalid birthdate'
+        end 
+    else 
+        @profile['age'] = 'Not available'
+    end
+
+    @errors = []
+    erb :'seller/profile/view', layout: :'layouts/seller/template'
+end 
+
 get '/user_profile' do 
     redirect '/login' unless logged_in? 
 
