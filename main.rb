@@ -669,6 +669,20 @@ get '/seller_profile' do
 
     @title = "Seller Profile"
     @profile = current_user
+    
+    if @profile && @profile['birthdate']
+        birthdate = Date.parse(@profile['birthdate']) rescue nil 
+        if birthdate 
+            today = Date.today 
+            age = today.year - birthdate.year 
+            @profile['age'] = age
+        else 
+            @profile['age'] = 'Invalid birthdate'
+        end 
+    else 
+        @profile['age'] = 'Not available'
+    end
+
     @errors = []
     erb :'seller/profile/view', layout: :'layouts/seller/seller_panel/layout'
 end 
@@ -678,6 +692,20 @@ get '/user_profile' do
 
     @title = "User Profile"
     @profile = current_user
+
+    if @profile && @profile['birthdate']
+        birthdate = Date.parse(@profile['birthdate']) rescue nil 
+        if birthdate 
+            today = Date.today 
+            age = today.year - birthdate.year 
+            @profile['age'] = age
+        else 
+            @profile['age'] = 'Invalid birthdate'
+        end 
+    else 
+        @profile['age'] = 'Not available'
+    end
+
     @errors = []
     erb :'user/profile/view', layout: :'layouts/user/template'
 end 
