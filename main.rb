@@ -739,5 +739,6 @@ get '/user_profile_edit/:user_id' do
     @title = "User Profile Edit"
     @profile = current_user
 
-
+    @errors = []
+    erb :'user/profile/edit', layout: :'layouts/user/template'
 end 
