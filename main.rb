@@ -746,11 +746,10 @@ get '/seller_profile_edit/:user_id' do
     @profile = current_user
 
     @errors = []
-    erb :'user/profile/edit', layout: :'layouts/user/template'
+    erb :'seller/profile/edit', layout: :'layouts/seller/template'
 end 
 
 post '/seller_profile_edit/:user_id' do 
-    editing_profile(name, username, email, birthdate, address, phone, user_id = nil)
     @errors = editing_profile(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:user_id])
 
     # error photo variable check 
@@ -759,7 +758,41 @@ post '/seller_profile_edit/:user_id' do
 
     photo_filename = nil 
 
-    
+    if @errors.empty? 
+        # Handle file upload 
+        if photo && photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+            File.open("./public/uploads/users/#{photo_filename}", "wb") do |f|
+                f.write(photo[:tempfile].read)
+            end 
+        end 
+
+        # Flash message
+        session[:success] = "Your Profile has been successfully updated"
+
+        # Update the profile in the database
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
+
+    else 
+        # Handle validation errors and re-render the edit form 
+        original_profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first 
+
+        # Merge user input with original data to retain user edit 
+        @profile = {
+            'user_id' => params[:user_id],
+            'name' => params[:name] || original_profile['name'],
+            'username' => params[:username] || original_profile['username'],
+            'email' => params[:email] || original_profile['email'],
+            'birthdate' => params[:birthdate] || original_profile['birthdate'],
+            'address' => params[:address] || original_profile['address'],
+            'phone' => params[:phone] || original_profile['phone'],
+            'photo' => photo_filename || original_profile['photo']
+        }
+        erb :'seller/profile/view', layout: :'layouts/seller/template'
+
+    end 
+
+        
 end 
 
 get '/user_profile/:user_id' do 

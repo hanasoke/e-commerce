@@ -1,73 +1,79 @@
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Dashboard</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">View Profile</li>
-    </ol>
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-user me-1"></i>
-            View <%= @profile['name']%>
-        </div>
-        <div class="card-body">
-            <div class="mb-3 row">
-                <label for="name" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @profile['name'] %>">
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <div class="card border-secondary">
+                <div class="card-header">User Profile Edit</div>
+                <div class="card-body">
+                   <div class="row g-0">
+                    <div class="col-md-4">
+                        <% if @profile['photo'] %>
+                                <img src="/uploads/users/<%= @profile['photo'] %>" class="img-fluid rounded-start" alt="<%= @profile['username']%>">
+                            <% end %>
+                            
+                            <div class="my-5">
+                                <label for="formFileSm" class="form-label">Input A New File</label>
+                                <input class="form-control form-control-sm w-50" id="formFileSm" type="file">
+                            </div>
+                    </div>
+                    <div class="col-md-8">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="name" value="<%= @profile['name'] %>">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="username" value="<%= @profile['username']%>">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" readonly class="form-control" id="email" value="<%= @profile['email'] %>">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="phone" value="<%= @profile['phone'] %>">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control" id="birthdate" value="<%= @profile['birthdate']%>">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="mb-3 row">
+                                    <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                    <div class="col-sm-10">
+                                        <textarea type="text" class="form-control" id="address" value="<%= @profile['address'] %>"><%= @profile['address'] %></textarea>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                   </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="username" class="col-sm-2 col-form-label">Username</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="username" value="<%= @profile['username'] %>">
+                <div class="card-footer">
+                    <a href="/user_profile/<%= current_user['user_id'] %>" class="btn btn-danger float-start">Back</a>
+                    <button class="btn btn-success float-end">Submit</button>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="email" value="<%= @profile['email'] %>">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= @profile['birthdate'] %>">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="age" class="col-sm-2 col-form-label">Age</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="age" value="<%= @profile['age'] %>">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="address" class="col-sm-2 col-form-label">Address</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="address" value="<%= @profile['address'] %>">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= @profile['phone'] %>">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="access" class="col-sm-2 col-form-label" for="photo">Photo</label>
-                <div class="col-sm-10">
-                    <% if @profile['photo'] %>
-                        <img src="/uploads/users/<%= @profile['photo'] %>" style="max-width: 200px">
-                    <% end %>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="access" class="col-sm-2 col-form-label">Access</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
-                </div>
-            </div>
-            <!-- Edit Button -->
-            <button href="#" class="btn btn-outline-success float-end">Edit My Profile</button>
-            <a href="/seller_profile_view" class="btn btn-outline-success float-start">Back</a>
+            </div>     
         </div>
     </div>
 </div>
