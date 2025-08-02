@@ -59,12 +59,6 @@
                     <% end %>
                 </div>
             </div>
-            <div class="mb-3 row">
-                <label for="access" class="col-sm-2 col-form-label">Access</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
-                </div>
-            </div>
             <!-- Edit Button -->
             <a href="/seller_profile_edit/<%= @current_user['user_id'] %>" class="btn btn-outline-success float-end">Edit My Profile</a>
         </div>
