@@ -763,6 +763,8 @@ post '/seller_profile_edit/:user_id' do
         # Update the profile in the database
         DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
 
+        redirect '/seller'
+
     else 
         # Handle validation errors and re-render the edit form 
         original_profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first 
