@@ -150,7 +150,7 @@ def editing_user(name, username, email, birthdate, address, phone, access, user_
     errors
 end 
 
-def editing_profile(name, username, email, birthdate, address, phone, access, user_id = nil)
+def editing_profile_admin(name, username, email, birthdate, address, phone, access, user_id = nil)
 
     errors = []
 
@@ -165,6 +165,25 @@ def editing_profile(name, username, email, birthdate, address, phone, access, us
     errors << "Phone cannot be blank."if phone.nil? || phone.strip.empty?
 
     errors << "Access cannot be blank." if access.nil? || access.strip.empty?
+
+    # Validate email 
+    errors.concat(validate_email(email, user_id))
+    errors
+end
+
+def editing_profile(name, username, email, birthdate, address, phone, user_id = nil)
+
+    errors = []
+
+    errors << "Name cannot be blank." if name.nil? || name.strip.empty?
+
+    errors << "Username cannot be blank." if username.nil? || username.strip.empty?
+    
+    errors << "Birthdate cannot be blank." if birthdate.nil? || birthdate.strip.empty?
+
+    errors << "Address cannot be blank." if address.nil? || address.strip.empty?
+
+    errors << "Phone cannot be blank."if phone.nil? || phone.strip.empty?
 
     # Validate email 
     errors.concat(validate_email(email, user_id))
@@ -583,7 +602,7 @@ end
 
 post '/admin_edit_profile/:user_id' do 
 
-    @errors = editing_profile(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
+    @errors = editing_profile_admin(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:access], params[:user_id])
 
     # error photo variable check 
     photo = params['photo']
@@ -728,6 +747,19 @@ get '/seller_profile_edit/:user_id' do
 
     @errors = []
     erb :'user/profile/edit', layout: :'layouts/user/template'
+end 
+
+post '/seller_profile_edit/:user_id' do 
+    editing_profile(name, username, email, birthdate, address, phone, user_id = nil)
+    @errors = editing_profile(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:user_id])
+
+    # error photo variable check 
+    photo = params['photo']
+    @errors += validate_photo(photo) if photo && photo[:tempfile] # Validate only if a new photo is provided
+
+    photo_filename = nil 
+
+    
 end 
 
 get '/user_profile/:user_id' do 
