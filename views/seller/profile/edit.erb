@@ -4,6 +4,18 @@
             <div class="card border-secondary">
                 <div class="card-header">User Profile Edit</div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <% if @errors&.any? %>
+                                    <% @errors.each do |error| %>
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <div><%= error %></div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    <% end %>
+                                <% end %>
+                            </div>
+                        </div>
                         <form action="/seller_profile_edit/<%= @profile['user_id'] %>" method="post" enctype="multipart/form-data" >
                         <div class="row g-0">
                             <div class="col-md-12">
@@ -16,7 +28,7 @@
                                     
                                     <div class="my-5">
                                         <label for="file" class="form-label">Input A New File</label>
-                                        <input class="form-control form-control-sm w-50" id="file" type="file" name="file">
+                                        <input class="form-control form-control-sm w-50" id="photo" type="file" name="photo">
                                     </div>
                             </div>
                             <div class="col-md-8">

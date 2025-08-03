@@ -744,7 +744,8 @@ post '/seller_profile_edit/:user_id' do
 
     # error photo variable check 
     photo = params['photo']
-    @errors += validate_photo(photo) if photo && photo[:tempfile] # Validate only if a new photo is provided
+    # Validate only if a new photo is provided
+    @errors += validate_photo(photo) if photo && photo[:tempfile] 
 
     photo_filename = nil 
 
@@ -761,7 +762,7 @@ post '/seller_profile_edit/:user_id' do
         session[:success] = "Your Profile has been successfully updated"
 
         # Update the profile in the database
-        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo), access = ? WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
+        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
 
         redirect '/seller'
 
@@ -780,7 +781,7 @@ post '/seller_profile_edit/:user_id' do
             'phone' => params[:phone] || original_profile['phone'],
             'photo' => photo_filename || original_profile['photo']
         }
-        erb :'seller/profile/view', layout: :'layouts/seller/template'
+        erb :'seller/profile/edit', layout: :'layouts/seller/template'
 
     end 
 
