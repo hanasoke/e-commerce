@@ -23,13 +23,13 @@
                             </div>
                             <div class="col-md-4">
                                 <% if @profile['photo'] %>
-                                        <img src="/uploads/users/<%= @profile['photo'] %>" class="img-fluid rounded-start" alt="<%= @profile['username']%>">
-                                    <% end %>
+                                    <img src="/uploads/users/<%= @profile['photo'] %>" class="img-fluid rounded-start" alt="<%= @profile['username']%>">
+                                <% end %>
                                     
-                                    <div class="my-5">
-                                        <label for="file" class="form-label">Input A New File</label>
-                                        <input class="form-control form-control-sm w-50" id="photo" type="file" name="photo">
-                                    </div>
+                                <div class="my-5">
+                                    <label for="file" class="form-label">Input A New Photo</label>
+                                    <input class="form-control form-control-sm w-50" type="file" name="photo" id="photo">
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <ul class="list-group list-group-flush">
