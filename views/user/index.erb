@@ -1,9 +1,18 @@
-<% if session[:success] %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong><%= session[:success] %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col mb-4">
+            <% if session[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= session[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session[:success] = nil %>
+            <% end %>
+        </div>
     </div>
-    <% session[:success] = nil %>
-<% end %>
-
-<h1>Hello <%= current_user['name'] %></h1>
+    <div class="row">
+        <div class="col">
+            <h1>Hello <%= current_user['name'] %></h1>
+        </div>
+    </div>
+</div>
