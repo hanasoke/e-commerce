@@ -16,6 +16,7 @@
     end  
 %>
 
+
 <div class="col-lg-8">
     <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
         <div class="card-header">
@@ -23,7 +24,30 @@
         </div>
 
         <div class="card-body">
-            <form action="/register" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col">
+                    <% if @errors&.any? %>
+                        <% @errors.each do |e| %>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <div><%= e %></div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <% if session[:success] %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div>
+                                <%= session.delete(:success)%>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
                 <div class="col-md-12 mb-3">
                     <label for="name" class="form-label">Seller Name</label>
                     <div class="input-group">
@@ -73,10 +97,10 @@
                         <input type="text" class="form-control" id="age" value="<%= age ? "#{age} years" : '' %>" disabled/>
                     </div>
                 </div>
-
+            <form action="/seller_register/<%= current_user['user_id'] %>" method="post" enctype="multipart/form-data">
                 <div class="col-md-12 mb-3">
                     <label for="identity_card" class="form-label">Identity Card</label>
-                    <input class="form-control" type="file" id="identity_card">
+                    <input class="form-control" type="file" id="identity_card" name="identity_photo">
                 </div>
 
                 <div class="mt-4 mb-0">

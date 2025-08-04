@@ -238,7 +238,6 @@ def validate_user_login(email, password)
     errors
 end
 
-
 # Routes 
 
 # Homepage 
@@ -683,6 +682,54 @@ get '/seller_register/:user_id' do
     @errors = []
     erb :'sign/seller/register', layout: :'layouts/sign/template'
 end
+
+post '/seller_register/:user_id' do
+    redirect '/login' unless logged_in? 
+
+    @errors = []
+
+    # pastikan yang mendaftar adalah user yang sedang login (prevent spoofing)
+    unless params[:user_id].to_i == session[:user_id].to_i 
+        halt 403, "Forbidden"
+    end 
+
+    user_id = session[:user_id]
+    photo = params['identity_photo']
+
+    # Validasi foto jika ada 
+    @errors += validate_photo(photo)
+
+    if @errors.empty?
+        
+        # Cek apakah seller sudah terdaftar sebelumnya 
+        existing = DB.get_first_row("SELECT * FROM sellers WHERE user_id = ?", [user_id])
+
+        if existing
+            @errors << "Seller profile already registered"
+        else 
+            photo_filename = nil 
+            if photo && photo[:tempfile]
+                photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+                File.open("./public/uploads/sellers/#{photo_filename}", 'wb') do |f|
+                    f.write(photo[:tempfile].read)
+                end 
+            end 
+
+            begin 
+                DB.execute("INSERT INTO sellers (user_id, identity_photo) VALUES (?, ?)", [user_id, photo_filename])
+                session[:success] = "Seller account registered."
+                redirect '/seller' 
+            rescue SQLite3::ConstraintException => e 
+                @errors << "Registration failed: #{e.message}"
+            end 
+        end 
+    end 
+
+    # Jika ada error, render ulang form 
+    @title = "Seller Register"
+    @profile = current_user
+    erb :'sign/seller/register', layout: :'layouts/sign/template'
+end 
 
 get '/seller_profile/:user_id' do 
     redirect '/login' unless logged_in? 
