@@ -683,7 +683,7 @@ get '/seller_register/:user_id' do
     redirect '/login' unless logged_in?
     
     if seller_registered?(session[:user_id])
-        session[:success] = "You have already registered as a seller"
+        flash[:warning] = "You have already registered as a seller"
         redirect '/seller'
     end 
 

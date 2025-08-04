@@ -11,6 +11,17 @@
         </div>
     </div>
     <div class="row">
+        <div class="col mb-4">
+            <% if flash[:warning] %>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:warning] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:warning] = nil %>
+            <% end %>
+        </div>
+    </div>
+    <div class="row">
         <div class="col">
             <h1 class="text-uppercase my-5 mx-5">Hello <%= current_user['name'] %></h1>
         </div>
