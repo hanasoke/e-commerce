@@ -30,6 +30,11 @@ def user_count
     result.to_i
 end 
 
+def seller_registered?(user_id)
+    result = DB.get_first_value("SELECT COUNT(*) FROM sellers WHERE user_id = ?", [user_id])
+    result.to_i > 0
+end 
+
 def current_user 
     @current_user ||= DB.execute("SELECT * FROM users WHERE user_id = ?", [session[:user_id]]).first if logged_in?
 end 
@@ -675,7 +680,12 @@ get '/seller_dashboard/:user_id' do
 end 
 
 get '/seller_register/:user_id' do 
-    redirect '/login' unless logged_in? 
+    redirect '/login' unless logged_in?
+    
+    if seller_registered?(session[:user_id])
+        session[:success] = "You have already registered as a seller"
+        redirect '/seller'
+    end 
 
     @title = "Seller Register"
     @profile = current_user
