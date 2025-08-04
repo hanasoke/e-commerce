@@ -1,3 +1,11 @@
+<% 
+    english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    birthdate = Date.parse(@profile['birthdate']) rescue nil 
+
+    formatted_birthdate = birthdate ? "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}" : ''
+%>
+
 <div class="col-lg-8">
     <div class="card shadow-lg border-0 rounded-lg mt-5 mb-5">
         <div class="card-header">
@@ -12,7 +20,7 @@
                         <span class="input-group-text">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" class="form-control" id="name" name="name" value="<%= @profile['name'] %>" readonly disabled />
+                        <input type="text" class="form-control" id="name" name="name" value="<%= @profile['name'] %>" disabled />
                     </div>
                 </div>
 
@@ -22,17 +30,33 @@
                         <span class="input-group-text">
                             <i class="fa-solid fa-envelope"></i>
                         </span>
-                        <input type="email" class="form-control" id="email" name="email" value="<%= @profile['email'] %>" readonly disabled />
+                        <input type="email" class="form-control" id="email" name="email" value="<%= @profile['email'] %>" disabled />
                     </div>
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <label for="formFile" class="form-label">Default file input example</label>
-                    <input class="form-control" type="file" id="formFile">
+                    <label for="phone" class="form-label">Seller Phone Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        <input type="phone" class="form-control" id="phone" name="phone" value="<%= @profile['phone'] %>" disabled />
+                    </div>
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <input type="hidden" class="form-control" id="access" name="access" value="1" >
+                    <label for="birthdate" class="form-label">Birthdate</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-calendar"></i>
+                        </span>
+                        <input type="birthdate" class="form-control" id="birthdate" name="birthdate" value="<%= formatted_birthdate %>" disabled/>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label for="id_card" class="form-label">ID Card</label>
+                    <input class="form-control" type="file" id="id_card">
                 </div>
 
                 <div class="mt-4 mb-0">

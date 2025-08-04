@@ -6,6 +6,7 @@ require 'prawn'
 require 'rubyXL'
 require 'prawn/table'
 require 'write_xlsx'
+require 'date'
 
 # This is also needed for generating files in memory
 require 'stringio'
