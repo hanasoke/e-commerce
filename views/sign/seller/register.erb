@@ -4,6 +4,16 @@
     birthdate = Date.parse(@profile['birthdate']) rescue nil 
 
     formatted_birthdate = birthdate ? "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}" : ''
+
+    # calculated the age 
+    today = Date.today 
+    age = if birthdate
+        age = today.year - birthdate.year 
+        age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
+        age
+    else 
+        nil
+    end  
 %>
 
 <div class="col-lg-8">
@@ -55,8 +65,18 @@
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <label for="id_card" class="form-label">ID Card</label>
-                    <input class="form-control" type="file" id="id_card">
+                    <label for="birthdate" class="form-label">Age</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-calendar"></i>
+                        </span>
+                        <input type="text" class="form-control" id="age" value="<%= age ? "#{age} years" : '' %>" disabled/>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label for="identity_card" class="form-label">Identity Card</label>
+                    <input class="form-control" type="file" id="identity_card">
                 </div>
 
                 <div class="mt-4 mb-0">
