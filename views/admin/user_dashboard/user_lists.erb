@@ -1,3 +1,23 @@
+<%
+    english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    birthdate = Date.parse(@user['birthdate'])
+    rescue nil 
+
+    formatted_birthdate = birthdate ? "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}" : ''
+
+    # calculated the age 
+    today = Date.today 
+    age = if birthdate 
+        age = today.year - birthdate.year 
+        age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
+        age 
+    else 
+        nil
+    end  
+%> 
+
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
@@ -38,7 +58,8 @@
                         <td><%= user['name'] %></td>
                         <td><%= user['username'] %></td>
                         <td><%= user['email'] %></td>
-                        <td><%= user['birthdate'] %></td>
+                        <td><%= formatted_birthdate %></td>
+                        <td><%= age ? "#{age} years" : '' %></td>
                         <td><%= user['address'] %></td>
                         <td><%= user['phone']%></td>
                         <td>
