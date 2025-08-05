@@ -267,7 +267,7 @@ get '/seller' do
     
     @errors = []
     @title = 'Seller'
-    erb :'seller/index', layout: :'layouts/user/template'
+    erb :'user/index', layout: :'layouts/user/template'
 end 
 
 # Login
@@ -676,7 +676,7 @@ get '/seller_dashboard/:user_id' do
     @title = "Seller Dashboard"
     @profile = current_user
     @errors = []
-    erb :'seller/seller_panel/index', layout: :'layouts/seller/seller_panel/layout'
+    erb :'seller/seller_panel/index', layout: :'layouts/seller/layout'
 end 
 
 get '/seller_register/:user_id' do 
@@ -765,87 +765,7 @@ get '/seller_profile/:user_id' do
     end
 
     @errors = []
-    erb :'seller/profile/view', layout: :'layouts/seller/seller_panel/layout'
-end 
-
-get '/seller_profile_view/:user_id' do 
-    redirect '/login' unless logged_in? 
-
-    @title = "Seller Profile"
-    @profile = current_user
-    
-    if @profile && @profile['birthdate']
-        birthdate = Date.parse(@profile['birthdate']) rescue nil 
-        if birthdate 
-            today = Date.today 
-            age = today.year - birthdate.year 
-            @profile['age'] = age
-        else 
-            @profile['age'] = 'Invalid birthdate'
-        end 
-    else 
-        @profile['age'] = 'Not available'
-    end
-
-    @errors = []
-    erb :'seller/profile/view', layout: :'layouts/user/template'
-end 
-
-get '/seller_profile_edit/:user_id' do 
-    redirect '/login' unless logged_in? 
-
-    @title = "User Profile Edit"
-    @profile = current_user
-
-    @errors = []
-    erb :'seller/profile/edit', layout: :'layouts/user/template'
-end 
-
-post '/seller_profile_edit/:user_id' do 
-    @errors = editing_profile(params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], params[:user_id])
-
-    # error photo variable check 
-    photo = params['photo']
-    # Validate only if a new photo is provided
-    @errors += validate_photo(photo) if photo && photo[:tempfile] 
-
-    photo_filename = nil 
-
-    if @errors.empty? 
-        # Handle file upload 
-        if photo && photo[:tempfile]
-            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
-            File.open("./public/uploads/users/#{photo_filename}", "wb") do |f|
-                f.write(photo[:tempfile].read)
-            end 
-        end 
-
-        # Flash message
-        session[:success] = "Your Profile has been successfully updated"
-
-        # Update the profile in the database
-        DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
-
-        redirect '/seller'
-
-    else 
-        # Handle validation errors and re-render the edit form 
-        original_profile = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first 
-
-        # Merge user input with original data to retain user edit 
-        @profile = {
-            'user_id' => params[:user_id],
-            'name' => params[:name] || original_profile['name'],
-            'username' => params[:username] || original_profile['username'],
-            'email' => params[:email] || original_profile['email'],
-            'birthdate' => params[:birthdate] || original_profile['birthdate'],
-            'address' => params[:address] || original_profile['address'],
-            'phone' => params[:phone] || original_profile['phone'],
-            'photo' => photo_filename || original_profile['photo']
-        }
-        erb :'seller/profile/edit', layout: :'layouts/seller/template'
-
-    end 
+    erb :'seller/profile/view', layout: :'layouts/seller/layout'
 end 
 
 get '/user_profile/:user_id' do 
