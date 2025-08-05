@@ -727,6 +727,10 @@ post '/seller_register/:user_id' do
 
             begin 
                 DB.execute("INSERT INTO sellers (user_id, identity_photo) VALUES (?, ?)", [user_id, photo_filename])
+
+                # Update access level after successful seller registration 
+                DB.execute("UPDATE users SET access = 2 WHERE user_id = ?", [user_id])
+
                 session[:success] = "Seller account registered."
                 redirect '/seller' 
             rescue SQLite3::ConstraintException => e 
