@@ -23,18 +23,14 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="#">Items</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Grade
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/user_profile/<%= current_user['user_id'] %>">User</a></li>
-              </ul>
+            <li class="nav-item">
+              <a class="nav-item text-white" href="/user_profile/<%= current_user['user_id'] %>">User</a>
             </li>
           </ul>
 
           <!-- Right-aligned nav items (Login & Register) -->
           <ul class="navbar-nav mb-2 mb-lg-0">
+            
             <li class="nav-item">
               <a class="nav-link text-white" href="#">My Wishlists</a>
             </li>
@@ -47,6 +43,9 @@
               <!-- Show "My Store" only for users with access level 2 -->
               <li class="nav-item">
                 <a class="nav-link text-white" href="/seller_dashboard/<%= current_user['user_id'] %>">My Store</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="/seller_dashboard/<%= current_user['user_id'] %>">Seller Profile</a>
               </li>
             <% end %>
 

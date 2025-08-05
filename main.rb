@@ -788,7 +788,7 @@ get '/seller_profile_view/:user_id' do
     end
 
     @errors = []
-    erb :'seller/profile/view', layout: :'layouts/seller/template'
+    erb :'seller/profile/view', layout: :'layouts/user/template'
 end 
 
 get '/seller_profile_edit/:user_id' do 
@@ -798,7 +798,7 @@ get '/seller_profile_edit/:user_id' do
     @profile = current_user
 
     @errors = []
-    erb :'seller/profile/edit', layout: :'layouts/seller/template'
+    erb :'seller/profile/edit', layout: :'layouts/user/template'
 end 
 
 post '/seller_profile_edit/:user_id' do 
@@ -906,7 +906,16 @@ post '/user_profile_edit/:user_id' do
         # Update the profile in the database
         DB.execute("UPDATE users SET name = ?, username = ?, email = ?, birthdate = ?, address = ?, phone = ?, photo = COALESCE(?, photo) WHERE user_id = ?", [params[:name], params[:username], params[:email], params[:birthdate], params[:address], params[:phone], photo_filename, params[:user_id]])
 
-        redirect '/account'
+        # Fetch updated access level from DB 
+        updated_user = DB.get_first_row("SELECT access FROM users WHERE user_id = ?", [params[:user_id]])
+
+        if updated_user['access'].to_i == 1
+            redirect '/account'
+        elsif updated_user['access'].to_i == 2
+            redirect '/seller'
+        else 
+            redirect '/' #fallback
+        end 
 
     else 
         # Handle validation errors and re-render the edit form 
