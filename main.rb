@@ -384,6 +384,16 @@ get '/admin' do
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
 
+get '/user_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "User Lists"
+    @users = DB.execute("SELECT * FROM users WHERE access IN (1, 2)")
+    erb :'admin/index', layout: :'layouts/admin/layout'
+
+end 
+
 get '/edit_user/:user_id' do 
     redirect '/login' unless logged_in?
 
