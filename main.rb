@@ -380,7 +380,8 @@ get '/admin' do
 
     @errors = []
     @title = "Admin"
-    @users = DB.execute("SELECT * FROM users")
+
+    
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
 
@@ -390,7 +391,7 @@ get '/user_lists' do
     @errors = []
     @title = "User Lists"
     @users = DB.execute("SELECT * FROM users WHERE access IN (1, 2)")
-    erb :'admin/index', layout: :'layouts/admin/layout'
+    erb :'admin/user_dashboard/user_lists', layout: :'layouts/admin/layout'
 
 end 
 
