@@ -856,3 +856,12 @@ post '/user_profile_edit/:user_id' do
 
     end 
 end 
+
+get '/seller_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "Seller Lists"
+    @sellers = DB.execute("SELECT * FROM sellers")
+    erb :'admin/seller_dashboard/seller_lists', layout: :'layouts/admin/layout'
+end 

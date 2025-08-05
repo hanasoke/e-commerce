@@ -1,0 +1,78 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Seller Lists</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Seller Lists
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>#</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Birthdate</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Photo</th>
+                        <th>Access</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>test</td>
+                        <td>test</td>
+                        <td>test@gmail.com</td>
+                        <td>2003-04-03</td>
+                        <td>Jl Parpostel No 56</td>
+                        <td>08324342332</td>
+                        <td>
+                            <p>No Photo Available</p>
+                        </td>
+                        <th>2</th>
+                        <th>
+                            <div class="btn-group" role="group" aria-label="Button Group">
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#">Delete</button>
+                                <a href="#" class="btn btn-info text-white">View</a>
+                                <a href="#" class="btn btn-primary">Edit</a>
+                            </div>
+                        </th>
+                    </tr>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="#" tabindex="-1" aria-labelledby="#" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title fs-5" id="#">Confirm Deletion</h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure want to delete this User ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <form action="#" method="POST">
+                                        <button type="submit" class="btn btn-primary">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
