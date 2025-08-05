@@ -1,3 +1,21 @@
+<%
+    english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    birthdate = Date.parse(@profile['birthdate']) rescue nil 
+
+    formatted_birthdate = birthdate ? "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}" : ''
+
+    # calculated the age 
+    today = Date.today 
+    age = if birthdate
+        age = today.year - birthdate.year 
+        age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
+        age 
+    else 
+        nil
+    end  
+%>
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
@@ -37,13 +55,13 @@
             <div class="mb-3 row">
                 <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= @profile['birthdate'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= formatted_birthdate %>">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="age" class="col-sm-2 col-form-label">Age</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="age" value="<%= @profile['age'] %>">
+                    <input type="text" readonly class="form-control-plaintext" id="age" value="<%= age ? "#{age} years" : '' %>">
                 </div>
             </div>
             <div class="mb-3 row">
