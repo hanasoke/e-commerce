@@ -38,11 +38,18 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="#">My Wishlists</a>
             </li>
-            <li class="nav-item">
-              <% unless seller_registered?(current_user['user_id']) %>
-                <a class="nav-link text-white" href="/seller_register/<%= current_user['user_id'] %>">Open Store</a>
-              <% end %>
-            </li>
+            <% if current_user['access'].to_i == 1 %>
+              <!-- Show "Open Store" only for users with access level 1 -->
+              <li class="nav-item">
+                  <a class="nav-link text-white" href="/seller_register/<%= current_user['user_id'] %>">Open Store</a>
+              </li>
+            <% elsif current_user['access'].to_i == 2 %>
+              <!-- Show "My Store" only for users with access level 2 -->
+              <li class="nav-item">
+                <a class="nav-link text-white" href="/seller_dashboard/<%= current_user['user_id'] %>">My Store</a>
+              </li>
+            <% end %>
+
             <li class="nav-item">
               <a class="nav-link text-white" href="/logout">Log Out</a>
             </li>
