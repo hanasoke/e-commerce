@@ -21,53 +21,66 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>User ID</th>
+                        <th>User Full Name</th>
+                        <th>User Email</th>
+                        <th>User Photo</th>
+                        <th>User Phone Number</th>
                         <th>Seller Identity</th>
+                        <th>Seller Address</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% @sellers.each_with_index do |seller, index| %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= seller['user_id'] %></td>
-                        <td>
-                            <% if seller['identity_photo'] %>
-                                <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 100px"/>
-                            <% else %>
-                                <p>No Photo Available</p>
-                            <% end %>
-                        </td>
-                        <th>
-                            <div class="btn-group" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#">Delete</button>
-                                <a href="#" class="btn btn-info text-white">View</a>
-                                <a href="#" class="btn btn-primary">Edit</a>
-                            </div>
-                        </th>
-                    </tr>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= seller['name'] %></td>
+                            <td><%= seller['email'] %></td>
+                            <td>
+                                <% if seller['photo'] %>
+                                    <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 100px; border-radius: 8px;">
+                                <% else %>
+                                    <p>No Photo Available</p>
+                                <% end %>
+                            </td>
+                            <td><%= seller['phone'] %></td>
+                            <td>
+                                <% if seller['identity_photo'] %>
+                                    <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 100px"/>
+                                <% else %>
+                                    <p>No Photo Available</p>
+                                <% end %>
+                            </td>
+                            <td><%= seller['address'] %></td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Button Group">
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#">Delete</button>
+                                    <a href="#" class="btn btn-info text-white">View</a>
+                                    <a href="#" class="btn btn-primary">Edit</a>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="#" tabindex="-1" aria-labelledby="#" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title fs-5" id="#">Confirm Deletion</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure want to delete this User ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <form action="#" method="POST">
-                                        <button type="submit" class="btn btn-primary">Delete</button>
-                                    </form>
+                        <!-- Modal -->
+                        <div class="modal fade" id="#" tabindex="-1" aria-labelledby="#" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title fs-5" id="#">Confirm Deletion</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure want to delete this User ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <form action="#" method="POST">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
                     <% end %>
                 </tbody>
             </table>

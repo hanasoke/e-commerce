@@ -873,6 +873,17 @@ get '/seller_lists' do
 
     @errors = []
     @title = "Seller Lists"
-    @sellers = DB.execute("SELECT * FROM sellers")
+    @sellers = DB.execute <<-SQL
+        SELECT 
+            sellers.*,
+            users.name,
+            users.email,
+            users.phone,
+            users.photo,
+            users.address
+        FROM sellers 
+        JOIN users ON sellers.user_id = users.user_id
+    SQL
+
     erb :'admin/seller_dashboard/seller_lists', layout: :'layouts/admin/layout'
 end 
