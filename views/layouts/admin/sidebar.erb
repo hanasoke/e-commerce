@@ -3,25 +3,30 @@
         <div class="sb-sidenav-menu">
             <div class="nav">
                 <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link" href="/admin">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
-                </a>
+
                 <div class="sb-sidenav-menu-heading">Lists</div>
                 <% if current_user['access'].to_i == 3 %>
-                <a class="nav-link" href="/user_lists">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
-                    User Lists
-                </a>
-                <a class="nav-link" href="/seller_lists">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-user-tie"></i></div>
-                    Seller Lists
-                </a>
+                    <a class="nav-link" href="/admin">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    <a class="nav-link" href="/user_lists">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                        User Lists
+                    </a>
+                    <a class="nav-link" href="/seller_lists">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-user-tie"></i></div>
+                        Seller Lists
+                    </a>
                 <% elsif current_user['access'].to_i == 2 %>
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Item Lists
-                </a>
+                    <a class="nav-link" href="#">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    <a class="nav-link" href="#">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Item Lists
+                    </a>
                 <% end %>
             </div>
         </div>
