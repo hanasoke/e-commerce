@@ -687,7 +687,7 @@ get '/seller_dashboard/:user_id' do
     @title = "Seller Dashboard"
     @profile = current_user
     @errors = []
-    erb :'seller/seller_panel/index', layout: :'layouts/seller/layout'
+    erb :'seller/seller_panel/index', layout: :'layouts/admin/layout'
 end 
 
 get '/seller_register/:user_id' do 
@@ -754,29 +754,6 @@ post '/seller_register/:user_id' do
     @title = "Seller Register"
     @profile = current_user
     erb :'sign/seller/register', layout: :'layouts/sign/template'
-end 
-
-get '/seller_profile/:user_id' do 
-    redirect '/login' unless logged_in? 
-
-    @title = "Seller Profile"
-    @profile = current_user
-    
-    if @profile && @profile['birthdate']
-        birthdate = Date.parse(@profile['birthdate']) rescue nil 
-        if birthdate 
-            today = Date.today 
-            age = today.year - birthdate.year 
-            @profile['age'] = age
-        else 
-            @profile['age'] = 'Invalid birthdate'
-        end 
-    else 
-        @profile['age'] = 'Not available'
-    end
-
-    @errors = []
-    erb :'seller/profile/view', layout: :'layouts/seller/layout'
 end 
 
 get '/user_profile/:user_id' do 
