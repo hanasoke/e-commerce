@@ -871,6 +871,9 @@ get '/view_seller/:user_id' do
     @title = "View My Seller Profile"
     @profile = current_user
 
+    # Get seller-specific information
+    @seller_info = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [params[:user_id]]).first
+
     if @profile && @profile['birthdate']
         birthdate = Date.parse(@profile['birthdate']) rescue nil 
         if birthdate
