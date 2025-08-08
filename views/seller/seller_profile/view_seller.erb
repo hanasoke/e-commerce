@@ -1,0 +1,99 @@
+<%
+    english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    birthdate = Date.parse(@profile['birthdate']) rescue nil 
+
+    formatted_birthdate = birthdate ? "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}" : ''
+
+    # calculated the age 
+    today = Date.today 
+    age = if birthdate
+        age = today.year - birthdate.year 
+        age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
+        age 
+    else 
+        nil
+    end  
+%>
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">View Profile</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-user me-1"></i>
+            View <%= @profile['name']%>
+        </div>
+        <div class="card-body">
+            <% if session[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= session[:success] %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session[:success] = nil %>
+            <% end %>
+            <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @profile['name'] %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="username" class="col-sm-2 col-form-label">Username</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="username" value="<%= @profile['username'] %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="email" value="<%= @profile['email'] %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= formatted_birthdate %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="age" class="col-sm-2 col-form-label">Age</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="age" value="<%= age ? "#{age} years" : '' %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="address" value="<%= @profile['address'] %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="phone" class="col-sm-2 col-form-label">Phone</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= @profile['phone'] %>">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="access" class="col-sm-2 col-form-label" for="photo">Photo</label>
+                <div class="col-sm-10">
+                    <% if @profile['photo'] %>
+                        <img src="/uploads/users/<%= @profile['photo'] %>" style="max-width: 200px">
+                    <% end %>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="access" class="col-sm-2 col-form-label">Access</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="access" value="<%= @profile['access'] %>">
+                </div>
+            </div>
+            <!-- Edit Button -->
+            <a class="btn btn-outline-success float-end" href="#">Edit My Profile</a>
+            <!-- Back Button -->
+            <a class="btn btn-outline-secondary float-start" href="/seller_dashboard/<%= current_user['user_id'] %>"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
+        </div>
+    </div>
+</div>
