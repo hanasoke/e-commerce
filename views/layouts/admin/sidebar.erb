@@ -25,7 +25,7 @@
                         Seller Lists
                     </a>
                 <% elsif current_user['access'].to_i == 2 %>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="/item_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                         Item Lists
                     </a>
