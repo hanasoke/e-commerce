@@ -1,1 +1,81 @@
-<h1>Item Lists</h1>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Dashboard Items</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Item Lists</li>
+    </ol>
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Primary Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body"><i class="fas fa-user"></i> 3 Users</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white text-decoration-none" href="/admin">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Success Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Danger Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            DataTable Example
+        </div>
+        <div class="card-body">
+            <% if session[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= session[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session[:success] = nil %>
+            <% end %>
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Item Name</th>
+                        <th>Type</th>
+                        <th>Brand</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Panci</td>
+                        <td>Wajan</td>
+                        <td>Sanken</td>
+                        <td>80 cm</td>
+                        <td>Inactive</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
