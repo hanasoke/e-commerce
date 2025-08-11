@@ -898,3 +898,11 @@ get '/item_lists/:user_id' do
 
     erb :'seller/seller_items/item_lists', layout: :'layouts/admin/layout'
 end 
+
+get '/add_my_store/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "Add My Store"
+
+    erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
+end 

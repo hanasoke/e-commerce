@@ -43,8 +43,8 @@
     </div>
     <div class="card mb-4">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            DataTable Example
+            <i class="fas fa-store me-1"></i>
+            Store
         </div>
         <div class="card-body">
             <% if session[:success] %>
@@ -54,28 +54,13 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Birthdate</th>
-                        <th>Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Sukijan</td>
-                        <td>suki67</td>
-                        <td>sukijan@gmail.com</td>
-                        <td>11 May 1980</td>
-                        <td>Jl Parpostel No 56</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h5 class="card-title">You Don't Have A Store</h5>
+            <p class="card-text">To sell your items, first open a store to add your products.</p>
+            <div class="text-center">
+                <div class="d-grid gap-2">
+                    <a href="/add_my_store/<%= current_user['user_id'] %>" class="btn btn-primary">Create A Store</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
