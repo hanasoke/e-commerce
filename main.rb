@@ -262,7 +262,14 @@ def validate_stores(store_name, store_address, store_status, cs_number)
 
     errors << "Customer Service Number cannot be blank." if cs_number.nil? || cs_number.strip.empty?
 
-    errors 
+    # power validation 
+    if cs_number.nil? || cs_number.strip.empty?
+        errors << "Customer Service cannot be blank."
+    elsif cs_number.to_f <= 0
+        errors << "Customer Service must be a positive number."
+    elsif cs_number.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "Customer Service must be a valid number." 
+    end 
 end 
 
 # Routes 
