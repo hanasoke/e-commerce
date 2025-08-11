@@ -37,8 +37,12 @@ DB.execute <<-SQL
         seller_id INTEGER,
         store_name TEXT,
         store_photo TEXT,
+        store_banner TEXT,
         store_address TEXT,
+        store_status TEXT,
         cs_number TEXT,
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id)
     )
 SQL
+
+# DB.execute("DROP TABLE stores");
