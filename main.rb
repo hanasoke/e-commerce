@@ -928,3 +928,10 @@ get '/add_my_store/:user_id' do
 
     erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
 end 
+
+post '/add_my_store' do 
+    redirect '/login' unless logged_in?
+
+    @title = "Adding My Store"
+
+end 
