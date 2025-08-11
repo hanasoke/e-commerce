@@ -32,7 +32,7 @@ SQL
 
 # Store Table 
 DB.execute <<-SQL 
-    CREATE TABLE NOT EXISTS store (
+    CREATE TABLE NOT EXISTS stores (
         store_id INTEGER PRIMARY KEY AUTOINCREMENT,
         seller_id INTEGER,
         store_name TEXT,
