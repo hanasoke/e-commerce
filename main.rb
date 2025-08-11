@@ -243,6 +243,28 @@ def validate_user_login(email, password)
     errors
 end
 
+def validate_stores(store_name, store_address, store_status, cs_number) 
+
+    errors = []
+
+    errors << "Store Name cannot be blank." if store_name.nil? || store_name.strip.empty?
+
+    # Check for unique name 
+    query = user_id ? "SELECT store_id FROM stores WHERE LOWER(store_name) = ? AND store_id != ?" : "SELECT store_id FROM stores WHERE LOWER (store_name) = ?"
+
+    existing_store_name = DB.execute(query, store_id ? [store_name.downcase, store_id] : [store_name.downcase]).first
+
+    errors << "Store Name already exists. Please Choose a different store name." if existing_store_name
+    
+    errors << "Store Address cannot be blank." if store_address.nil? || store_address.strip.empty?
+
+    errors << "Store Status cannot be blank." if store_status.nil? || store_status.strip.empty?
+
+    errors << "Customer Service Number cannot be blank." if cs_number.nil? || cs_number.strip.empty?
+
+    errors 
+end 
+
 # Routes 
 
 # Homepage 
