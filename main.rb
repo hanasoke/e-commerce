@@ -937,7 +937,7 @@ end
 post '/add_my_store' do 
     redirect '/login' unless logged_in?
 
-    @errors = validate_car(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
+    @errors = validate_stores(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
 
     store_photo = params['store_photo']
     store_banner = params['store_banner']
@@ -946,13 +946,23 @@ post '/add_my_store' do
     @errors += validate_photo(store_photo)
     @errors += validate_photo(store_banner)
 
-    if store_photo && store_photo[:tempfile]
-        store_photo_filename = "#{Time.now.to_i}_#{store_photo}"
-        File.open("./public/img/store/#{store_photo_filename}", 'wb') do |f|
-            f.write(store_photo[:tempfile].read)
-        end 
+    if @errors.empty?
+        # Handle file upload 
+        if store_photo && store_photo[:tempfile]
+            store_photo_filename = "#{Time.now.to_i}_#{store_photo}"
+            File.open("./public/img/store/#{store_photo_filename}", 'wb') do |f|
+                f.write(store_photo[:tempfile].read)
+            end 
+        end
+        
+        # Flash message
+        session[:success] = "My Store has been successfully added."
+
+        # Insert store details, including the photo, into the database 
+        DB.execute("INSERT INTO stores(seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number) VALUES(?, ?, ?, ?, ?, ?, ?)", [params[:store_name]])
+        
+        redirect '/add_my_store/:user_id'
+    else 
+        erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
     end 
-
-    @title = "Adding My Store"
-
 end 

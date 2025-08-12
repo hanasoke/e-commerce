@@ -42,7 +42,7 @@ DB.execute <<-SQL
         store_status TEXT,
         cs_number TEXT,
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id)
-    )
+    );
 SQL
 
 # DB.execute("DROP TABLE stores");
