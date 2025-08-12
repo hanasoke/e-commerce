@@ -260,8 +260,6 @@ def validate_stores(store_name, store_address, store_status, cs_number)
 
     errors << "Store Status cannot be blank." if store_status.nil? || store_status.strip.empty?
 
-    errors << "Customer Service Number cannot be blank." if cs_number.nil? || cs_number.strip.empty?
-
     # power validation 
     if cs_number.nil? || cs_number.strip.empty?
         errors << "Customer Service cannot be blank."
@@ -938,6 +936,22 @@ end
 
 post '/add_my_store' do 
     redirect '/login' unless logged_in?
+
+    @errors = validate_car(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
+
+    store_photo = params['store_photo']
+    store_banner = params['store_banner']
+
+    # Add photo validation errors 
+    @errors += validate_photo(store_photo)
+    @errors += validate_photo(store_banner)
+
+    if store_photo && store_photo[:tempfile]
+        store_photo_filename = "#{Time.now.to_i}_#{store_photo}"
+        File.open("./public/img/store/#{store_photo_filename}", 'wb') do |f|
+            f.write(store_photo[:tempfile].read)
+        end 
+    end 
 
     @title = "Adding My Store"
 
