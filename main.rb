@@ -243,33 +243,6 @@ def validate_user_login(email, password)
     errors
 end
 
-def validate_stores(store_name, store_address, store_status, cs_number) 
-
-    errors = []
-
-    errors << "Store Name cannot be blank." if store_name.nil? || store_name.strip.empty?
-
-    # Check for unique name 
-    query = user_id ? "SELECT store_id FROM stores WHERE LOWER(store_name) = ? AND store_id != ?" : "SELECT store_id FROM stores WHERE LOWER (store_name) = ?"
-
-    existing_store_name = DB.execute(query, store_id ? [store_name.downcase, store_id] : [store_name.downcase]).first
-
-    errors << "Store Name already exists. Please Choose a different store name." if existing_store_name
-    
-    errors << "Store Address cannot be blank." if store_address.nil? || store_address.strip.empty?
-
-    errors << "Store Status cannot be blank." if store_status.nil? || store_status.strip.empty?
-
-    # power validation 
-    if cs_number.nil? || cs_number.strip.empty?
-        errors << "Customer Service cannot be blank."
-    elsif cs_number.to_f <= 0
-        errors << "Customer Service must be a positive number."
-    elsif cs_number.to_s !~ /\A\d+(\.\d{1,2})?\z/
-        errors << "Customer Service must be a valid number." 
-    end 
-end 
-
 # Routes 
 
 # Homepage 
@@ -937,32 +910,29 @@ end
 post '/add_my_store' do 
     redirect '/login' unless logged_in?
 
-    @errors = validate_stores(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
+    user_id = params[:user_id].to_i 
+    store_name = params[:name]
+    store_address = params[:address]
+    store_status = "Open" # default
+    cs_number = params[:phone] 
+    store_photo = params[:store_photo]
+    store_banner = params[:store_banner]
 
-    store_photo = params['store_photo']
-    store_banner = params['store_banner']
+    errors = []
+    errors << "Store name cannot be blank" if store_name.strip.empty?
+    errors << "Store address cannot be blank" if store_address.strip.empty?
+    errors << "Customer service number cannot be blank" if cs_number.strip.empty?
 
-    # Add photo validation errors 
-    @errors += validate_photo(store_photo)
-    @errors += validate_photo(store_banner)
+    if errors.any?
+        @errors = errors 
+        @title = "Add Store"
+        @profile = current_user
+        return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
+    end 
 
-    if @errors.empty?
-        # Handle file upload 
-        if store_photo && store_photo[:tempfile]
-            store_photo_filename = "#{Time.now.to_i}_#{store_photo}"
-            File.open("./public/img/store/#{store_photo_filename}", 'wb') do |f|
-                f.write(store_photo[:tempfile].read)
-            end 
-        end
-        
-        # Flash message
-        session[:success] = "My Store has been successfully added."
-
-        # Insert store details, including the photo, into the database 
-        DB.execute("INSERT INTO stores(seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number) VALUES(?, ?, ?, ?, ?, ?, ?)", [params[:store_name]])
-        
-        redirect '/add_my_store/:user_id'
-    else 
-        erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
+    # Save store photo 
+    store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
+    File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
+        f.write(store_photo[:tempfile].read)
     end 
 end 
