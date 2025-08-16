@@ -935,4 +935,15 @@ post '/add_my_store' do
     File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
         f.write(store_photo[:tempfile].read)
     end 
+
+    # Save store banner 
+    store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
+    File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
+        f.write(store_banner[:tempfile].read)
+    end 
+
+    # Insert seller if not exists
+    
+
+
 end 
