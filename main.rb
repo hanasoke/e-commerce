@@ -943,7 +943,17 @@ post '/add_my_store' do
     end 
 
     # Insert seller if not exists
+    seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
+    unless seller   
+        DB.execute("INSERT INTO sellers (user_id, identity_photo) VALUES (?, ?)", [user_id, ""])
+        seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
+    end 
+
+    # Insert store
+    DB.execute(
+        "INSERT INTO stores (seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+        [seller['seller_id'], store_name, store_photo_filename, store_banner_filename, store_address, store_status, cs_number])
     
-
-
+    session[:success] = "Store created successfully!"
+    redirect "/seller_dashboard/#{user_id}"
 end 
