@@ -54,13 +54,24 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <h5 class="card-title">You Don't Have A Store</h5>
-            <p class="card-text">To sell your items, first open a store to add your products.</p>
-            <div class="text-center">
-                <div class="d-grid gap-2">
-                    <a href="/add_my_store/<%= current_user['user_id'] %>" class="btn btn-primary">Create A Store</a>
+
+            <% store = DB.get_first_row("
+                SELECT * FROM stores 
+                JOIN sellers ON stores.seller_id = sellers.seller_id 
+                WHERE sellers.user_id = ?", [current_user['user_id']]) %>
+
+            <% if store %>
+                <h5 class="card-title"><%= store['store_name'] %></h5>
+                <a href="/store_bio/<%= store['store_id'] %>" class="btn btn-success">Store Bio</a>
+            <% else %>
+                <h5 class="card-title">You Don't Have A Store</h5>
+                <p class="card-text">To sell your items, first open a store to add your products.</p>
+                <div class="text-center">
+                    <div class="d-grid gap-2">
+                        <a href="/add_my_store/<%= current_user['user_id'] %>" class="btn btn-primary">Create A Store</a>
+                    </div>
                 </div>
-            </div>
+            <% end %>
         </div>
     </div>
 </div>
