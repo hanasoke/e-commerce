@@ -907,14 +907,14 @@ get '/add_my_store/:user_id' do
     erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
 end 
 
-post '/add_my_store' do 
+post '/add_my_store/:user_id' do 
     redirect '/login' unless logged_in?
 
     user_id = params[:user_id].to_i 
-    store_name = params[:name]
-    store_address = params[:address]
-    store_status = "Open" # default
-    cs_number = params[:phone] 
+    store_name = params[:store_name]
+    store_address = params[:store_address]
+    store_status = params[:store_status]
+    cs_number = params[:cs_number] 
     store_photo = params[:store_photo]
     store_banner = params[:store_banner]
 
@@ -931,16 +931,22 @@ post '/add_my_store' do
     end 
 
     # Save store photo 
-    store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
-    File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
-        f.write(store_photo[:tempfile].read)
+    store_photo_filename = nil 
+    if store_photo && store_photo[:filename] && store_photo[:tempfile]
+        store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
+        File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
+            f.write(store_photo[:tempfile].read)
+        end 
     end 
 
     # Save store banner 
-    store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
-    File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
-        f.write(store_banner[:tempfile].read)
-    end 
+    store_banner_filename = nil 
+    if store_banner && store_banner[:filename] && store_banner[:tempfile]
+        store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
+        File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
+            f.write(store_banner[:tempfile].read)
+        end
+    end  
 
     # Insert seller if not exists
     seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
