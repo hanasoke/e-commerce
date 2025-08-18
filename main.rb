@@ -963,3 +963,12 @@ post '/add_my_store/:user_id' do
     session[:success] = "Store created successfully!"
     redirect "/seller_dashboard/#{user_id}"
 end 
+
+get '/store_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "Store Lists"
+
+    erb :'admin/seller_dashboard/store_lists', layout: :'layouts/admin/layout'
+end 

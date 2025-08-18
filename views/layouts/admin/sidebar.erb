@@ -24,6 +24,10 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-user-tie"></i></div>
                         Seller Lists
                     </a>
+                    <a class="nav-link" href="/store_lists">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
+                        Store Lists
+                    </a>
                 <% elsif current_user['access'].to_i == 2 %>
                     <a class="nav-link" href="/item_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
