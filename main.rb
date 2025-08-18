@@ -970,5 +970,24 @@ get '/store_lists' do
     @errors = []
     @title = "Store Lists"
 
+    # Fetch store + seller + user data 
+    @stores = DB.execute <<-SQL 
+        SELECT 
+            stores.store_id, 
+            stores.store_name, 
+            stores.store_photo,
+            stores.store_banner,
+            stores.store_address,
+            stores.store_status,
+            stores.cs_number,
+            users.name AS owner_name,
+            users.email AS owner_email,
+            users.username AS owner_username
+        FROM stores
+        JOIN sellers ON stores.seller_id = sellers.seller_id
+        JOIN users ON sellers.user_id = users.user_id
+        ORDER BY stores.store_id DESC
+    SQL
+
     erb :'admin/seller_dashboard/store_lists', layout: :'layouts/admin/layout'
 end 

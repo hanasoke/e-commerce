@@ -47,16 +47,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    <% @stores.each_with_index do |store, index| %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= store["owner_name"] %> (<%store["owner_username"]%>)
+                                <br>
+                                <small><%= store["owner_email"] %></small>
+                            </td>
+                            <td>
+                                <%= store["store_name"]%>
+                            </td>
+                            <td>
+                                <% if store["store_photo"] %>
+                                    <img src="/uploads/stores/<%= store["store_photo"]%>" alt="Store Photo" width="80">
+                                <% end %>
+                            </td>
+                            <td>
+                                <% if store["store_banner"] %>
+                                    <img src="/uploads/stores/<%= store["store_banner"] %>" alt="Store Banner" width="120" >
+                                <% end %>
+                            </td>
+                            <td>
+                                <%= store["store_address"] %>
+                            </td>
+                            <td>
+                                <%= store["cs_number"] %>
+                            </td>
+                            <td>
+                                <% if store["store_status"] == "Open" %>
+                                    <span class="badge bg-success">Open</span>
+                                <% else %>
+                                    <span class="badge bg-danger">Closed</span>
+                                <% end %>
+                            </td>
+                        </tr>
+                    <% end %>
                 </tbody>
             </table>
         </div>
