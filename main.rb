@@ -929,6 +929,15 @@ get '/view_seller_detail/:seller_id' do
     erb :'admin/seller_dashboard/view_detail', layout: :'layouts/admin/layout'
 end 
 
+# DELETE a user
+post '/delete_seller/:seller_id' do
+    # Flash message
+    session[:success] = "A seller has been successfully deleted."
+
+    DB.execute("DELETE FROM sellers WHERE seller_id = ?", [params[:seller_id]])
+    redirect '/seller_lists'
+end 
+
 get '/item_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
