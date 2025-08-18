@@ -54,18 +54,18 @@
                             <td><%= seller['address'] %></td>
                             <td>
                                 <div class="btn-group-sm btn-group" role="group" aria-label="Button Group">
-                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#">Delete</button>
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= seller['seller_id'] %>">Delete</button>
                                     <a href="#" class="btn btn-info text-white">View</a>
                                 </div>
                             </td>
                         </tr>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="#" tabindex="-1" aria-labelledby="#" aria-hidden="true">
+                        <div class="modal fade" id="deleteModal<%= seller['seller_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= seller['seller_id'] %>" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h3 class="modal-title fs-5" id="#">Confirm Deletion</h3>
+                                        <h3 class="modal-title fs-5" id="deleteModalLabel<%= seller['seller_id'] %>">Confirm Deletion</h3>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
