@@ -894,10 +894,38 @@ end
 get '/view_seller_detail/:seller_id' do 
     redirect '/login' unless logged_in?
 
-    @errors = []
+    seller_id = params[:seller_id]
+
+    # Join sellers with users to get full profile 
+    @seller = DB.execute(<<-SQL, seller_id).first
+        SELECT 
+            s.seller_id,
+            s.identity_photo,
+            s.user_id,
+            u.username,
+            u.name,
+            u.email,
+            u.phone,
+            u.photo,
+            u.birthdate,
+            u.address
+        FROM sellers s 
+        JOIN users u ON s.user_id = u.user_id
+        WHERE s.seller_id = ?
+    SQL
+
+    if @seller.nil?
+        flash[:error] = "Seller not found"
+        redirect '/seller_lists'
+    end 
+
+    # calculate age if birthdate exists 
+    if @seller["birthdate"]
+        birthdate = Date.parse(@seller["birthdate"]) rescue nil 
+        @seller["age"] = ((Date.today - birthdate).to_i / 365) if birthdate
+    end 
+
     @title = "Seller Detail"
-
-
     erb :'admin/seller_dashboard/view_detail', layout: :'layouts/admin/layout'
 end 
 
