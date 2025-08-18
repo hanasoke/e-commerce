@@ -891,6 +891,16 @@ get '/view_seller/:user_id' do
     erb :'seller/seller_profile/view_seller', layout: :'layouts/admin/layout'
 end 
 
+get '/view_seller_detail/:seller_id' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "Seller Detail"
+
+
+    erb :'admin/seller_dashboard/view_detail', layout: :'layouts/admin/layout'
+end 
+
 get '/item_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
@@ -990,3 +1000,4 @@ get '/store_lists' do
 
     erb :'admin/store_dashboard/store_lists', layout: :'layouts/admin/layout'
 end 
+
