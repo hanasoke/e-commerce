@@ -1,0 +1,23 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Store Lists</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Store Lists
+        </div>
+        <div class="card-body">
+            <% if session[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= session[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
+                </div>
+                <% session[:success] = nil %>
+            <% end %>
+            
+        </div>
+    </div>
+</div>
