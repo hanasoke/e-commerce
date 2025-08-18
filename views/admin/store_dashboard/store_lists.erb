@@ -86,11 +86,33 @@
                                 <% end %>
                             </td>
                             <td>
-                                <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#" >
+                                <button type="submit" class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#deleteModal<%= store["store_id"] %>" >
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
+                                <a href="#" class="btn btn-info text-white btn-sm mb-1"><i class="fa-solid fa-eye"></i></a>
                             </td>
                         </tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteModal<%= store['store_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= store['store_id'] %>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title fs-5" id="deleteModalLabel<%= store['store_id'] %>">Confirm Deletion</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure want to delete this Store ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <form action="#" method="POST">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <% end %>
                 </tbody>
             </table>
