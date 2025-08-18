@@ -981,8 +981,7 @@ get '/store_lists' do
             stores.store_status,
             stores.cs_number,
             users.name AS owner_name,
-            users.email AS owner_email,
-            users.username AS owner_username
+            users.email AS owner_email
         FROM stores
         JOIN sellers ON stores.seller_id = sellers.seller_id
         JOIN users ON sellers.user_id = users.user_id
