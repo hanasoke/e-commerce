@@ -988,5 +988,5 @@ get '/store_lists' do
         ORDER BY stores.store_id DESC
     SQL
 
-    erb :'admin/seller_dashboard/store_lists', layout: :'layouts/admin/layout'
+    erb :'admin/store_dashboard/store_lists', layout: :'layouts/admin/layout'
 end 
