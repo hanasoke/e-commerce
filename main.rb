@@ -1038,3 +1038,11 @@ get '/store_lists' do
     erb :'admin/store_dashboard/store_lists', layout: :'layouts/admin/layout'
 end 
 
+# DELETE a user
+post '/delete_store/:store_id' do
+    # Flash message
+    session[:success] = "A store has been successfully deleted."
+
+    DB.execute("DELETE FROM stores WHERE store_id = ?", [params[:store_id]])
+    redirect '/store_lists'
+end 
