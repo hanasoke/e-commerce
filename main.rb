@@ -972,8 +972,8 @@ post '/add_my_store/:user_id' do
     errors << "Store address cannot be blank" if store_address.empty?
     errors << "Customer service number cannot be blank" if cs_number.empty?
 
-    # Check CS number numeric + valid length 
-    unless cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
+    # Check CS number must be numeric + valid length 
+    unless cs_number.empty? || cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
         errors << "Customer service number must be numeric (8 - 15 digits)"
     end 
 
@@ -984,14 +984,17 @@ post '/add_my_store/:user_id' do
 
     # File type validation 
     allowed_extensions = [".jpg", ".jpeg", ".png", ".gif"]
-    if store_photo && store_photo[:filename]
-        ext = File.extname(store_photo[:filename]).downcase 
-        errors << "Store photo must be an image (jpg, jpeg, png, gif)" unless allowed_extensions.include?(ext)
+
+    if store_photo.nil? || store_photo[:filename].empty?
+        errors << "Store photo is required"
+    elsif !allowed_extensions.include?(File.extname(store_photo[:filename]).downcase)
+        errors << "Store photo must be an image (jpg, jpeg, png, gif)"
     end 
 
-    if store_banner && store_banner[:filename]
-        ext = File.extname(store_banner[:filename]).downcase
-        errors << "Store banner must be an image (jpg, jpeg, png, gif)" unless allowed_extensions.include?(ext)
+    if store_banner.nil? || store_banner[:filename].empty?
+        errors << "Store banner is required"
+    elsif !allowed_extensions.include?(File.extname(store_banner[:filename]).downcase)
+        errors << "Store banner must be an image (jpg, jpeg, png, gif)"
     end 
 
     # If errors exist, re-render form with messages
@@ -1003,22 +1006,16 @@ post '/add_my_store/:user_id' do
     end 
 
     # Save store photo 
-    store_photo_filename = nil 
-    if store_photo && store_photo[:filename] && store_photo[:tempfile]
-        store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
-        File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
-            f.write(store_photo[:tempfile].read)
-        end 
-    end 
-
-    # Save store banner 
-    store_banner_filename = nil 
-    if store_banner && store_banner[:filename] && store_banner[:tempfile]
-        store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
-        File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
-            f.write(store_banner[:tempfile].read)
-        end
+    store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
+    File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
+        f.write(store_photo[:tempfile].read)
     end  
+
+    # Save store banner
+    store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
+    File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
+        f.write(store_banner[:tempfile].read)
+    end
 
     # Insert seller if not exists
     seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
