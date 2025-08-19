@@ -958,18 +958,43 @@ post '/add_my_store/:user_id' do
     redirect '/login' unless logged_in?
 
     user_id = params[:user_id].to_i 
-    store_name = params[:store_name]
-    store_address = params[:store_address]
-    store_status = params[:store_status]
-    cs_number = params[:cs_number] 
+    store_name = params[:store_name].to_s.strip
+    store_address = params[:store_address].to_s.strip 
+    store_status = params[:store_status].to_s.strip 
+    cs_number = params[:cs_number].to_s.strip 
     store_photo = params[:store_photo]
     store_banner = params[:store_banner]
 
     errors = []
-    errors << "Store name cannot be blank" if store_name.strip.empty?
-    errors << "Store address cannot be blank" if store_address.strip.empty?
-    errors << "Customer service number cannot be blank" if cs_number.strip.empty?
 
+    # Basic presence validation
+    errors << "Store name cannot be blank" if store_name.empty?
+    errors << "Store address cannot be blank" if store_address.empty?
+    errors << "Customer service number cannot be blank" if cs_number.empty?
+
+    # Check CS number numeric + valid length 
+    unless cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
+        errors << "Customer service number must be numeric (8 - 15 digits)"
+    end 
+
+    # Store status validation 
+    unless ["Active", "Inactive"].include?(store_status)
+        errors << "Store status must be Active or Inactive"
+    end 
+
+    # File type validation 
+    allowed_extensions = [".jpg", ".jpeg", ".png", ".gif"]
+    if store_photo && store_photo[:filename]
+        ext = File.extname(store_photo[:filename]).downcase 
+        errors << "Store photo must be an image (jpg, jpeg, png, gif)" unless allowed_extensions.include?(ext)
+    end 
+
+    if store_banner && store_banner[:filename]
+        ext = File.extname(store_banner[:filename]).downcase
+        errors << "Store banner must be an image (jpg, jpeg, png, gif)" unless allowed_extensions.include?(ext)
+    end 
+
+    # If errors exist, re-render form with messages
     if errors.any?
         @errors = errors 
         @title = "Add Store"
