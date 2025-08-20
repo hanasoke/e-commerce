@@ -1068,3 +1068,11 @@ post '/delete_store/:store_id' do
     DB.execute("DELETE FROM stores WHERE store_id = ?", [params[:store_id]])
     redirect '/store_lists'
 end 
+
+get '/store_bio/:store_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "View My Store"
+
+    erb :'seller/store_panel/view_store', layout: :'layouts/admin/layout'
+end 
