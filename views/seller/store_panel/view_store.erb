@@ -1,7 +1,7 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">View User Profile</li>
+        <li class="breadcrumb-item active">View Store Profile</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
@@ -12,47 +12,55 @@
             <div class="mb-3 row">
                 <label for="name" class="col-sm-2 col-form-label">Owner Name</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="name" value="#">
+                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @store['owner_name'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="username" class="col-sm-2 col-form-label">Store Name</label>
+                <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="username" value="#">
+                    <input type="text" readonly class="form-control-plaintext" id="store_name" value="<%= @store['store_name'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="email" class="col-sm-2 col-form-label">Store Address</label>
+                <label for="store_address" class="col-sm-2 col-form-label">Store Address</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="email" value="#">
+                    <input type="text" readonly class="form-control-plaintext" id="store_address" value="<%= @store['store_address'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="birthdate" class="col-sm-2 col-form-label">Store Status</label>
+                <label for="store_status" class="col-sm-2 col-form-label">Store Status</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="#">
+                    <input type="text" readonly class="form-control-plaintext" id="store_status" value="<%= @store['store_status'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="age" class="col-sm-2 col-form-label">Customer Service Number</label>
+                <label for="cs_number" class="col-sm-2 col-form-label">Customer Service Number</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" id="age" value="#">
+                    <input type="text" readonly class="form-control-plaintext" id="cs_number" value="<%= @store['cs_number']%>">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="access" class="col-sm-2 col-form-label" for="photo">Store Photo</label>
+                <label class="col-sm-2 col-form-label" for="photo">Store Banner</label>
                 <div class="col-sm-10">
-                    <img src="...." style="max-width: 200px">
+                    <% if @store['store_banner'] && !@store['store_banner'].empty? %>
+                        <img src="/uploads/stores/<%= @store['store_banner'] %>" style="max-width: 200px" alt="Store Banner">
+                    <% else %>
+                        <span class="text-muted">No store banner available</span>
+                    <% end %>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="access" class="col-sm-2 col-form-label" for="photo">Store Banner</label>
+                <label class="col-sm-2 col-form-label">Store Photo</label>
                 <div class="col-sm-10">
-                    <img src="...." style="max-width: 200px">
+                    <% if @store['store_photo'] && !@store['store_photo'].empty? %>
+                        <img src="/uploads/stores/<%= @store['store_photo'] %>" style="max-width: 200px" alt="Store Photo">
+                    <% else %>
+                        <span class="text-muted">No store banner available</span>
+                    <% end %>
                 </div>
             </div>
             <!-- Back Button -->
-            <a class="btn btn-outline-secondary float-start" href="/user_lists"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
+            <a class="btn btn-outline-secondary float-start" href="/seller_dashboard/<%= @store['store_id']%>"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
         </div>
     </div>
 </div>

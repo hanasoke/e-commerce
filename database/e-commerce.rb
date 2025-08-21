@@ -44,5 +44,3 @@ DB.execute <<-SQL
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id)
     );
 SQL
-
-# DB.execute("DROP TABLE stores");
