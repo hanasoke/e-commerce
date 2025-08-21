@@ -1147,6 +1147,8 @@ post '/edit_my_store/:store_id' do
     store_address = params[:store_address].to_s.strip 
     store_status = params[:store_status].to_s.strip 
     cs_number = params[:cs_number].to_s.strip 
+    store_photo = params[:store_photo]
+    store_banner = params[:store_banner]
 
     errors = []
 
@@ -1156,10 +1158,27 @@ post '/edit_my_store/:store_id' do
     errors << "Store status must be Active or Inactive" unless ["Active", "Inactive"].include?(store_status)
 
     errors << "Customer service number cannot be blank" if cs_number.empty?
-    
+
      # Check CS number must be numeric + valid length 
     unless cs_number.empty? || cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
         errors << "Customer service number must be numeric (8 - 15 digits)"
+    end 
+
+    # allowed file extensions 
+    allowed_extensions = [".jpg", ".jpeg", ".png", ".svg"]
+
+    # store Photo validation
+    if store_photo.nil? || store_photo[:filename].empty?
+        errors << "Store Photo is required"
+    elsif !allowed_extensions.include?(File.extname(store_photo[:filename]).downcase)
+        errors << "Store photo must be an image (jpg, jpeg, png, svg)"
+    end 
+
+    # Store Banner Validation 
+    if store_banner.nil? || store_banner[:filename].empty?
+        errors << "Store banner is required"
+    elsif !allowed_extensions.include?(File.extname(store_banner[:filename]).downcase)
+        errors << "Store banner must be an image (jpg, jpeg, png, svg)"
     end 
 
     # Handle file uploads 
@@ -1174,7 +1193,7 @@ post '/edit_my_store/:store_id' do
     end 
 
     store_banner_filename = nil 
-    if params[:store_banner] && params[:store_banner][:filename] && !params[:store_banner][filename].empty?
+    if params[:store_banner] && params[:store_banner][:filename] && !params[:store_banner][:filename].empty?
         store_banner_filename = "#{Time.now.to_i}_#{params[:store_banner][:filename]}"
         file_path = File.join(upload_dir, store_banner_filename)
         File.open(file_path, "wb") { |f| f.write(params[:store_banner][:tempfile].read)}
