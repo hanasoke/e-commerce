@@ -405,6 +405,16 @@ get '/user_lists' do
 
 end 
 
+get '/hidden_seller' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "User Lists"
+    @sellers = DB.execute("SELECT * FROM sellers")
+    erb :'admin/seller_dashboard/hidden_seller', layout: :'layouts/admin/layout'
+
+end 
+
 get '/edit_user/:user_id' do 
     redirect '/login' unless logged_in?
 
