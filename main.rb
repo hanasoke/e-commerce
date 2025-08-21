@@ -30,6 +30,16 @@ def user_count
     result.to_i
 end 
 
+def seller_count 
+    result = DB.get_first_value("SELECT COUNT(*) FROM sellers")
+    result.to_i
+end 
+
+def store_count 
+    result = DB.get_first_value("SELECT COUNT(*) FROM stores")
+    result.to_i
+end 
+
 def seller_registered?(user_id)
     result = DB.get_first_value("SELECT COUNT(*) FROM sellers WHERE user_id = ?", [user_id])
     result.to_i > 0
