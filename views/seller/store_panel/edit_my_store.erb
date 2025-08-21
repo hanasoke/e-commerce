@@ -15,52 +15,65 @@
                     <input type="text" readonly class="form-control-plaintext" id="name" value="<%= @store['owner_name'] %>">
                 </div>
             </div>
-            <div class="mb-3 row">
-                <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control" id="store_name" value="<%= @store['store_name'] %>">
+
+            <form action="/edit_my_store/<%= @store['store_id'] %>" method="POST" enctype="multipart/form-data">
+                <div class="mb-3 row">
+                    <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="store_name" name="store_name" value="<%= @store['store_name'] %>">
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="store_address" class="col-sm-2 col-form-label">Store Address</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control" id="store_address" value="<%= @store['store_address'] %>">
+                <div class="mb-3 row">
+                    <label for="store_address" class="col-sm-2 col-form-label">Store Address</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="store_address" name="store_address" value="<%= @store['store_address'] %>">
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="store_status" class="col-sm-2 col-form-label">Store Status</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control" id="store_status" value="<%= @store['store_status'] %>">
+                <div class="mb-3 row">
+                    <label for="store_status" class="col-sm-2 col-form-label">Store Status</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" name="store_status" id="store_status">
+                            <option value="Active" <%= "selected" if @store['store_status'] == "Active" %>></option>
+                            <option value="Inactive" <%= "selected" if @store['store_status'] == "Inactive" %>></option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="cs_number" class="col-sm-2 col-form-label">Customer Service Number</label>
-                <div class="col-sm-10">
-                    <input type="text" readonly class="form-control" id="cs_number" value="<%= @store['cs_number']%>">
+                <div class="mb-3 row">
+                    <label for="cs_number" class="col-sm-2 col-form-label">Customer Service Number</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cs_number" name="cs_number" value="<%= @store['cs_number']%>">
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">Store Photo</label>
-                <div class="col-sm-10">
-                    <% if @store['store_photo'] && !@store['store_photo'].empty? %>
-                        <img src="/uploads/stores/<%= @store['store_photo'] %>" style="max-width: 200px" alt="Store Photo">
-                    <% else %>
-                        <span class="text-muted">No store banner available</span>
-                    <% end %>
+                <div class="mb-3 row">
+                    <label for="store_photo" class="col-sm-2 col-form-label">Store Photo</label>
+                    <div class="col-sm-10">
+                        <% if @store['store_photo'] && !@store['store_photo'].empty? %>
+                            <img src="/uploads/stores/<%= @store['store_photo'] %>" style="max-width: 200px" alt="Store Photo">
+                        <% else %>
+                            <span class="text-muted">No store banner available</span>
+                        <% end %>
+                        <div class="mt-3">
+                            <input class="form-control form-control-sm" id="store_photo" type="file" name="store_photo">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label" for="photo">Store Banner</label>
-                <div class="col-sm-10">
-                    <% if @store['store_banner'] && !@store['store_banner'].empty? %>
-                        <img src="/uploads/stores/<%= @store['store_banner'] %>" style="max-width: 200px" alt="Store Banner">
-                    <% else %>
-                        <span class="text-muted">No store banner available</span>
-                    <% end %>
+                <div class="mb-3 row">
+                    <label for="store_banner" class="col-sm-2 col-form-label" for="photo">Store Banner</label>
+                    <div class="col-sm-10">
+                        <% if @store['store_banner'] && !@store['store_banner'].empty? %>
+                            <img src="/uploads/stores/<%= @store['store_banner'] %>" style="max-width: 200px" alt="Store Banner">
+                        <% else %>
+                            <span class="text-muted">No store banner available</span>
+                        <% end %>
+                        <div class="mt-3">
+                            <input id="store_banner" class="form-control form-control-sm" type="file" name="store_banner">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!-- Back Button -->
-            <button class="btn btn-outline-primary float-end" href="#">Submit</button>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-outline-primary float-end">Save Changes</button>
+            </form>
+            
             <!-- Back Button -->
             <a class="btn btn-outline-secondary float-start" href="/store_bio/<%= @store['store_id']%>"><img src="/uploads/items/arrow-left-circle.svg" width="30px"/> Back</a>
         </div>

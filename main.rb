@@ -1136,3 +1136,7 @@ get '/edit_my_store/:store_id' do
     @title = "Store Lists"
     erb :'seller/store_panel/edit_my_store', layout: :'layouts/admin/layout'
 end 
+
+post '/edit_my_store/:store_id' do 
+
+end 
