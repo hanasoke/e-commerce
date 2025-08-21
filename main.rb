@@ -1112,3 +1112,27 @@ get '/store_bio/:store_id' do
 
     erb :'seller/store_panel/view_store', layout: :'layouts/admin/layout'
 end 
+
+get '/edit_my_store/:store_id' do 
+    redirect '/login' unless logged_in?
+
+    
+    # Fetch store details with associated user information 
+    store_query = <<-SQL 
+        SELECT s.*, u.name as owner_name, u.user_id
+        FROM stores s 
+        JOIN sellers sl ON s.seller_id = sl.seller_id 
+        JOIN users u ON  sl.user_id = u.user_id
+        WHERE s.store_id = ?
+    SQL
+
+    @store = DB.execute(store_query, [params[:store_id]]).first
+
+    if @store.nil?
+        flash[:error] = "Store not found!"
+        redirect back
+    end 
+
+    @title = "Store Lists"
+    erb :'seller/store_panel/edit_my_store', layout: :'layouts/admin/layout'
+end 
