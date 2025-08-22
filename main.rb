@@ -1166,19 +1166,26 @@ post '/edit_my_store/:store_id' do
 
     # allowed file extensions 
     allowed_extensions = [".jpg", ".jpeg", ".png", ".svg"]
+    valid_mime_types = ["image/jpeg", "image/png", "image/svg+xml"]
 
-    # store Photo validation
-    if store_photo.nil? || store_photo[:filename].empty?
-        errors << "Store Photo is required"
-    elsif !allowed_extensions.include?(File.extname(store_photo[:filename]).downcase)
-        errors << "Store photo must be an image (jpg, jpeg, png, svg)"
+    # Store Photo Validation
+    if store_photo && store_photo[:filename] && !store_photo[:filename].empty?
+        ext = File.extname(store_photo[:filename]).downcase 
+        mime = store_photo[:type]
+        
+        unless allowed_extensions.include?(ext) && valid_mime_types.include?(mime)
+            errors << "Store photo must be an image (jpg, jpeg, png, svg)"
+        end 
     end 
 
     # Store Banner Validation 
-    if store_banner.nil? || store_banner[:filename].empty?
-        errors << "Store banner is required"
-    elsif !allowed_extensions.include?(File.extname(store_banner[:filename]).downcase)
-        errors << "Store banner must be an image (jpg, jpeg, png, svg)"
+    if store_banner && !store_banner[:filename] && !store_banner[:filename].empty?
+        ext = File.extname(store_banner[:filename]).downcase 
+        mime = store_banner[:type]
+        
+        unless allowed_extensions.include?(ext) && valid_mime_types.include?(mime)
+            errors << "Store photo must be an image (jpg, jpeg, png, svg)"
+        end         
     end 
 
     # Handle file uploads 
