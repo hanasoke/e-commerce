@@ -961,7 +961,7 @@ end
 get '/item_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
-    @title = "View My Seller Profile"
+    @title = "View My Item Lists"
 
     erb :'seller/seller_items/item_lists', layout: :'layouts/admin/layout'
 end 
