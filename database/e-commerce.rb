@@ -20,7 +20,7 @@ DB.execute <<-SQL
     );
 SQL
 
-# sellers Table
+# Sellers Table
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS sellers (
         seller_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +30,7 @@ DB.execute <<-SQL
     );
 SQL
 
-# Store Table 
+# Stores Table 
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS stores (
         store_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,11 +45,13 @@ DB.execute <<-SQL
     );
 SQL
 
+# Items Table
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS items (
         item_id INTEGER PRIMARY KEY AUTOINCREMENT,
         store_id INTEGER,
         item_name TEXT, 
+        item_brand TEXT,
         item_photo TEXT,
         item_description TEXT,
         item_price TEXT,
