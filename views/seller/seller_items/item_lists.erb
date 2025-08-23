@@ -15,9 +15,9 @@
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card bg-warning text-white mb-4">
-                <div class="card-body"><i class="fas fa-user"></i> 3 Users</div>
+                <div class="card-body"><i class="fas fa-user"></i> 3 Transactions</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white text-decoration-none" href="/admin">View Details</a>
+                    <a class="small text-white text-decoration-none" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -45,6 +45,8 @@
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             DataTable Example
+
+            <a href="/add_an_item/<%= current_user['user_id'] %>" class="btn btn-sm btn-success float-end">Add An Item</a>
         </div>
         <div class="card-body">
             <% if session[:success] %>
@@ -69,10 +71,20 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <!-- <tbody>
+                <tbody>
                     <tr>
+                        <td>1</td>
+                        <td>Blue Blazer</td>
+                        <td>Fashion</td>
+                        <td>Qunituples</td>
+                        <td>Miku</td>
+                        <td>200</td>
+                        <td>Rp. 9.000.000</td>
+                        <td>enjoy for using</td>
+                        <td>nakanomiku.jpg</td>
+                        <td>Active</td>
                     </tr>
-                </tbody> -->
+                </tbody>
             </table>
         </div>
     </div>

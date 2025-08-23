@@ -1053,6 +1053,14 @@ post '/add_my_store/:user_id' do
     redirect "/seller_dashboard/#{user_id}"
 end 
 
+get '/add_an_item/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "Add An Item"
+
+    erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
+end 
+
 get '/store_lists' do 
     redirect '/login' unless logged_in?
 
