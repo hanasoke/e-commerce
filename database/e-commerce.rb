@@ -61,4 +61,4 @@ DB.execute <<-SQL
         item_status TEXT,
         FOREIGN KEY(store_id) REFERENCES stores(store_id)
     );
-SQL;
+SQL
