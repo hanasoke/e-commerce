@@ -145,6 +145,55 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
+def validate_item(item_name, item_brand, item_description, item_price, item_stock, item_category, item_unit, item_status, item_id = nil) 
+    errors = []
+
+    # Item Name Validation
+    if item_name.nil? || item_name.strip.empty?
+        errors << "Item Name cannot be blank."
+    else 
+        query = "SELECT item_id FROM items WHERE LOWER(item_name) = ?"
+        query += " AND item_id != ?" if item_id
+        name_exists = DB.get_first_row(query, item_id ? [item_name.downcase, item_id] : [item_name.downcase])
+        errors << "Item Name is already taken." if name_exists 
+    end 
+
+    # Item Brand 
+    errors << "Item Brand Cannot be Blank." if item_brand.nil? || item_brand.strip.empty?
+
+    # Item Description 
+    errors << "Item Description Cannot be Blank." if item_description.nil? || item_description.strip.empty?
+
+    # Item Price 
+    if item_price.nil? ||  item_price.to_s.strip.empty?
+        errors << "Item Price Cannot be Blank."
+    elsif item_price.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "Item Price must be a valid number."
+    elsif item_price.to_f <= 0 
+        errors << "Item Price must be a positive number."
+    end 
+
+    # Item Stock
+    if item_stock.nil? ||  item_stock.to_s.strip.empty?
+        errors << "Item Stock Cannot be Blank."
+    elsif item_stock.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "Item Stock must be a valid number."
+    elsif item_stock.to_f <= 0 
+        errors << "Item Stock must be a positive number."
+    end 
+
+    # Item Category
+    errors << "Item Category Cannot be blank." if item_category.nil? || item_category.to_s.strip.empty?
+    
+    # Item Unit 
+    errors << "Item Category Cannot be blank." if item_unit.nil? || item_unit.to_s.strip.empty?
+
+    # Item Status 
+    errors << "Item Status Cannot be blank." if item_status.nil? || item_status.to_s.strip.empty?
+
+    errors
+end 
+
 def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
 
     errors = []
@@ -1061,59 +1110,41 @@ get '/add_an_item/:user_id' do
 end 
 
 post '/add_an_item/:user_id' do 
-    redirect '/login' unless logged_in?
+    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
+
+    item_photo = params['item_photo']
+
+    # Add item_photo validation errors 
+    @errors += validate_photo(item_photo)
 
     # Get current store for this seller 
     seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [params[:user_id]]).first 
     store = DB.execute("SELECT * FROM stores WHERE seller_id = ?", [seller['seller_id']]).first 
 
-    @errors = []
+    photo_filename = nil
 
-    # Collect form params 
-    item_name  = params[:item_name]
-    item_brand  = params[:item_brand]
-    item_description  = params[:item_description]
-    item_price  = params[:item_price]
-    item_stock  = params[:item_stock]
-    item_category  = params[:item_category]
-    item_unit  = params[:item_unit]
-    item_status  = params[:item_status]
-    item_photo = params[:item_photo]
-
-    # Validate basic fields
-    if item_name.nil? || item_name.strip.empty?
-        @errors << "Item name is required"
-    end 
-    if item_price.nil? || item_price.strip.empty?
-        @errors << "Price is required"
-    end 
-
-    # File upload validation
-    if item_photo && item_photo[:filename] && !item_photo[:filename].empty?
-        filename = "#{Time.now.to_i}_#{item_photo[:filename]}"
-        filepath = "./public/uploads/items/#{filename}"
-
-        File.open(filepath, "wb") do |f|
-            f.write(item_photo[:tempfile].read)
+    if @errors.empty? 
+        # Handle file upload 
+        if item_photo && item_photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{item_photo[:filename]}"
+            File.open("./public/uploads/items/#{photo_filename}", 'wb') do |f|
+                f.write(item_photo[:tempfile].read)
+            end 
         end 
+
+        # Flash Message
+        session[:success] = "Item added successfully!"
+
+        # Insert item details, including the photo, into the database
+        DB.execute("INSERT INTO items 
+            (store_id, item_name, item_brand, item_photo, item_description, item_price, item_stock, item_category, item_unit, item_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [store['store_id'], params[:item_name], params[:item_brand], photo_filename, params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status]]
+        )
+        redirect "/item_lists/#{params[:user_id]}"
     else 
-        @errors << "Item photo is required"
-    end
-
-    if @errors.any?
-        @title = "Add An Item"
-        return erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
+        erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
     end 
-
-    # Insert into DB
-    DB.execute("INSERT INTO items 
-        (store_id, item_name, item_brand, item_photo, item_description, item_price, item_stock, item_category, item_unit, item_status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [store['store_id'], item_name, item_brand, filename, item_description, item_price, item_stock, item_category, item_unit, item_status]
-    )
-
-    session[:success] = "Item added successfully!"
-    redirect "/item_lists/#{params[:user_id]}"
 end 
 
 get '/store_lists' do 
