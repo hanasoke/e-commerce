@@ -1106,6 +1106,15 @@ post '/add_an_item/:user_id' do
         return erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
     end 
 
+    # Insert into DB
+    DB.execute("INSERT INTO items 
+        (store_id, item_name, item_brand, item_photo, item_description, item_price, item_stock, item_category, item_unit, item_status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [store['store_id'], item_name, item_brand, filename, item_description, item_price, item_stock, item_category, item_unit, item_status]
+    )
+
+    session[:success] = "Item added successfully!"
+    redirect "/item_lists/#{params[:user_id]}"
 end 
 
 get '/store_lists' do 

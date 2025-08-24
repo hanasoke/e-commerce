@@ -72,18 +72,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% items = DB.execute("SELECT * FROM items WHERE store_id = (SELECT store_id FROM stores WHERE seller_id = (SELECT seller_id FROM sellers WHERE user_id = ?))", [current_user['user_id']]) %>
+                    <% items.each_with_index do |item, index| %>
                     <tr>
-                        <td>1</td>
-                        <td>Blue Blazer</td>
-                        <td>Fashion</td>
-                        <td>Qunituples</td>
-                        <td>Miku</td>
-                        <td>200</td>
-                        <td>Rp. 9.000.000</td>
-                        <td>enjoy for using</td>
-                        <td>nakanomiku.jpg</td>
-                        <td>Active</td>
+                        <td><%= index + 1 %></td>
+                        <td><%= item['item_name'] %></td>
+                        <td><%= item['item_category'] %></td>
+                        <td><%= item['item_brand'] %></td>
+                        <td><%= item['item_unit'] %></td>
+                        <td><%= item['item_stock'] %></td>
+                        <td><%= item['item_price'] %></td>
+                        <td><%= item['item_description'] %></td>
+                        <td>
+                            <img src="/uploads/items/<%= item['item_photo'] %>" alt="Item Photo" width="50">
+                        </td>
+                        <td><%= item['item_status'] %></td>
                     </tr>
+                    <% end %>
                 </tbody>
             </table>
         </div>

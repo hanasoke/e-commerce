@@ -17,32 +17,52 @@
                 <% end %>
             <% end %>
             <form action="/add_an_item/<%= current_user['user_id'] %>" method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <input type="hidden" name="_method" value="post">
-                </div>
                 <div class="mb-3 row">
-                    <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
+                    <label for="item_name" class="col-sm-2 col-form-label">Item Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="store_name" name="store_name">
+                        <input type="text" class="form-control" id="item_name" name="item_name"/>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="store_address" class="col-sm-2 col-form-label">Store Address</label>
+                    <label for="item_brand" class="col-sm-2 col-form-label">Item Brand</label>
                     <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="store_address" name="store_address"></textarea>
+                        <input type="text" class="form-control" id="item_brand" name="item_brand"/>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="cs_number" class="col-sm-2 col-form-label">Customer Service Number</label>
+                    <label for="item_description" class="col-sm-2 col-form-label">Description</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="cs_number" name="cs_number">
+                        <textarea class="form-control" id="item_description" name="item_description"></textarea>
                     </div>
                 </div>
-
                 <div class="mb-3 row">
-                    <label for="store_status" class="col-sm-2 col-form-label">Status</label>
+                    <label for="item_price" class="col-sm-2 col-form-label">Price</label>
                     <div class="col-sm-10">
-                        <select class="form-select" id="store_status" name="store_status">
+                        <input type="number" class="form-control" id="item_price" name="item_price">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_stock" class="col-sm-2 col-form-label">Stock</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="item_stock" name="item_stock">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_category" class="col-sm-2 col-form-label">Category</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="item_category" name="item_category">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_unit" class="col-sm-2 col-form-label">Unit</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="item_unit" name="item_unit">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_status" class="col-sm-2 col-form-label">Status</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="item_status" name="item_status">
                             <option value="" disabled selected>Open this select menu</option>
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
@@ -50,13 +70,9 @@
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <div class="col-md-6">
-                        <label for="store_photo" class="form-label" for="store_photo">Store Photo</label>
-                        <input class="form-control" type="file" id="store_photo" name="store_photo">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="store_banner" class="form-label" for="store_banner">Store Banner</label>
-                        <input class="form-control" type="file" id="store_banner" name="store_banner">
+                    <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
+                    <div class="col-sm-10">
+                        <input type="file" class="form-control" id="item_photo" name="item_photo">
                     </div>
                 </div>
 
