@@ -1081,6 +1081,31 @@ post '/add_an_item/:user_id' do
     item_status  = params[:item_status]
     item_photo = params[:item_photo]
 
+    # Validate basic fields
+    if item_name.nil? || item_name.strip.empty?
+        @errors << "Item name is required"
+    end 
+    if item_price.nil? || item_price.strip.empty?
+        @errors << "Price is required"
+    end 
+
+    # File upload validation
+    if item_post && item_photo[:filename] && !item_photo[:filename].empty?
+        filename = "#{Time.now.to_i}_#{item_photo[:filename]}"
+        filepath = "./public/uploads/items/#{filename}"
+
+        File.open(filepath, "wb") do |f|
+            f.write(item_photo[:tempfile].read)
+        end 
+    else 
+        @errors << "Item photo is required"
+    end
+
+    if @errors.any?
+        @title = "Add An Item"
+        return erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
+    end 
+
 end 
 
 get '/store_lists' do 
