@@ -1061,6 +1061,28 @@ get '/add_an_item/:user_id' do
     erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
 end 
 
+post '/add_an_item/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    # Get current store for this seller 
+    seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [params[:user_id]]).first 
+    store = DB.execute("SELECT * FROM stores WHERE seller_id = ?", [seller['seller_id']]).first 
+
+    @errors = []
+
+    # Collect form params 
+    item_name  = params[:item_name]
+    item_brand  = params[:item_brand]
+    item_description  = params[:item_description]
+    item_price  = params[:item_price]
+    item_stock  = params[:item_stock]
+    item_category  = params[:item_category]
+    item_unit  = params[:item_unit]
+    item_status  = params[:item_status]
+    item_photo = params[:item_photo]
+
+end 
+
 get '/store_lists' do 
     redirect '/login' unless logged_in?
 
