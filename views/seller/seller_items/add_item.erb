@@ -17,6 +17,9 @@
                 <% end %>
             <% end %>
             <form action="/add_an_item/<%= current_user['user_id'] %>" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="hidden" name="_method" value="post">
+                </div>
                 <div class="mb-3 row">
                     <label for="item_name" class="col-sm-2 col-form-label">Item Name</label>
                     <div class="col-sm-10">

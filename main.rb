@@ -1055,9 +1055,8 @@ end
 
 get '/add_an_item/:user_id' do 
     redirect '/login' unless logged_in?
-
+    @errors = []
     @title = "Add An Item"
-
     erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
 end 
 
@@ -1090,7 +1089,7 @@ post '/add_an_item/:user_id' do
     end 
 
     # File upload validation
-    if item_post && item_photo[:filename] && !item_photo[:filename].empty?
+    if item_photo && item_photo[:filename] && !item_photo[:filename].empty?
         filename = "#{Time.now.to_i}_#{item_photo[:filename]}"
         filepath = "./public/uploads/items/#{filename}"
 
