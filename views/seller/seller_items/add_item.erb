@@ -1,21 +1,13 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Adding Store Profile</li>
+        <li class="breadcrumb-item active">Adding An Item</li>
     </ol>
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-user me-1"></i>
         </div>
         <div class="card-body">
-            <% if @errors && @errors.any? %>
-                <% @errors.each do |error| %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><%= error %></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <% end %>
-            <% end %>
             <form action="/add_an_item/<%= current_user['user_id'] %>" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">
@@ -25,42 +17,77 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="item_name" name="item_name"/>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Name')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Name')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_brand" class="col-sm-2 col-form-label">Item Brand</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="item_brand" name="item_brand"/>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Brand')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Brand')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_description" class="col-sm-2 col-form-label">Description</label>
                     <div class="col-sm-10">
                         <textarea class="form-control" id="item_description" name="item_description"></textarea>
                     </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="item_price" class="col-sm-2 col-form-label">Price</label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control" id="item_price" name="item_price">
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="item_stock" class="col-sm-2 col-form-label">Stock</label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control" id="item_stock" name="item_stock">
-                    </div>
+                    <% if @errors.any? { |e| e.include?('Item Description')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Description')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_category" class="col-sm-2 col-form-label">Category</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="item_category" name="item_category">
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Category')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Category')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_unit" class="col-sm-2 col-form-label">Unit</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="item_unit" name="item_unit">
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Unit')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Unit')} %>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_price" class="col-sm-2 col-form-label">Price</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="item_price" name="item_price">
+                    </div>
+                    <% if @errors.any? { |e| e.include?('Item Price')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Price')} %>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="mb-3 row">
+                    <label for="item_stock" class="col-sm-2 col-form-label">Stock</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="item_stock" name="item_stock">
+                    </div>
+                    <% if @errors.any? { |e| e.include?('Item Stock')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Stock')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_status" class="col-sm-2 col-form-label">Status</label>
@@ -71,12 +98,22 @@
                             <option value="Inactive">Inactive</option>
                         </select>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Status')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Status')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
                     <div class="col-sm-10">
                         <input type="file" class="form-control" id="item_photo" name="item_photo">
                     </div>
+                    <% if @errors.any? { |e| e.include?('Item Photo')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Photo')} %>
+                        </div>
+                    <% end %>
                 </div>
 
                 <!-- Submit Button -->
@@ -84,7 +121,7 @@
             </form>
 
             <!-- Back Button -->
-            <a class="btn btn-outline-secondary float-start" href="#">Back</a>
+            <a href="/item_lists/<% current_user['user_id'] %>"  class="btn btn-outline-secondary float-start">Back</a>
         </div>
     </div>
 </div>
