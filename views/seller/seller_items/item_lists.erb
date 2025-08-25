@@ -63,12 +63,11 @@
                         <th>Item Name</th>
                         <th>Category</th>
                         <th>Brand</th>
-                        <th>Unit</th>
                         <th>Stock</th>
                         <th>Price</th>
-                        <th>Description</th>
                         <th>Photo</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,14 +78,18 @@
                         <td><%= item['item_name'] %></td>
                         <td><%= item['item_category'] %></td>
                         <td><%= item['item_brand'] %></td>
-                        <td><%= item['item_unit'] %></td>
                         <td><%= item['item_stock'] %></td>
                         <td><%= item['item_price'] %></td>
-                        <td><%= item['item_description'] %></td>
                         <td>
                             <img src="/uploads/items/<%= item['item_photo'] %>" alt="Item Photo" width="150">
                         </td>
                         <td><%= item['item_status'] %></td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
+                                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                                <a href="/view_an_item/<%= item['item_id'] %>" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
+                                <a href="#" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
+                            </div>
                     </tr>
                     <% end %>
                 </tbody>
