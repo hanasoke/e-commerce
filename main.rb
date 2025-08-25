@@ -268,17 +268,14 @@ def validate_photo(photo)
             errors << "Photo must be a JPG, PNG, or GIF file."
         end 
 
-        # Check file sizee (5MB max, 40KB min)
-        max_size = 4 * 1024 * 1024 # 4MB in bytes
-        min_size = 40 * 1024       # 40KB in bytes
+        # Check file sizee (8MB max)
+        max_size = 8 * 1024 * 1024 # 8MB in bytes
         file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
 
         if file_size.nil? 
             errors << "Photo file size could not be determined."
         elsif file_size > max_size 
-            errors << "Photo size must be less than 4MB."
-        elsif file_size < min_size 
-            errors << "Photo size must be greater than 40KB."
+            errors << "Photo size must be less than 8MB."
         end 
     end 
 
