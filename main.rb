@@ -282,6 +282,33 @@ def validate_photo(photo)
     errors 
 end 
 
+def validate_item_photo(photo)
+    errors = []
+
+    # Check if the photo parameter is valid and has expected structure
+    if photo.nil? || !photo.is_a?(Hash) || photo[:tempfile].nil?
+        errors << 'Item Photo is required.'
+    else 
+        # Check file type
+        valid_types = ["image/jpeg", "image/png", "image/gif"]
+        if !photo[:type] || !valid_types.include?(photo[:type])
+            errors << "Item Photo must be a JPG, PNG, or GIF file."
+        end 
+
+        # Check file sizee (8MB max)
+        max_size = 8 * 1024 * 1024 # 8MB in bytes
+        file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
+
+        if file_size.nil? 
+            errors << "Item Photo file size could not be determined."
+        elsif file_size > max_size 
+            errors << "Item Photo size must be less than 8MB."
+        end 
+    end 
+
+    errors 
+end 
+
 def validate_user_login(email, password)
     errors = []
 
@@ -1112,7 +1139,7 @@ post '/add_an_item/:user_id' do
     item_photo = params['item_photo']
 
     # Add item_photo validation errors 
-    @errors += validate_photo(item_photo)
+    @errors += validate_item_photo(item_photo)
 
     # Get current store for this seller 
     seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [params[:user_id]]).first 

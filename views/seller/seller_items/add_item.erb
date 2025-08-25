@@ -90,6 +90,18 @@
                     <% end %>
                 </div>
                 <div class="mb-3 row">
+                    <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
+                    <div class="col-sm-10">
+                        <input type="file" class="form-control" id="item_photo" name="item_photo">
+                    </div>
+                    <% if @errors.any? { |e| e.include?('Item Photo')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Item Photo')} %>
+                        </div>
+                    <% end %>
+                </div>
+
+                <div class="mb-3 row">
                     <label for="item_status" class="col-sm-2 col-form-label">Status</label>
                     <div class="col-sm-10">
                         <select class="form-select" id="item_status" name="item_status" value="<%= params[:item_status] %>" >
@@ -101,17 +113,6 @@
                     <% if @errors.any? { |e| e.include?('Item Status')} %>
                         <div class="form-text text-danger">
                             <%= @errors.find { |e| e.include?('Item Status')} %>
-                        </div>
-                    <% end %>
-                </div>
-                <div class="mb-3 row">
-                    <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
-                    <div class="col-sm-10">
-                        <input type="file" class="form-control" id="item_photo" name="item_photo">
-                    </div>
-                    <% if @errors.any? { |e| e.include?('Item Photo')} %>
-                        <div class="form-text text-danger">
-                            <%= @errors.find { |e| e.include?('Item Photo')} %>
                         </div>
                     <% end %>
                 </div>
