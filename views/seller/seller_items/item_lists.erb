@@ -79,7 +79,7 @@
                         <td><%= item['item_category'] %></td>
                         <td><%= item['item_brand'] %></td>
                         <td><%= item['item_stock'] %></td>
-                        <td><%= item['item_price'] %></td>
+                        <td><%= rupiah_currency(item['item_price']) %></td>
                         <td>
                             <img src="/uploads/items/<%= item['item_photo'] %>" alt="Item Photo" width="150">
                         </td>

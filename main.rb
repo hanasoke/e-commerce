@@ -326,6 +326,10 @@ def validate_user_login(email, password)
     errors
 end
 
+def rupiah_currency(money)
+    "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
+end 
+
 # Routes 
 
 # Homepage 
