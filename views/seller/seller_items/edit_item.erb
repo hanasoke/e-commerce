@@ -44,7 +44,7 @@
             <div class="mb-3 row">
                 <label for="item_price" class="col-sm-2 col-form-label">Price</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="item_price" name="item_price" value="<%= rupiah_currency(@item['item_price']) %>">
+                    <input type="text" class="form-control" id="item_price" name="item_price" value="<%= @item['item_price'] %>">
                 </div>
             </div>
             <div class="mb-3 row">
@@ -64,6 +64,7 @@
                     <% if @item['item_photo'] %>
                         <img src="/uploads/items/<%= @item['item_photo'] %>" alt="<%= @item['name'] %>" style="max-width: 200px"/>
                     <% end %>
+                    <input type="file" class="form-control" name="item_photo" id="item_photo">
                 </div>
             </div>
 

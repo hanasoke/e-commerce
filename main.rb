@@ -1385,3 +1385,35 @@ get '/view_an_item/:item_id' do
 
     erb :'seller/seller_items/view', layout: :'layouts/admin/layout'
 end 
+
+get '/edit_an_item/:item_id' do 
+    redirect '/login' unless logged_in?
+
+    @item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
+
+    @errors = []
+    @title = "View Detail An Item"
+
+    # Handle Item where the item does not exist
+    if @item.nil? 
+        session[:error] = "The Item is not found !"
+        redirect "/item_lists/#{current_user['user_id']}"
+    end 
+
+    erb :'seller/seller_items/edit_item', layout: :'layouts/admin/layout'
+end 
+
+# Update a item
+post '/edit_an_item/:item_id' do 
+    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
+
+    # item_photo
+    item_photo = params['item_photo']
+
+    # Validate only if a new item_photo is provided 
+    @errors += validate_photo(item_photo) if item_photo && item_photo [:tempfile]
+    photo_filename = nil 
+
+    
+
+end 
