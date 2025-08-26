@@ -1380,7 +1380,7 @@ get '/view_an_item/:item_id' do
     # Handle Item where the item does not exist
     if @item.nil? 
         session[:error] = "The Item is not found !"
-        redirect "/item_lists/#{params[:user_id]}"
+        redirect "/item_lists/#{current_user['user_id']}"
     end 
 
     erb :'seller/seller_items/view', layout: :'layouts/admin/layout'
