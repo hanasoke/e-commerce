@@ -8,71 +8,71 @@
             <i class="fas fa-user me-1"></i>
         </div>
         <div class="card-body">
-                <div class="mb-3">
-                    <input type="hidden" name="_method" value="post">
+            <div class="mb-3">
+                <input type="hidden" name="_method" value="post">
+            </div>
+            <div class="mb-3 row">
+                <label for="item_name" class="col-sm-2 col-form-label">Item Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="item_name" name="item_name" readonly value="<%= @item['item_name'] %>" />
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_name" class="col-sm-2 col-form-label">Item Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" id="item_name" name="item_name" readonly value="<%= @item['item_name'] %>" />
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_category" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="item_category" name="item_category" readonly value="<%= @item['item_category'] %>" >
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_category" class="col-sm-2 col-form-label">Category</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" id="item_category" name="item_category" readonly value="<%= @item['item_category'] %>" >
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_brand" class="col-sm-2 col-form-label">Item Brand</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="item_brand" name="item_brand" readonly value="<%= @item['item_brand'] %>"/>
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_brand" class="col-sm-2 col-form-label">Item Brand</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" id="item_brand" name="item_brand" readonly value="<%= @item['item_brand'] %>"/>
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control-plaintext" id="item_description" name="item_description" readonly><%= @item['item_description'] %></textarea>
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_description" class="col-sm-2 col-form-label">Description</label>
-                    <div class="col-sm-10">
-                        <textarea class="form-control-plaintext" id="item_description" name="item_description" readonly><%= @item['item_description'] %></textarea>
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_unit" class="col-sm-2 col-form-label">SKU</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="item_unit" name="item_unit" readonly value="<%= @item['item_unit'] %>" >
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_unit" class="col-sm-2 col-form-label">SKU</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" id="item_unit" name="item_unit" readonly value="<%= @item['item_unit'] %>" >
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_price" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="item_price" name="item_price" readonly value="<%= rupiah_currency(@item['item_price']) %>">
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_price" class="col-sm-2 col-form-label">Price</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" id="item_price" name="item_price" readonly value="<%= rupiah_currency(@item['item_price']) %>">
-                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_stock" class="col-sm-2 col-form-label">Stock</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" readonly id="item_stock" name="item_stock" value="<%= @item['item_stock'] %>">
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_stock" class="col-sm-2 col-form-label">Stock</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" readonly id="item_stock" name="item_stock" value="<%= @item['item_stock'] %>">
+                <% if @errors.any? { |e| e.include?('Item Stock')} %>
+                    <div class="form-text text-danger">
+                        <%= @errors.find { |e| e.include?('Item Stock')} %>
                     </div>
-                    <% if @errors.any? { |e| e.include?('Item Stock')} %>
-                        <div class="form-text text-danger">
-                            <%= @errors.find { |e| e.include?('Item Stock')} %>
-                        </div>
+                <% end %>
+            </div>
+            <div class="mb-3 row">
+                <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
+                <div class="col-sm-10">
+                    <% if @item['item_photo'] %>
+                        <img src="/uploads/items/<%= @item['item_photo'] %>" alt="<%= @item['name'] %>" style="max-width: 200px"/>
                     <% end %>
                 </div>
-                <div class="mb-3 row">
-                    <label for="item_photo" class="col-sm-2 col-form-label">Item Photo</label>
-                    <div class="col-sm-10">
-                        <% if @item['item_photo'] %>
-                            <img src="/uploads/items/<%= @item['item_photo'] %>" alt="<%= @item['name'] %>" style="max-width: 200px"/>
-                        <% end %>
-                    </div>
-                </div>
+            </div>
 
-                <div class="mb-3 row">
-                    <label for="item_status" class="col-sm-2 col-form-label">Status</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext" readonly id="item_status" name="item_status" value="<%= @item['item_status'] %>">
-                    </div>
+            <div class="mb-3 row">
+                <label for="item_status" class="col-sm-2 col-form-label">Status</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" readonly id="item_status" name="item_status" value="<%= @item['item_status'] %>">
                 </div>
+            </div>
 
             <!-- Back Button -->
             <a href="/item_lists/<%= current_user['user_id'] %>"  class="btn btn-outline-secondary float-start">Back</a>
