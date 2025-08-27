@@ -1412,6 +1412,7 @@ post '/edit_an_item/:item_id' do
 
     # Validate only if a new item_photo is provided 
     @errors += validate_photo(item_photo) if item_photo && item_photo [:tempfile]
+
     photo_filename = nil 
 
     if @errors.empty? 
@@ -1428,7 +1429,27 @@ post '/edit_an_item/:item_id' do
         session[:success] = "An Item has been successfully updated."
 
         # Upload the item in the database
-        DB.execute("UPDATE items ")
+        DB.execute("UPDATE items SET item_name = ?, item_brand = ?, item_photo = COALESCE(?, item_photo), item_description = ?, item_price = ?, item_stock = ?, item_category = ?, item_unit = ?, item_status = ?", 
+            [params[:item_name], params[:item_brand], photo_filename], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
+        redirect "/item_lists/#{params[:user_id]}"
+    else 
+        # Handle validation errors and re-render the edit form 
+        @original_item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first
+
+        # Merge validation errors and re-render the edit form 
+        @item = {
+            'item_id' => params[:item_id],
+            'item_name' => params[:item_name] || original_item['item_name'],
+            'item_brand' => params[:item_brand] || original_item['item_brand'],
+            'item_photo' => photo_filename || original_item['item_photo'],
+            'item_description' => params[:item_description] || original_item['item_description'],
+            'item_price' => params[:item_price] || original_item['item_price'],
+            'item_stock' => params[:item_stock] || original_item['item_stock'],
+            'item_category' => params[:item_category] || original_item['item_category'],
+            'item_unit' => params[:item_unit] || original_item['item_unit'],
+            'item_status' => params[:item_status] || original_item['item_status']
+        }
+        erb :'seller/seller_items/edit_item', layout: :'layouts/admin/layout'
     end 
 
 end 
