@@ -1411,7 +1411,7 @@ post '/edit_an_item/:item_id' do
     item_photo = params['item_photo']
 
     # Validate only if a new item_photo is provided 
-    @errors += validate_photo(item_photo) if item_photo && item_photo [:tempfile]
+    @errors += validate_item_photo(item_photo) if item_photo && item_photo [:tempfile]
 
     photo_filename = nil 
 
@@ -1429,12 +1429,22 @@ post '/edit_an_item/:item_id' do
         session[:success] = "An Item has been successfully updated."
 
         # Upload the item in the database
-        DB.execute("UPDATE items SET item_name = ?, item_brand = ?, item_photo = COALESCE(?, item_photo), item_description = ?, item_price = ?, item_stock = ?, item_category = ?, item_unit = ?, item_status = ?", 
-            [params[:item_name], params[:item_brand], photo_filename], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
-        redirect "/item_lists/#{params[:user_id]}"
+        DB.execute("UPDATE items 
+                    SET item_name = ?, 
+                    item_brand = ?, 
+                    item_photo = COALESCE(?, item_photo), 
+                    item_description = ?, 
+                    item_price = ?, 
+                    item_stock = ?, 
+                    item_category = ?, 
+                    item_unit = ?, 
+                    item_status = ?
+                WHERE item_id = ?", 
+            [params[:item_name], params[:item_brand], photo_filename, params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], params[:item_id]])
+        redirect "/item_lists/#{current_user['user_id']}"
     else 
         # Handle validation errors and re-render the edit form 
-        @original_item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first
+        original_item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first
 
         # Merge validation errors and re-render the edit form 
         @item = {
