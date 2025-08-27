@@ -1461,5 +1461,16 @@ post '/edit_an_item/:item_id' do
         }
         erb :'seller/seller_items/edit_item', layout: :'layouts/admin/layout'
     end 
+end 
 
+# Delete an item 
+
+post '/delete_an_item/:item_id' do 
+    # Flash message 
+    session[:success] = "The Item has been successfully deleted."
+
+    # Delete logic 
+    DB.execute("DELETE FROM items WHERE item_id = ?", [params[:item_id]])
+
+    redirect "/item_lists/#{current_user['user_id']}"
 end 
