@@ -1414,6 +1414,21 @@ post '/edit_an_item/:item_id' do
     @errors += validate_photo(item_photo) if item_photo && item_photo [:tempfile]
     photo_filename = nil 
 
-    
+    if @errors.empty? 
+
+        # Handle file item_photo upload 
+        if item_photo && item_photo[:tempfile]
+            photo_filename = "#{Time.now.to_i}_#{item_photo[:filename]}"
+            File.open("./public/uploads/items/#{photo_filename}", 'wb') do |f|
+                f.write(item_photo[:tempfile].read)
+            end 
+        end 
+
+        # Flash message 
+        session[:success] = "An Item has been successfully updated."
+
+        # Upload the item in the database
+        DB.execute("UPDATE items ")
+    end 
 
 end 
