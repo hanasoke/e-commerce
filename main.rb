@@ -151,10 +151,23 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
     # Item Name Validation
     errors << "Item Name Cannot be Blank."  if item_name.nil? || item_name.strip.empty?
 
-    # Check for unique item_name
-    query = item_id ? "SELECT item_id FROM items WHERE LOWER(item_name) = ? AND item_id != ?" : "SELECT item_id FROM items WHERE LOWER(item_name) = ?"
-    existing_item = DB.execute(query, item_id ? [item_name.downcase, item_id] : [item_name.downcase]).first 
-    errors << "Item Name Already exist. Please choose a different item name." if existing_item
+    # Check for unique item_name (only if it's a new item or name is being changed)
+    if item_name && !item_name.strip.empty?
+        if item_id 
+            # For updated: check if another item (with different ID) has the same name 
+            existing_item = DB.execute(
+                "SELECT item_id FROM items WHERE LOWER(item_name) = ? AND item_id != ?", 
+                [item_name.downcase, item_id]
+            ).first 
+        else 
+            # For new items: check if any item has the same name
+            existing_item = DB.execute(
+                "SELECT item_id FROM items WHERE LOWER(item_name) = ?",
+                [item_name.downcase]
+            ).first 
+        end 
+        errors << "Item Name Already exist. Please choose a different item name." if existing_item
+    end 
 
     # Item Brand 
     errors << "Item Brand Cannot be Blank." if item_brand.nil? || item_brand.strip.empty?
