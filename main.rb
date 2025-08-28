@@ -149,14 +149,12 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
     errors = []
 
     # Item Name Validation
-    if item_name.nil? || item_name.strip.empty?
-        errors << "Item Name cannot be blank."
-    else 
-        query = "SELECT item_id FROM items WHERE LOWER(item_name) = ?"
-        query += " AND item_id != ?" if item_id
-        name_exists = DB.get_first_row(query, item_id ? [item_name.downcase, item_id] : [item_name.downcase])
-        errors << "Item Name is already taken." if name_exists 
-    end 
+    errors << "Item Name Cannot be Blank."  if item_name.nil? || item_name.strip.empty?
+
+    # Check for unique item_name
+    query = item_id ? "SELECT item_id FROM items WHERE LOWER(item_name) = ? AND item_id != ?" : "SELECT item_id FROM items WHERE LOWER(item_name) = ?"
+    existing_item = DB.execute(query, item_id ? [item_name.downcase, item_id] : [item_name.downcase]).first 
+    errors << "Item Name Already exist. Please choose a different item name." if existing_item
 
     # Item Brand 
     errors << "Item Brand Cannot be Blank." if item_brand.nil? || item_brand.strip.empty?
@@ -186,7 +184,7 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
     errors << "Item Category Cannot be blank." if item_category.nil? || item_category.to_s.strip.empty?
     
     # Item Unit 
-    errors << "Item Category Cannot be blank." if item_unit.nil? || item_unit.to_s.strip.empty?
+    errors << "SKU Cannot be blank." if item_unit.nil? || item_unit.to_s.strip.empty?
 
     # Item Status 
     errors << "Item Status Cannot be blank." if item_status.nil? || item_status.to_s.strip.empty?
@@ -1405,7 +1403,7 @@ end
 
 # Update a item
 post '/edit_an_item/:item_id' do 
-    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
+    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], params[:item_id])
 
     # item_photo
     item_photo = params['item_photo']
