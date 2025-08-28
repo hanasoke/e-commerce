@@ -498,7 +498,13 @@ get '/hidden_seller' do
 
     @errors = []
     @title = "User Lists"
-    @sellers = DB.execute("SELECT * FROM sellers")
+
+    # Join sellers with users table to get the username
+    @sellers = DB.execute("
+        SELECT sellers.*, users.username, users.name 
+        FROM sellers
+        JOIN users ON sellers.user_id = users.user_id
+    ")
     erb :'admin/seller_dashboard/hidden_seller', layout: :'layouts/admin/layout'
 
 end 
