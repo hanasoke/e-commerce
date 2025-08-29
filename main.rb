@@ -1404,7 +1404,7 @@ get '/edit_an_item/:item_id' do
     erb :'seller/seller_items/edit_item', layout: :'layouts/admin/layout'
 end 
 
-# Update a item
+# Update an item
 post '/edit_an_item/:item_id' do 
     @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], params[:item_id])
 
@@ -1465,7 +1465,6 @@ post '/edit_an_item/:item_id' do
 end 
 
 # Delete an item 
-
 post '/delete_an_item/:item_id' do 
     # Flash message 
     session[:success] = "The Item has been successfully deleted."
@@ -1505,20 +1504,20 @@ get '/edit_hidden_seller/:seller_id' do
     erb :'admin/seller_dashboard/edit_hidden_seller', layout: :'layouts/admin/layout'
 end 
 
-# Update a item
+# Update a seller identity
 post '/edit_hidden_seller/:seller_id' do 
 
     # identity_photo
     identity_photo = params['identity_photo']
+    @errors = []
 
     # Validate only if a new identity_photo is provided 
-    @errors += validate_photo(identity_photo) if identity_photo && identity_photo [:tempfile]
+    @errors += validate_photo(identity_photo) if identity_photo && identity_photo[:tempfile]
 
     photo_filename = nil 
 
     if @errors.empty? 
-
-        # Handle file identity_photo upload 
+        # Save new photo if uploaded 
         if identity_photo && identity_photo[:tempfile]
             photo_filename = "#{Time.now.to_i}_#{identity_photo[:filename]}"
             File.open("./public/uploads/sellers/#{photo_filename}", 'wb') do |f|
@@ -1531,20 +1530,20 @@ post '/edit_hidden_seller/:seller_id' do
 
         # Upload the item in the database
         DB.execute("UPDATE sellers 
-                    SET 
-                        identity_photo = COALESCE(?, identity_photo) 
+                    SET identity_photo = COALESCE(?, identity_photo) 
                     WHERE seller_id = ?", 
-            [photo_filename, params[:seller_id]])
-        redirect "/seller_lists/#{current_user['user_id']}"
+                    [photo_filename, params[:seller_id]])
+        session[:success] = "An Identity Seller Photo has been successfully updated."
+        redirect "/hidden_seller"
     else 
-        # Handle validation errors and re-render the edit form 
-        original_item = DB.execute("SELECT * FROM sellers WHERE seller_id = ?", [params[:seller_id]]).first
+        # Re-render the edit form with errors
+        original_seller = DB.execute("SELECT * FROM sellers WHERE seller_id = ?", [params[:seller_id]]).first
 
         # Merge validation errors and re-render the edit form 
-        @item = {
+        @seller = {
             'seller_id' => params[:item_id],
-            'identity_photo' => photo_filename || original_item['identity_photo']
+            'identity_photo' => photo_filename || original_seller['identity_photo']
         }
-        erb :'seller/seller_items/edit_item', layout: :'layouts/admin/layout'
+        erb :'admin/seller_dashboard/hidden_seller', layout: :'layouts/admin/layout'
     end 
 end 
