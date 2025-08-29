@@ -500,11 +500,7 @@ get '/hidden_seller' do
     @title = "User Lists"
 
     # Join sellers with users table to get the username
-    @sellers = DB.execute("
-        SELECT sellers.*, users.username, users.name 
-        FROM sellers
-        JOIN users ON sellers.user_id = users.user_id
-    ")
+    @sellers = DB.execute("SELECT * FROM sellers")
     erb :'admin/seller_dashboard/hidden_seller', layout: :'layouts/admin/layout'
 
 end 

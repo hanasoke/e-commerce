@@ -21,7 +21,6 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Username</th>
                         <th>Seller Identity</th>
                         <th>Action</th>
                     </tr>
@@ -30,13 +29,6 @@
                     <% @sellers.each_with_index do |seller, index| %>
                         <tr>
                             <td><%= index + 1 %></td>
-                            <td>
-                                <%= seller['username'] %>
-                                <% if seller['name'] %>
-                                    <br>
-                                    <small class="text-muted"><%= seller['name'] %></small>
-                                <% end %>
-                            </td>
                             <td>
                                 <% if seller['identity_photo'] %>
                                     <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 100px"/>
