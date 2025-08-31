@@ -34,7 +34,7 @@
                     </a>
                     <a class="nav-link" href="/store_lists">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
-                        Transaction Lists
+                        Seller Transaction Lists
                     </a>
                 <% elsif current_user['access'].to_i == 2 %>
                     <a class="nav-link" href="/item_lists/<%= current_user['user_id'] %>">
@@ -43,11 +43,11 @@
                     </a>
                     <a class="nav-link" href="#">
                         <div class="sb-nav-link-icon"><i class="fas fa-sitemap"></i></div>
-                        Transaction Status
+                        My Transaction Status
                     </a>
                     <a class="nav-link" href="#">
                         <div class="sb-nav-link-icon"><i class="fas fa-tent"></i></div>
-                        Transaction Items
+                        My Transaction Items
                     </a>
                 <% end %>
             </div>
