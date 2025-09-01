@@ -1493,9 +1493,3 @@ get '/view_seller_items/:seller_id' do
 
     erb :'admin/seller_dashboard/view_seller_items', layout: :'layouts/admin/layout'
 end 
-
-# Update a seller identity
-post '/edit_hidden_seller/:seller_id' do 
-
-    
-end 
