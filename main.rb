@@ -1481,7 +1481,23 @@ get '/seller_item_lists' do
     @errors = []
     @title = "Seller Item Lists"
 
-    @sellers = DB.execute("SELECT * FROM items")
+    @seller_items = DB.execute <<-SQL 
+        SELECT 
+            u.name AS seller_name,
+            u.photo AS seller_photo,
+            s.store_name,
+            s.store_photo,
+            i.item_name,
+            i.item_brand,
+            i.item_category, 
+            i.item_photo, 
+            i.item_price 
+        FROM items i 
+        JOIN stores s ON i.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        JOIN users u ON se.user_id = u.user_id 
+    SQL
+
     erb :'admin/seller_dashboard/seller_item_lists', layout: :'layouts/admin/layout'
 
 end 
