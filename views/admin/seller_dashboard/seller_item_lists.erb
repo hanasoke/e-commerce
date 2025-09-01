@@ -32,7 +32,48 @@
                         <th>Item Price</th>
                     </tr>
                 </thead>
+
                 <tbody>
+                    <% @seller_items.each_with_index do |row, index| %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td>
+                            <%= row["seller_name"] %>
+                        </td>
+                        <td>
+                            <% if row["seller_photo"] %>
+                                <img src="/uploads/users/<%= row["seller_photo"] %>" alt="Seller Photo" width="50">
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= row["store_name"] %>
+                        </td>
+                        <td>
+                            <% if row["store_photo"] %>
+                                <img src="/uploads/stores/<%= row["store_photo"] %>" alt="Store Photo" width="50">
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= row["item_name"] %>
+                        </td>
+                        <td>
+                            <%= row["item_brand"] %>
+                        </td>
+                        <td>
+                            <%= row["item_category"] %>
+                        </td>
+                        <td>
+                            <% if row["item_photo"] %>
+                                <img src="/uploads/items/<%= row["item_photo"] %>" alt="Item Photo" width="50">
+                            <% end %>
+                        </td>
+                        <td>
+                            <%= rupiah_currency(row["item_price"]) %>
+                        </td>
+                    </tr>
+                    <% end %>
                 </tbody>
             </table>
         </div>
