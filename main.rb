@@ -49,6 +49,16 @@ def current_user
     @current_user ||= DB.execute("SELECT * FROM users WHERE user_id = ?", [session[:user_id]]).first if logged_in?
 end 
 
+def seller_item_count 
+    result = DB.get_first_value(<<-SQL)
+        SELECT COUNT(*)
+        FROM items i 
+        JOIN stores s ON i.store_id = s.store_id
+        JOIN sellers se ON s.seller_id = se.seller_id
+    SQL
+    result.to_i
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
@@ -479,7 +489,6 @@ get '/admin' do
     @errors = []
     @title = "Admin"
 
-    
     erb :'admin/index', layout: :'layouts/admin/layout'
 end
 
