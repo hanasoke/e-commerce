@@ -40,8 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% items = DB.execute("SELECT * FROM items WHERE store_id = (SELECT store_id FROM stores WHERE seller_id = (SELECT seller_id FROM sellers WHERE user_id = ?))", [current_user['user_id']]) %>
-                    <% items.each_with_index do |item, index| %>
+                    <% @items.each_with_index do |item, index| %>
                     <tr>
                         <td><%= index + 1 %></td>
                         <td><%= item['item_name'] %></td>

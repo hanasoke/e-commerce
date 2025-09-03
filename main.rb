@@ -1058,8 +1058,17 @@ end
 
 get '/item_lists/:user_id' do 
     redirect '/login' unless logged_in?
+    halt 403, "Unauthorized" unless current_user['user_id'].to_s == params[:user_id]
 
     @title = "View My Item Lists"
+
+    @items = DB.execute(<<-SQL, [params[:user_id]]) 
+        SELECT i.*
+        FROM items i 
+        JOIN stores s ON i.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ?
+    SQL
 
     erb :'seller/seller_items/item_lists', layout: :'layouts/admin/layout'
 end 
@@ -1153,8 +1162,11 @@ end
 
 get '/add_an_item/:user_id' do 
     redirect '/login' unless logged_in?
+
     @errors = []
+
     @title = "Add An Item"
+
     erb :'seller/seller_items/add_item', layout: :'layouts/admin/layout'
 end 
 
