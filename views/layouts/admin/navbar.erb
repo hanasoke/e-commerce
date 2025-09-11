@@ -18,7 +18,17 @@
               <% if current_user['access'].to_i == 3 %>
                 <li><a class="dropdown-item" href="/admin_view_profile/<%= current_user['user_id'] %>">Settings</a></li>
               <%elsif current_user['access'].to_i == 2 %>
-                <li><a class="dropdown-item" href="/view_seller/<%= current_user['user_id'] %>">Settings</a></li>
+                <li>
+                  <a class="dropdown-item" href="/view_seller/<%= current_user['user_id'] %>">Seller Profile</a>
+                </li>
+                <li>
+                  <% store = DB.get_first_row("SELECT * FROM stores WHERE seller_id = (SELECT seller_id FROM sellers WHERE user_id = ?)", [current_user['user_id']]) %>
+                  <% if store %>
+                    <a class="dropdown-item" href="/store_bio/<%= store['store_id'] %>">Store Profile</a>
+                  <% else %>
+                    <a class="dropdown-item disabled" href="#"></a>
+                  <% end %>
+                </li>
               <% end %>
                 <li><a class="dropdown-item" href="">Activity Log</a></li>
                 <li><hr class="dropdown-divider" /></li>

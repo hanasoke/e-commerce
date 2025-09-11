@@ -1541,3 +1541,15 @@ get '/view_seller_items/:seller_id' do
 
     erb :'admin/seller_dashboard/view_seller_items', layout: :'layouts/admin/layout'
 end 
+
+get '/view_store/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "View My Store Profile"
+    @profile = current_user
+
+    # Get store-specific information
+
+    @errors = []
+    erb :'seller/seller_profile/view_seller', layout: :'layouts/admin/layout'
+end 
