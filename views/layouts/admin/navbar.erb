@@ -33,7 +33,6 @@
                 <li><a class="dropdown-item" href="">Activity Log</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Logout">Logout</button></li>
-
             </ul>
         </li>
     </ul>
@@ -47,15 +46,27 @@
         <h1 class="modal-title fs-5" id="exampleModalLabel">Ready to Leave ?</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Select "Logout" below if you are ready to end your current session. 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a href="/logout" class="btn btn-danger">
+      <% if current_user['access'].to_i == 3 %>
+        <div class="modal-body">
+          Select "Logout" below if you are ready to end your current session. 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/logout" class="btn btn-danger">
             Logout
-        </a>
-      </div>
+          </a>
+        </div>
+      <% elsif current_user['access'].to_i == 2 %>
+        <div class="modal-body">
+          Select "Logout" below if you are ready to end your session as a seller. 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/seller" class="btn btn-danger">
+            Logout
+          </a>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
