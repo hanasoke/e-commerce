@@ -386,6 +386,10 @@ get '/seller' do
     
     @errors = []
     @title = 'Seller'
+
+    # fetch only active items 
+    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+
     erb :'user/index', layout: :'layouts/user/template'
 end 
 
