@@ -1,1 +1,45 @@
-<h1>No Account</h1>
+<div class="container mt-5">
+    <div class="row mb-3">
+        <% if @items.any? %>
+            <% @items.each do |item| %>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 ">
+                        <% if item['item_photo'] && !item['item_photo'].empty? %>
+                            <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" alt="<%= item['item_name'] %>">
+                        <% else %>
+                            <img src="/img/question.png" class="card-img-top" alt="Default Item">
+                        <% end %>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <%= item['item_name'] %>
+                            </p>
+                            <p class="card-text">
+                                <strong>Brand:</strong> <%= item['item_brand'] %>
+                            </p>
+                            <p class="card-text">
+                                <%= item['item_description'] %>
+                            </p>
+                            <p class="card-text">
+                                <strong>Price:</strong> <%= rupiah_currency(item['item_price']) %>
+                            </p>
+                            <p class="card-text">
+                                <strong>Stock:</strong> <%= item['item_stock'] %>
+                            </p>
+                            <p class="card-text">
+                                <strong>Category:</strong> <%= item['item_category'] %>
+                            </p>
+                            <p class="catd-text">
+                                <strong>Unit:</strong> <%= item['item_unit'] %>
+                            </p>
+                            <a href="#" class="btn btn-primary float-end">Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        <% else %>
+            <div class="col">
+                <div class="alert alert-info">No Active items available right now.</div>
+            </div>
+        <% end %>
+    </div>
+</div>

@@ -368,6 +368,10 @@ end
 get '/' do 
     @errors = []
     @title = 'HomePage'
+
+    # fetch only active items 
+    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+    
     erb :'user/no_account/index', layout: :'layouts/no_user/template'
 end 
 
@@ -377,6 +381,10 @@ get '/account' do
     
     @errors = []
     @title = 'HomePage'
+
+    # fetch only active items 
+    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+
     erb :'user/index', layout: :'layouts/user/template'
 end 
 
