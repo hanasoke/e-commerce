@@ -232,6 +232,38 @@ def validate_store(store_name, store_address, store_status, cs_number, store_id 
     # Store Name Validation 
     errors << "Store Name Cannot be Blank." if store_name.nil? || store_name.strip.empty?
 
+    # Check for unique store_name (only if it's a new store or name is being changed)
+    if store_name && !store_name.strip.empty?
+        if store_id 
+            # For updated: check if another store (with different ID) has the same name
+            existing_store = DB.execute(
+                "SELECT store_id FROM stores WHERE LOWER(store_name) = ? AND store_id != ?", 
+                [store_name.downcase, store_id]
+            ).first 
+        else 
+            # For new stores: check if any store has the same name 
+            existing_store = DB.execute(
+                "SELECT store_id FROM stores WHERE LOWER(store_name) = ?",
+                [store_name.downcase]
+            ).first 
+        end 
+        errors << "Store Name Already exist. Please choose a different store name." if existing_store
+    end 
+
+    # Store Address Validation 
+    errors << "Store Address Cannot be Blank." if store_address.nil? || store_address.strip.empty?
+    
+    # Store Status Validation 
+    errors << "Store Status Cannot be Blank." if store_status.nil? || store_status.strip.empty?
+    
+    # CS_Number Validation
+    if cs_number.nil? || cs_number.to_s.strip.empty? 
+        errors << "CS Number Cannot be Blank."
+    elsif cs_number.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "CS Number must be a valid number."
+    elsif cs_number.to_f <= 0 
+        errors << "CS Number must be a positive number."
+    end
     
 end 
 
