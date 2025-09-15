@@ -18,7 +18,7 @@
                 <div class="mb-3 row">
                     <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="store_name" name="store_name">
+                        <input type="text" class="form-control" id="store_name" name="store_name" value="<%= params[:store_name] %>" >
                     </div>
                     <% if @errors.any? { |e| e.include?('Store Name')} %>
                         <div class="form-text text-danger">

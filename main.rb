@@ -226,6 +226,15 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
     errors
 end 
 
+def validate_store(store_name, store_address, store_status, cs_number, store_id = nil)
+    errors = []
+
+    # Store Name Validation 
+    errors << "Store Name Cannot be Blank." if store_name.nil? || store_name.strip.empty?
+
+    
+end 
+
 def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)
 
     errors = []
@@ -1088,6 +1097,7 @@ end
 get '/add_my_store/:user_id' do 
     redirect '/login' unless logged_in?
 
+    @errors = []
     @title = "Add My Store"
 
     erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
