@@ -1209,12 +1209,39 @@ post '/add_my_store/:user_id' do
 
     seller = DB.execute("SELECT * FROM sellers where user_id = ?", [user['user_id']])
 
-    photo_filename = nil 
+    store_photo_filename = nil 
+    store_banner_filename = nil 
 
-    
-    
-    session[:success] = "Store created successfully!"
-    redirect "/seller_dashboard/#{user_id}"
+    if @errors.empty?
+        # Handle file upload 
+        if store_photo && store_photo[:tempfile]
+            store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
+            File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
+                f.write(store_photo[:tempfile].read)
+            end 
+        end 
+
+        if store_banner && store_banner[:tempfile]
+            store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
+            File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
+                f.write(store_banner[:tempfile].read)
+            end 
+        end 
+
+        # Flash Message
+        session[:success] = "Store created successfully!"
+
+        # Insert store details, including the store_photo, into the database 
+        DB.execute("INSERT INTO stores 
+            (seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number)
+                VALUES (?, ?, ?, ?, ?, ?, ?)", 
+            [seller['seller_id'], params[:store_name], store_photo_filename, store_banner_filename, params[:store_address], params[:store_status], params[:cs_number]])
+
+            redirect "/seller_dashboard/#{user_id}"
+        else 
+            return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
+        end 
+    end 
 end 
 
 get '/add_an_item/:user_id' do 
