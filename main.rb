@@ -1192,79 +1192,26 @@ get '/add_my_store/:user_id' do
 end 
 
 post '/add_my_store/:user_id' do 
-    redirect '/login' unless logged_in?
 
-    user_id = params[:user_id].to_i 
-    store_name = params[:store_name].to_s.strip
-    store_address = params[:store_address].to_s.strip 
-    store_status = params[:store_status].to_s.strip 
-    cs_number = params[:cs_number].to_s.strip 
-    store_photo = params[:store_photo]
-    store_banner = params[:store_banner]
+    @errors = validate_store(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
 
-    errors = []
+    store_photo = params['store_photo']
+    store_banner = params['store_banner']
 
-    # Basic presence validation
-    errors << "Store name cannot be blank" if store_name.empty?
-    errors << "Store address cannot be blank" if store_address.empty?
-    errors << "Customer service number cannot be blank" if cs_number.empty?
+    # Add store_photo validation errors 
+    @errors += validate_store_photo(store_photo)
 
-    # Check CS number must be numeric + valid length 
-    unless cs_number.empty? || cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
-        errors << "Customer service number must be numeric (8 - 15 digits)"
-    end 
+    # Add store_banner validation errors 
+    @errors += validate_store_banner(store_banner)
 
-    # Store status validation 
-    unless ["Active", "Inactive"].include?(store_status)
-        errors << "Store status must be Active or Inactive"
-    end 
+    # Get current seller for this seller 
+    user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first 
 
-    # File type validation 
-    allowed_extensions = [".jpg", ".jpeg", ".png", ".gif"]
+    seller = DB.execute("SELECT * FROM sellers where user_id = ?", [user['user_id']])
 
-    if store_photo.nil? || store_photo[:filename].empty?
-        errors << "Store photo is required"
-    elsif !allowed_extensions.include?(File.extname(store_photo[:filename]).downcase)
-        errors << "Store photo must be an image (jpg, jpeg, png, gif)"
-    end 
+    photo_filename = nil 
 
-    if store_banner.nil? || store_banner[:filename].empty?
-        errors << "Store banner is required"
-    elsif !allowed_extensions.include?(File.extname(store_banner[:filename]).downcase)
-        errors << "Store banner must be an image (jpg, jpeg, png, gif)"
-    end 
-
-    # If errors exist, re-render form with messages
-    if errors.any?
-        @errors = errors 
-        @title = "Add Store"
-        @profile = current_user
-        return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
-    end 
-
-    # Save store photo 
-    store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
-    File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
-        f.write(store_photo[:tempfile].read)
-    end  
-
-    # Save store banner
-    store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
-    File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
-        f.write(store_banner[:tempfile].read)
-    end
-
-    # Insert seller if not exists
-    seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
-    unless seller   
-        DB.execute("INSERT INTO sellers (user_id, identity_photo) VALUES (?, ?)", [user_id, ""])
-        seller = DB.get_first_row("SELECT seller_id FROM sellers WHERE user_id = ?", [user_id])
-    end 
-
-    # Insert store
-    DB.execute(
-        "INSERT INTO stores (seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-        [seller['seller_id'], store_name, store_photo_filename, store_banner_filename, store_address, store_status, cs_number])
+    
     
     session[:success] = "Store created successfully!"
     redirect "/seller_dashboard/#{user_id}"
