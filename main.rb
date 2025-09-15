@@ -227,7 +227,7 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
 end 
 
 def validate_store(store_name, store_address, store_status, cs_number, store_id = nil)
-    
+
     errors = []
 
     # Store Name Validation 
@@ -378,6 +378,60 @@ def validate_item_photo(photo)
             errors << "Item Photo file size could not be determined."
         elsif file_size > max_size 
             errors << "Item Photo size must be less than 8MB."
+        end 
+    end 
+
+    errors 
+end 
+
+def validate_store_photo(photo)
+    errors = []
+
+    # Check if the photo parameter is valid and has expected structure
+    if photo.nil? || !photo.is_a?(Hash) || photo[:tempfile].nil?
+        errors << 'Store Photo is required.'
+    else 
+        # Check file type
+        valid_types = ["image/jpeg", "image/png", "image/gif"]
+        if !photo[:type] || !valid_types.include?(photo[:type])
+            errors << "Store Photo must be a JPG, PNG, or GIF file."
+        end 
+
+        # Check file sizee (8MB max)
+        max_size = 8 * 1024 * 1024 # 8MB in bytes
+        file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
+
+        if file_size.nil? 
+            errors << "Store Photo file size could not be determined."
+        elsif file_size > max_size 
+            errors << "Store Photo size must be less than 8MB."
+        end 
+    end 
+
+    errors 
+end 
+
+def validate_store_banner(photo)
+    errors = []
+
+    # Check if the photo parameter is valid and has expected structure
+    if photo.nil? || !photo.is_a?(Hash) || photo[:tempfile].nil?
+        errors << 'Store Banner is required.'
+    else 
+        # Check file type
+        valid_types = ["image/jpeg", "image/png", "image/gif"]
+        if !photo[:type] || !valid_types.include?(photo[:type])
+            errors << "Store Banner must be a JPG, PNG, or GIF file."
+        end 
+
+        # Check file sizee (8MB max)
+        max_size = 8 * 1024 * 1024 # 8MB in bytes
+        file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
+
+        if file_size.nil? 
+            errors << "Store Banner file size could not be determined."
+        elsif file_size > max_size 
+            errors << "Store Banner size must be less than 8MB."
         end 
     end 
 
