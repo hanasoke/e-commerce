@@ -227,6 +227,7 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
 end 
 
 def validate_store(store_name, store_address, store_status, cs_number, store_id = nil)
+    
     errors = []
 
     # Store Name Validation 
@@ -265,6 +266,7 @@ def validate_store(store_name, store_address, store_status, cs_number, store_id 
         errors << "CS Number must be a positive number."
     end
     
+    errors
 end 
 
 def editing_user(name, username, email, birthdate, address, phone, access, user_id = nil)

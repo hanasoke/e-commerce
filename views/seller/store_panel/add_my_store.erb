@@ -18,7 +18,7 @@
                 <div class="mb-3 row">
                     <label for="store_name" class="col-sm-2 col-form-label">Store Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="store_name" name="store_name" value="<%= params[:store_name] %>" >
+                        <input type="text" class="form-control" id="store_name" name="store_name" value="<%= params[:store_name] %>">
                     </div>
                     <% if @errors.any? { |e| e.include?('Store Name')} %>
                         <div class="form-text text-danger">
@@ -29,7 +29,7 @@
                 <div class="mb-3 row">
                     <label for="store_address" class="col-sm-2 col-form-label">Store Address</label>
                     <div class="col-sm-10">
-                        <textarea type="text" class="form-control" id="store_address" name="store_address"></textarea>
+                        <textarea type="text" class="form-control" id="store_address" name="store_address"><%= params[:store_address] %></textarea>
                     </div>
                     <% if @errors.any? { |e| e.include?('Store Address')} %>
                         <div class="form-text text-danger">
@@ -40,7 +40,7 @@
                 <div class="mb-3 row">
                     <label for="cs_number" class="col-sm-2 col-form-label">Customer Service Number</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="cs_number" name="cs_number">
+                        <input type="number" class="form-control" id="cs_number" name="cs_number" value="<%= params[:cs_number] %>">
                     </div>
                     <% if @errors.any? { |e| e.include?('CS Number')} %>
                         <div class="form-text text-danger">
@@ -53,9 +53,9 @@
                     <label for="store_status" class="col-sm-2 col-form-label">Status</label>
                     <div class="col-sm-10">
                         <select class="form-select" id="store_status" name="store_status">
-                            <option value="" disabled selected>Open this select menu</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                            <option disabled <%= params[:store_status].nil? || params[:store_status].empty? ? 'selected' : '' %>>Open this select menu</option>
+                            <option value="Active" <%= params[:store_status] == "Active" ? "selected" : "" %>>Active</option>
+                            <option value="Inactive" <%= params[:store_status] == "Inactive" ? "selected" : "" %>>Inactive</option>
                         </select>
                     </div>
                     <% if @errors.any? { |e| e.include?('Store Status')} %>
@@ -68,21 +68,21 @@
                     <div class="col-md-6">
                         <label for="store_photo" class="form-label" for="store_photo">Store Photo</label>
                         <input class="form-control" type="file" id="store_photo" name="store_photo">
-                        <% if @errors.any? { |e| e.include?('Store Photo')} %>
-                            <div class="form-text text-danger">
-                                <%= @errors.find { |e| e.include?('Store Photo')} %>
-                            </div>
-                        <% end %>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Store Photo')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Store Photo')} %>
+                        </div>
+                    <% end %>
                     <div class="col-md-6">
                         <label for="store_banner" class="form-label" for="store_banner">Store Banner</label>
                         <input class="form-control" type="file" id="store_banner" name="store_banner">
-                        <% if @errors.any? { |e| e.include?('Store Banner')} %>
-                            <div class="form-text text-danger">
-                                <%= @errors.find { |e| e.include?('Store Banner')} %>
-                            </div>
-                        <% end %>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Store Banner')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Store Banner')} %>
+                        </div>
+                    <% end %>
                 </div>
 
                 <!-- Submit Button -->
