@@ -467,7 +467,13 @@ get '/' do
     @title = 'HomePage'
 
     # fetch only active items 
-    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+    @items = DB.execute(<<-SQL)
+        SELECT i.*
+        FROM items i
+        JOIN stores s ON i.store_id = s.store_id
+        WHERE i.item_status = 'Active'
+            AND s.store_status = 'Active'
+    SQL
     
     erb :'user/no_account/index', layout: :'layouts/no_user/template'
 end 
