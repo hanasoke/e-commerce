@@ -1207,7 +1207,12 @@ post '/add_my_store/:user_id' do
     # Get current seller for this seller 
     user = DB.execute("SELECT * FROM users WHERE user_id = ?", [params[:user_id]]).first 
 
-    seller = DB.execute("SELECT * FROM sellers where user_id = ?", [user['user_id']])
+    seller = DB.execute("SELECT * FROM sellers where user_id = ?", [user['user_id']]).first
+
+    if seller.nil? 
+        @errors << "Seller account not found for this user."
+        return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
+    end 
 
     store_photo_filename = nil 
     store_banner_filename = nil 
@@ -1228,19 +1233,20 @@ post '/add_my_store/:user_id' do
             end 
         end 
 
-        # Flash Message
-        session[:success] = "Store created successfully!"
-
-        # Insert store details, including the store_photo, into the database 
+        # Insert store details
         DB.execute("INSERT INTO stores 
             (seller_id, store_name, store_photo, store_banner, store_address, store_status, cs_number)
                 VALUES (?, ?, ?, ?, ?, ?, ?)", 
-            [seller['seller_id'], params[:store_name], store_photo_filename, store_banner_filename, params[:store_address], params[:store_status], params[:cs_number]])
+            [seller['seller_id'], params[:store_name], store_photo_filename, store_banner_filename, params[:store_address], params[:store_status], params[:cs_number]]
+        )
 
-            redirect "/seller_dashboard/#{user_id}"
-        else 
-            return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
-        end 
+        # Flash Message
+        session[:success] = "Store created successfully!"
+
+        # Redirect to seller dashboard
+        redirect "/seller_dashboard/#{user['user_id']}"
+    else 
+        return erb :'seller/store_panel/add_my_store', layout: :'layouts/admin/layout'
     end 
 end 
 
