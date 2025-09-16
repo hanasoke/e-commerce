@@ -4,6 +4,17 @@
         <li class="breadcrumb-item"><a href="/seller_dashboard/<%= current_user['user_id'] %>">Dashboard</a></li>
         <li class="breadcrumb-item active">Store Bio</li>
     </ol>
+    <% if flash[:success] %>
+        <div class="row">
+            <div class="col mb-4">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <% flash[:success] = nil %>
+    <% end %>
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-user me-1"></i>

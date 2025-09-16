@@ -486,7 +486,13 @@ get '/account' do
     @title = 'HomePage'
 
     # fetch only active items 
-    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+    @items = DB.execute(<<-SQL)
+        SELECT i.*
+        FROM items i
+        JOIN stores s ON i.store_id = s.store_id
+        WHERE i.item_status = 'Active'
+            AND s.store_status = 'Active'
+    SQL
 
     erb :'user/index', layout: :'layouts/user/template'
 end 
@@ -499,7 +505,13 @@ get '/seller' do
     @title = 'Seller'
 
     # fetch only active items 
-    @items = DB.execute("SELECT * FROM items WHERE item_status = 'Active'")
+    @items = DB.execute(<<-SQL)
+        SELECT i.*
+        FROM items i
+        JOIN stores s ON i.store_id = s.store_id
+        WHERE i.item_status = 'Active'
+            AND s.store_status = 'Active'
+    SQL
 
     erb :'user/index', layout: :'layouts/user/template'
 end 
@@ -1343,6 +1355,8 @@ end
 get '/store_bio/:store_id' do 
     redirect '/login' unless logged_in?
 
+    @errors = []
+
     # Fetch store details with associated user information 
     store_query = <<-SQL 
         SELECT s.*, u.name as owner_name, u.user_id
@@ -1367,6 +1381,7 @@ end
 get '/edit_my_store/:store_id' do 
     redirect '/login' unless logged_in?
 
+    @errors = []
     
     # Fetch store details with associated user information 
     store_query = <<-SQL 
