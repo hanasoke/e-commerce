@@ -1406,88 +1406,16 @@ end
 post '/edit_my_store/:store_id' do 
     redirect '/login' unless logged_in?
 
+    @errors = validate_store(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
+
+    # store_photo
+
+    # store_banner
+
     store_id = params[:store_id]
-    store = DB.execute("SELECT * FROM stores WHERE store_id = ?", [store_id]).first
 
-    store_name = params[:store_name].to_s.strip 
-    store_address = params[:store_address].to_s.strip 
-    store_status = params[:store_status].to_s.strip 
-    cs_number = params[:cs_number].to_s.strip 
-    store_photo = params[:store_photo]
-    store_banner = params[:store_banner]
+    if errors.empty
 
-    errors = []
-
-    # Basic validation 
-    errors << "Store name is required" if store_name.empty?
-    errors << "Store address is required" if store_address.empty?
-    errors << "Store status must be Active or Inactive" unless ["Active", "Inactive"].include?(store_status)
-
-    errors << "Customer service number cannot be blank" if cs_number.empty?
-
-     # Check CS number must be numeric + valid length 
-    unless cs_number.empty? || cs_number.match?(/\A\d{8,15}\z/) # 8-15 digits
-        errors << "Customer service number must be numeric (8 - 15 digits)"
-    end 
-
-    # allowed file extensions 
-    allowed_extensions = [".jpg", ".jpeg", ".png", ".svg"]
-    valid_mime_types = ["image/jpeg", "image/png", "image/svg+xml"]
-
-    # Store Photo Validation
-    if store_photo && store_photo[:filename] && !store_photo[:filename].empty?
-        ext = File.extname(store_photo[:filename]).downcase 
-        mime = store_photo[:type]
-        
-        unless allowed_extensions.include?(ext) && valid_mime_types.include?(mime)
-            errors << "Store photo must be an image (jpg, jpeg, png, svg)"
-        end 
-    end 
-
-    # Store Banner Validation 
-    if store_banner && !store_banner[:filename] && !store_banner[:filename].empty?
-        ext = File.extname(store_banner[:filename]).downcase 
-        mime = store_banner[:type]
-        
-        unless allowed_extensions.include?(ext) && valid_mime_types.include?(mime)
-            errors << "Store photo must be an image (jpg, jpeg, png, svg)"
-        end         
-    end 
-
-    # Handle file uploads 
-    upload_dir = File.join(Dir.pwd, "public", "uploads", "stores")
-    Dir.mkdir(upload_dir) unless Dir.exist?(upload_dir)
-
-    store_photo_filename = nil 
-    if params[:store_photo] && params[:store_photo][:filename] && !params[:store_photo][:filename].empty?
-        store_photo_filename = "#{Time.now.to_i}_#{params[:store_photo][:filename]}"
-        file_path = File.join(upload_dir, store_photo_filename)
-        File.open(file_path, "wb") { |f| f.write(params[:store_photo][:tempfile].read)}
-    end 
-
-    store_banner_filename = nil 
-    if params[:store_banner] && params[:store_banner][:filename] && !params[:store_banner][:filename].empty?
-        store_banner_filename = "#{Time.now.to_i}_#{params[:store_banner][:filename]}"
-        file_path = File.join(upload_dir, store_banner_filename)
-        File.open(file_path, "wb") { |f| f.write(params[:store_banner][:tempfile].read)}
-    end 
-
-    if errors.any?
-        flash.now[:error] = errors.join(", ")
-
-        # Pre-fill @store with submitted values
-        @store = store.merge(
-            'store_name' => store_name,
-            'store_address' => store_address,
-            'store_status' => store_status,
-            'cs_number' => cs_number,
-            # Keep old images if user didn't upload new ones 
-            'store_photo' => store_photo_filename || store['store_photo'],
-            'store_banner' => store_banner_filename || store['store_banner']
-        )
-
-        erb :'seller/store_panel/edit_my_store', layout: :'layouts/admin/layout'
-    else 
         # Update store record
         DB.execute(
             "UPDATE stores 
@@ -1509,6 +1437,21 @@ post '/edit_my_store/:store_id' do
         flash[:success] = "Store updated successfully!"
         redirect "/store_bio/#{store_id}"
 
+    else 
+        store = DB.execute("SELECT * FROM stores WHERE store_id = ?", [store_id]).first
+
+        # Pre-fill @store with submitted values
+        @store = store.merge(
+            'store_name' => store_name,
+            'store_address' => store_address,
+            'store_status' => store_status,
+            'cs_number' => cs_number,
+            # Keep old images if user didn't upload new ones 
+            'store_photo' => store_photo_filename || store['store_photo'],
+            'store_banner' => store_banner_filename || store['store_banner']
+        )
+
+        erb :'seller/store_panel/edit_my_store', layout: :'layouts/admin/layout'
     end 
 
 end 
