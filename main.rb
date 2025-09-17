@@ -1409,12 +1409,25 @@ post '/edit_my_store/:store_id' do
     @errors = validate_store(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
 
     # store_photo
+    store_photo = params['store_photo']
 
     # store_banner
+    store_banner = params['store_banner']
+
+    # store_photo validation errors
+    @errors += validate_store_photo(store_photo) if store_photo && store_photo [:tempfile]
+    
+    store_photo_filename = nil 
+
+    # store_banner validation errors
+    @errors += validate_store_banner(store_banner) if store_banner && store_banner [:tempfile]
+    
+    store_banner_filename = nil
 
     store_id = params[:store_id]
 
-    if errors.empty
+    if errors.empty?
+        
 
         # Update store record
         DB.execute(
