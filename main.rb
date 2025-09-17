@@ -468,7 +468,7 @@ get '/' do
 
     # fetch only active items 
     @items = DB.execute(<<-SQL)
-        SELECT i.*
+        SELECT i.*, s.store_name
         FROM items i
         JOIN stores s ON i.store_id = s.store_id
         WHERE i.item_status = 'Active'
@@ -1406,7 +1406,13 @@ end
 post '/edit_my_store/:store_id' do 
     redirect '/login' unless logged_in?
 
-    @errors = validate_store(params[:store_name], params[:store_address], params[:store_status], params[:cs_number])
+    @errors = validate_store(
+        params[:store_name], 
+        params[:store_address], 
+        params[:store_status], 
+        params[:cs_number], 
+        params[:store_id]
+    )
 
     # store_photo
     store_photo = params['store_photo']
@@ -1415,54 +1421,69 @@ post '/edit_my_store/:store_id' do
     store_banner = params['store_banner']
 
     # store_photo validation errors
-    @errors += validate_store_photo(store_photo) if store_photo && store_photo [:tempfile]
-    
-    store_photo_filename = nil 
+    @errors += validate_store_photo(store_photo) if store_photo && store_photo[:tempfile] 
 
     # store_banner validation errors
-    @errors += validate_store_banner(store_banner) if store_banner && store_banner [:tempfile]
+    @errors += validate_store_banner(store_banner) if store_banner && store_banner[:tempfile]
     
+    store_photo_filename = nil
     store_banner_filename = nil
 
-    store_id = params[:store_id]
+    if @errors.empty?
+        # Handle file store_photo upload 
+        if store_photo && store_photo[:tempfile]
+            store_photo_filename = "#{Time.now.to_i}_#{store_photo[:filename]}"
+            File.open("./public/uploads/stores/#{store_photo_filename}", 'wb') do |f|
+                f.write(store_photo[:tempfile].read)
+            end 
+        end 
 
-    if errors.empty?
-        
+        # Handle file store_banner upload
+        if store_banner && store_banner[:tempfile]
+            store_banner_filename = "#{Time.now.to_i}_#{store_banner[:filename]}"
+            File.open("./public/uploads/stores/#{store_banner_filename}", 'wb') do |f|
+                f.write(store_banner[:tempfile].read)
+            end 
+        end 
+
+        flash[:success] = "Store updated successfully!"
 
         # Update store record
         DB.execute(
             "UPDATE stores 
-                SET store_name = ?, store_address = ?, store_status = ?, cs_number = ?, 
+                SET store_name = ?, 
+                    store_address = ?, 
+                    store_status = ?, 
+                    cs_number = ?,     
                     store_photo = COALESCE(?, store_photo),
                     store_banner = COALESCE(?, store_banner)
                 WHERE store_id = ?",
                 [
-                    store_name,
-                    store_address,
-                    store_status, 
-                    cs_number,
+                    params[:store_name],
+                    params[:store_address],
+                    params[:store_status], 
+                    params[:cs_number],
                     store_photo_filename, 
                     store_banner_filename,
-                    store_id 
+                    params[:store_id] 
                 ]
         )
-
-        flash[:success] = "Store updated successfully!"
-        redirect "/store_bio/#{store_id}"
+        redirect "/store_bio/#{params[:store_id] }"
 
     else 
-        store = DB.execute("SELECT * FROM stores WHERE store_id = ?", [store_id]).first
+        original_store = DB.execute("SELECT * FROM stores WHERE store_id = ?", params[:store_id]).first
 
         # Pre-fill @store with submitted values
-        @store = store.merge(
-            'store_name' => store_name,
-            'store_address' => store_address,
-            'store_status' => store_status,
-            'cs_number' => cs_number,
+        @store = {
+            'store_id' => params[:store_id],
+            'store_name' => params[:store_name] || original_store['store_name'],
+            'store_address' => params[:store_address] || original_store['store_address'],
+            'store_status' => params[:store_status] || original_store['store_status'],
+            'cs_number' => params[:cs_number] || original_store['cs_number'],
             # Keep old images if user didn't upload new ones 
-            'store_photo' => store_photo_filename || store['store_photo'],
-            'store_banner' => store_banner_filename || store['store_banner']
-        )
+            'store_photo' => store_photo_filename || original_store['store_photo'],
+            'store_banner' => store_banner_filename || original_store['store_banner']
+        }
 
         erb :'seller/store_panel/edit_my_store', layout: :'layouts/admin/layout'
     end 
