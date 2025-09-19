@@ -41,7 +41,9 @@
             <% elsif current_user['access'].to_i == 2 %>
               <!-- Show "My Store" only for users with access level 2 -->
               <li class="nav-item">
-                <a class="nav-link text-white" href="/seller_dashboard/<%= current_user['user_id'] %>">My Store</a>
+                <a class="nav-link text-white" href="/seller_dashboard/<%= current_user['user_id'] %>">
+                  <img src="/img/icons/shop.svg" alt="My Store">
+                </a>
               </li>
             <% end %>
 
