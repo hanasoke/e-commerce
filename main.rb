@@ -1648,6 +1648,10 @@ get '/view_detail_item/:item_id' do
     @title = 'View Detail An Item'
 
     @item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
+    if @item.nil?
+        flash[:error] = "Item not found!"
+        redirect '/'
+    end 
     
-    erb :'user/items/view_item', layout: :'layouts/user/template'
+    erb :'user/items/view_item', layout: :'layouts/no_user/template'
 end 
