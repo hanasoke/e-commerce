@@ -1641,3 +1641,13 @@ get '/view_store/:user_id' do
     @errors = []
     erb :'seller/seller_profile/view_seller', layout: :'layouts/admin/layout'
 end 
+
+# Homepage 
+get '/view_detail_item/:item_id' do 
+    @errors = []
+    @title = 'View Detail An Item'
+
+    @item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
+    
+    erb :'user/items/view_item', layout: :'layouts/user/template'
+end 

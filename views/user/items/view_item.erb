@@ -1,9 +1,7 @@
 <div class="container mt-5">
     <div class="row mb-3">
-        <% if @items.any? %>
-            <% @items.each do |item| %>
                 <div class="col-md-3 mb-4">
-                    <div class="card h-100 ">
+                    <div class="card">
                         <% if item['item_photo'] && !item['item_photo'].empty? %>
                             <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" alt="<%= item['item_name'] %>">
                         <% else %>
@@ -31,13 +29,11 @@
                             <p class="catd-text">
                                 <strong>Unit:</strong> <%= item['item_unit'] %>
                             </p>
-                            <a href="/view_detail_item/<%= item['item_id'] %>" class="btn btn-outline-secondary float-start">Detail</a>
+                            <a href="#" class="btn btn-outline-secondary float-start">Detail</a>
                             <a href="#" class="btn btn-primary float-end">Checkout</a>
                         </div>
                     </div>
                 </div>
-            <% end %>
-        <% else %>
             <div class="col">
                 <div class="alert alert-info">No Active items available right now.</div>
             </div>
