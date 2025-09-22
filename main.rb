@@ -1630,20 +1630,8 @@ get '/view_seller_items/:seller_id' do
     erb :'admin/seller_dashboard/view_seller_items', layout: :'layouts/admin/layout'
 end 
 
-get '/view_store/:user_id' do 
-    redirect '/login' unless logged_in?
-
-    @title = "View My Store Profile"
-    @profile = current_user
-
-    # Get store-specific information
-
-    @errors = []
-    erb :'seller/seller_profile/view_seller', layout: :'layouts/admin/layout'
-end 
-
-# Homepage 
-get '/view_detail_item/:item_id' do 
+# View Detail Item
+get '/view_detail_item_no_user/:item_id' do 
     @errors = []
     @title = 'View Detail An Item'
 
@@ -1653,5 +1641,22 @@ get '/view_detail_item/:item_id' do
         redirect '/'
     end 
     
-    erb :'user/items/view_item', layout: :'layouts/no_user/template'
+    erb :'user/items/view_item_no_user', layout: :'layouts/no_user/template'
+end 
+
+# View Detail Item
+get '/view_detail_item/:item_id' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = 'View Detail An Item'
+
+
+    @item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
+    if @item.nil?
+        flash[:error] = "Item not found!"
+        redirect '/'
+    end 
+    
+    erb :'user/items/view_item', layout: :'layouts/user/template'
 end 

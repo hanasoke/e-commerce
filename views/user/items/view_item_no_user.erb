@@ -29,11 +29,7 @@
                     <p class="catd-text">
                         <strong>Unit:</strong> <%= @item['item_unit'] %>
                     </p>
-                    <% if current_user['access'].to_i == 1 %>
-                        <a href="/account" class="btn btn-primary float-start">Back</a>
-                    <% elsif current_user['access'].to_i ==2 %>
-                        <a href="/seller" class="btn btn-primary float-start">Back</a>
-                    <% end %>
+                    <a href="/" class="btn btn-primary float-start">Back</a>
                 </div>
             </div>
         </div>
