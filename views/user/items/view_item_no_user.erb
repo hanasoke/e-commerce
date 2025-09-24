@@ -3,14 +3,14 @@
         <div class="col-12">
             <div class="card mb-3">
                 <div class="row g-0">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <% if @item['item_photo'] && !@item['item_photo'].empty? %>
-                            <img src="/uploads/items/<%= @item['item_photo'] %>" class="card-img-top" alt="<%= @item['item_name'] %>">
+                            <img src="/uploads/items/<%= @item['item_photo'] %>" class="img-fluid rounded-start" alt="<%= @item['item_name'] %>">
                         <% else %>
-                            <img src="/img/question.png" class="card-img-top" alt="Default Item">
+                            <img src="/img/question.png" class="img-fluid" alt="Default Item">
                         <% end %>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">

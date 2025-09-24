@@ -3,41 +3,52 @@
         <div class="col-12">
             <div class="card mb-3">
                 <div class="row g-0">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <% if @item['item_photo'] && !@item['item_photo'].empty? %>
-                            <img src="/uploads/items/<%= @item['item_photo'] %>" class="card-img-top" alt="<%= @item['item_name'] %>">
+                            <img src="/uploads/items/<%= @item['item_photo'] %>" class="img-fluid rounded-start" alt="<%= @item['item_name'] %>">
                         <% else %>
-                            <img src="/img/question.png" class="card-img-top" alt="Default Item">
+                            <img src="/img/question.png" class="img-fluid rounded-start" alt="Default Item">
                         <% end %>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="card-body">
-                            <p class="card-text">
-                                <%= @item['item_name'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Brand:</strong> <%= @item['item_brand'] %>
-                            </p>
-                            <p class="card-text">
-                                <%= @item['item_description'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Price:</strong> <%= rupiah_currency(@item['item_price']) %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Stock:</strong> <%= @item['item_stock'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Category:</strong> <%= @item['item_category'] %>
-                            </p>
-                            <p class="catd-text">
-                                <strong>Unit:</strong> <%= @item['item_unit'] %>
-                            </p>
-                            <% if current_user['access'].to_i == 1 %>
-                                <a href="/account" class="btn btn-primary float-start">Back</a>
-                            <% elsif current_user['access'].to_i ==2 %>
-                                <a href="/seller" class="btn btn-primary float-start">Back</a>
-                            <% end %>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <%= @item['item_name'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <%= @item['item_description'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Price:</strong> <%= rupiah_currency(@item['item_price']) %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Stock:</strong> <%= @item['item_stock'] %>
+                                    </p>   
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Category:</strong> <%= @item['item_category'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Unit:</strong> <%= @item['item_unit'] %>
+                                    </p>
+                                </li>
+                                <% if current_user['access'].to_i == 1 %>
+                                    <a href="/account" class="btn btn-primary float-start">Back</a>
+                                <% elsif current_user['access'].to_i ==2 %>
+                                    <a href="/seller" class="btn btn-primary float-start">Back</a>
+                                <% end %>
+                            </ul>
                         </div>
                     </div>
                 </div>
