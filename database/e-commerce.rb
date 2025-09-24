@@ -136,7 +136,7 @@ DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS shipments (
         shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
         transaction_id INTEGER,
-        shipping_status,
+        shipping_status TEXT,
         shipping_date TEXT
     );
 SQL
