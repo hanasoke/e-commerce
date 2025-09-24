@@ -62,3 +62,60 @@ DB.execute <<-SQL
         FOREIGN KEY(store_id) REFERENCES stores(store_id)
     );
 SQL
+
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS wishlists (
+        wishlist_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_id INTEGER,
+        store_id INTEGER,
+        user_id INTEGER,
+        seller_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES users(user_id)
+        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id)
+        FOREIGN KEY(store_id) REFERENCES stores(store_id)
+        FOREIGN KEY(item_id) REFERENCES items(item_id)
+    );
+SQL
+
+DB.execute <<-SQL
+    CREATE TABLE IF NOT EXISTS baskets (
+        basket_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        wishlist_id INTEGER,
+        item_id INTEGER,
+        store_id INTEGER,
+        user_id INTEGER,
+        seller_id INTEGER,
+        quantity INTEGER,
+        total_price INTEGER,
+        FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
+        FOREIGN KEY(item_id) REFERENCES items(item_id)
+    )
+SQL
+
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS transactions (
+        transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        store_id INTEGER,
+        seller_id INTEGER, 
+        item_id INTEGER, 
+        user_id INTEGER,
+        wishlist_id INTEGER,
+        basket_id INTEGER,
+        quantity INTEGER,
+        total_price INTEGER,
+        payment_method TEXT,
+        account_number TEXT,
+        payment_photo TEXT,
+        payment_status TEXT,
+        transaction_date TEXT, 
+        FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
+        FOREIGN KEY(item_id) REFERENCES items(item_id),
+        FOREIGN KEY(basket_id) REFERENCES items(basket_id)
+    );
+SQL
