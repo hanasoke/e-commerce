@@ -99,8 +99,7 @@ DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS services (
         service_id INTEGER PRIMARY KEY AUTOINCREMENT,
         service_name TEXT, 
-        fee INTEGER,
-        maximal_size INTEGER
+        fee INTEGER
     )
 SQL
 
@@ -128,5 +127,16 @@ DB.execute <<-SQL
         FOREIGN KEY(item_id) REFERENCES items(item_id),
         FOREIGN KEY(basket_id) REFERENCES items(basket_id),
         FOREIGN KEY(service_id) REFERENCES services(service_id)
+    );
+SQL
+
+shipments
+
+DB.execute <<-SQL
+    CREATE TABLE IF NOT EXISTS shipments (
+        shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        transaction_id INTEGER,
+        shipping_status,
+        shipping_date TEXT
     );
 SQL
