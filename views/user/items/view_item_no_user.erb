@@ -12,28 +12,44 @@
                     </div>
                     <div class="col-md-7">
                         <div class="card-body">
-                            <p class="card-text">
-                                <%= @item['item_name'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Brand:</strong> <%= @item['item_brand'] %>
-                            </p>
-                            <p class="card-text">
-                                <%= @item['item_description'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Price:</strong> <%= rupiah_currency(@item['item_price']) %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Stock:</strong> <%= @item['item_stock'] %>
-                            </p>
-                            <p class="card-text">
-                                <strong>Category:</strong> <%= @item['item_category'] %>
-                            </p>
-                            <p class="catd-text">
-                                <strong>Unit:</strong> <%= @item['item_unit'] %>
-                            </p>
-                            <a href="/" class="btn btn-primary float-start">Back</a>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <%= @item['item_name'] %>
+                                    </p>   
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Brand:</strong> <%= @item['item_brand'] %>
+                                    </p>   
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <%= @item['item_description'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Price:</strong> <%= rupiah_currency(@item['item_price']) %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Stock:</strong> <%= @item['item_stock'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="card-text">
+                                        <strong>Category:</strong> <%= @item['item_category'] %>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="catd-text">
+                                        <strong>Unit:</strong> <%= @item['item_unit'] %>
+                                    </p>
+                                </li>
+                                <a href="/" class="btn btn-primary">Back</a>
+                            </ul>
                         </div>
                     </div>
                 </div>
