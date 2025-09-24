@@ -96,6 +96,15 @@ DB.execute <<-SQL
 SQL
 
 DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS services (
+        service_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        service_name TEXT, 
+        fee INTEGER,
+        maximal_size INTEGER
+    )
+SQL
+
+DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS transactions (
         transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
         store_id INTEGER,
@@ -104,6 +113,7 @@ DB.execute <<-SQL
         user_id INTEGER,
         wishlist_id INTEGER,
         basket_id INTEGER,
+        service_id INTEGER,
         quantity INTEGER,
         total_price INTEGER,
         payment_method TEXT,
@@ -116,6 +126,7 @@ DB.execute <<-SQL
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
         FOREIGN KEY(store_id) REFERENCES stores(store_id),
         FOREIGN KEY(item_id) REFERENCES items(item_id),
-        FOREIGN KEY(basket_id) REFERENCES items(basket_id)
+        FOREIGN KEY(basket_id) REFERENCES items(basket_id),
+        FOREIGN KEY(service_id) REFERENCES services(service_id)
     );
 SQL
