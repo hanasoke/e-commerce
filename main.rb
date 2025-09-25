@@ -1662,11 +1662,21 @@ get '/view_detail_item/:item_id' do
 end 
 
 # Services 
-get '/services' do 
+get '/service_lists' do 
     redirect '/login' unless logged_in?
     
     @errors = []
     @title = 'Services'
 
     erb :'admin/services/service_lists', layout: :'layouts/admin/layout'
+end 
+
+# Services 
+get '/add_a_service' do 
+    redirect '/login' unless logged_in?
+    
+    @errors = []
+    @title = 'Add A Service'
+
+    erb :'admin/services/add_service', layout: :'layouts/admin/layout'
 end 
