@@ -130,8 +130,6 @@ DB.execute <<-SQL
     );
 SQL
 
-shipments
-
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS shipments (
         shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
