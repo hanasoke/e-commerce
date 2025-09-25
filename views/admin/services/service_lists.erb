@@ -35,22 +35,22 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td></td>
+                        <td>1</td>
                         <td>JNE</td>
                         <td>Rp. 50.000</td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= item['item_id'] %>" ><i class="fa-solid fa-trash"></i></button>
-                                <a href="/view_an_item/<%= item['item_id'] %>" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
-                                <a href="/edit_an_item/<%= item['item_id'] %>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" ><i class="fa-solid fa-trash"></i></button>
+                                <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
+                                <a href="#" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
                             </div>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= item['item_id'] %>" aria-hidden="true">
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title fs-5" id="deleteModalLabel<%= item['item_id'] %>">Confirm Deletion</h3>
+                                            <h3 class="modal-title fs-5" id="deleteModalLabel">Confirm Deletion</h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <form action="/delete_an_item/<%= item['item_id'] %>" method="POST">
+                                            <form action="#" method="POST">
                                                 <button type="submit" class="btn btn-primary">Delete</button>
                                             </form>
                                         </div>

@@ -497,12 +497,12 @@ get '/account' do
     erb :'user/index', layout: :'layouts/user/template'
 end 
 
-# Account 
+# Seller
 get '/seller' do 
     redirect '/login' unless logged_in?
     
     @errors = []
-    @title = 'Seller'
+    @title = 'My Homepage'
 
     # fetch only active items 
     @items = DB.execute(<<-SQL)
@@ -1659,4 +1659,14 @@ get '/view_detail_item/:item_id' do
     end 
     
     erb :'user/items/view_item', layout: :'layouts/user/template'
+end 
+
+# Services 
+get '/services' do 
+    redirect '/login' unless logged_in?
+    
+    @errors = []
+    @title = 'Services'
+
+    erb :'admin/services/service_lists', layout: :'layouts/admin/layout'
 end 
