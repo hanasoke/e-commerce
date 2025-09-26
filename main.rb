@@ -170,21 +170,21 @@ def validate_service(service_name, fee, service_id = nil)
     errors = []
 
     # Name validation
-    if service_name.nil? || service_name.strip.empty?
-        errors << "Service Name cannot be blank."
-    end 
-        query = "SELECT service_id FROM users WHERE LOWER(service_name) = ?"
-        query += " AND service_id != ?" if service_id
-        name_exists = DB.get_first_row(query, service_id ? [service_name.downcase, service_id] : [service_name.downcase])
-        errors << "Service Name is already taken." if name_exists
+    if service_name.nil? || service_name.strip.empty? || service_name == "Select A Delivery"
+        errors << "Service Name is required."
+    # end 
+    #     query = "SELECT service_id FROM users WHERE LOWER(service_name) = ?"
+    #     query += " AND service_id != ?" if service_id
+    #     name_exists = DB.get_first_row(query, service_id ? [service_name.downcase, service_id] : [service_name.downcase])
+    #     errors << "Service Name is already taken." if name_exists
     end 
 
     # Fee validation
-    if service_name.nil? || service_name.strip.empty?
+    if fee.nil? || fee.strip.empty?
         errors << "Fee cannot be blank."
-    elsif item_price.to_s !~ /\A\d+(\.\d{1,2})?\z/
-        errors << "Fee must be a valid number."
-    elsif item_price.to_f <= 0 
+    elsif fee.to_s !~ /^\d+$/
+        errors << "Fee must be a number."
+    elsif fee.to_f <= 0 
         errors << "Fee must be a positive number."
     end 
 
@@ -1686,17 +1686,19 @@ get '/view_detail_item/:item_id' do
     erb :'user/items/view_item', layout: :'layouts/user/template'
 end 
 
-# Services 
+# Services list
 get '/service_lists' do 
     redirect '/login' unless logged_in?
     
     @errors = []
     @title = 'Services'
 
+    @services = DB.execute("SELECT * FROM services")
+
     erb :'admin/services/service_lists', layout: :'layouts/admin/layout'
 end 
 
-# Services 
+# Add service form
 get '/add_a_service' do 
     redirect '/login' unless logged_in?
     
@@ -1705,3 +1707,24 @@ get '/add_a_service' do
 
     erb :'admin/services/add_service', layout: :'layouts/admin/layout'
 end 
+
+# Add service action
+post '/add_a_service' do 
+    @errors = validate_service(params[:service_name], params[:fee])
+
+    if @errors.empty?
+        # Insert service details into the database
+        DB.execute("INSERT INTO services
+            (service_name, fee)
+            VALUES (?, ?)",
+            [params[:service_name], params[:fee]]
+        )
+
+        # Flash Message
+        flash[:success] = "Service added successfully!"
+        redirect "/service_lists" 
+    else 
+        erb :'admin/services/add_service', layout: :'layouts/admin/layout'
+    end
+end 
+

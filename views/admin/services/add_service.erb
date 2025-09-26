@@ -8,15 +8,21 @@
             <i class="fas fa-user me-1"></i>
         </div>
         <div class="card-body">
-            <form action="/add_a_service/#" method="post" enctype="multipart/form-data">
+            <% if flash[:error] %>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:error] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% end %>
+            <form action="/add_a_service" method="post">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">
                 </div>
                 <div class="mb-3 row">
-                    <label for="item_name" class="col-sm-2 col-form-label">Service Name</label>
+                    <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
                     <div class="col-sm-10">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Select A Delivery</option>
+                        <select class="form-select" id="service_name" name="service_name" value="<%= params[:service_name]%>">
+                            <option selected value="">Select A Delivery</option>
                             <option value="JNE">JNE</option>
                             <option value="TIKI">TIKI</option>
                             <option value="WAHANA">WAHANA</option>
@@ -29,7 +35,7 @@
                 <div class="mb-3 row">
                     <label for="fee" class="col-sm-2 col-form-label">Fee</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="fee" name="fee" value="<%= params[:fee] %>"/>
+                        <input type="text" class="form-control" id="fee" name="fee" value="<%= params[:fee]%>"/>
                     </div>
                 </div>
 
@@ -38,7 +44,7 @@
             </form>
 
             <!-- Back Button -->
-            <a href="/service_lists/<%= current_user['user_id'] %>"  class="btn btn-outline-secondary float-start">Back</a>
+            <a href="/service_lists"  class="btn btn-outline-secondary float-start">Back</a>
         </div>
     </div>
 </div>

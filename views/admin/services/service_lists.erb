@@ -10,65 +10,69 @@
             <a href="/add_a_service" class="btn btn-sm btn-success float-end">Add An Item</a>
         </div>
         <div class="card-body">
-            <% if session[:success] %>
+            <% if flash[:success] %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><%= session[:success] %></strong>
+                    <strong><%= flash[:success] %></strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <% session[:success] = nil %>
+                <% flash[:success] = nil %>
             <% end %>
-            <% if session[:error] %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><%= session[:error] %></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% session[:error] = nil %>
-            <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Service Name</th>
-                        <th>Fee</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>JNE</td>
-                        <td>Rp. 50.000</td>
-                        <td>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" ><i class="fa-solid fa-trash"></i></button>
-                                <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
-                                <a href="#" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
-                            </div>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title fs-5" id="deleteModalLabel">Confirm Deletion</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure want to delete this Item ?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <form action="#" method="POST">
-                                                <button type="submit" class="btn btn-primary">Delete</button>
-                                            </form>
+            <% if @services.any? %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Service Name</th>
+                            <th>Fee</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @services.each do |service| %>
+                            <tr>
+                                <td>
+                                    <%= service['service_id'] %>
+                                </td>
+                                <td>
+                                    <%= service['service_name'] %>
+                                </td>
+                                <td><%= service['fee'] %></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
+                                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" ><i class="fa-solid fa-trash"></i></button>
+                                        <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="#" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title fs-5" id="deleteModalLabel">Confirm Deletion</h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure want to delete this Item ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <form action="#" method="POST">
+                                                        <button type="submit" class="btn btn-primary">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>  
+                <div class="alert alert-info">No services available.</div>
+            <% end %>
         </div>
     </div>
 </div>
