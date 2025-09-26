@@ -1770,3 +1770,14 @@ post '/edit_a_service/:service_id' do
         erb :'admin/services/edit_service', layout: :'layouts/admin/layout'
     end 
 end 
+
+# Delete a service 
+post '/delete_a_service/:service_id' do 
+    # Flash message
+    flash[:success] = "Service has been successfully deleted."
+
+    # Delete logic 
+    DB.execute("DELETE FROM services WHERE service_id = ?", [params[:service_id]])
+
+    redirect "/service_lists"
+end 
