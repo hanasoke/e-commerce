@@ -1728,3 +1728,14 @@ post '/add_a_service' do
     end
 end 
 
+# Edit service form
+get '/edit_a_service/:service_id' do 
+    redirect '/login' unless logged_in?
+
+    @service = DB.execute("SELECT * FROM services WHERE service_id = ?", [params[:service_id]]).first 
+    
+    @errors = []
+    @title = 'Edit A Service'
+
+    erb :'admin/services/edit_service', layout: :'layouts/admin/layout'
+end 

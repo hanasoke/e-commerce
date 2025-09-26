@@ -1,0 +1,44 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Adding A Service</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-user me-1"></i>
+        </div>
+        <div class="card-body">
+            <form action="/edit_a_service" method="post">
+                <div class="mb-3">
+                    <input type="hidden" name="_method" value="post">
+                </div>
+                <div class="mb-3 row">
+                    <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="service_name" name="service_name">
+                            <option selected value="<%= @service['service_name']%>"><%= @service['service_name']%></option>
+                            <option value="JNE">JNE</option>
+                            <option value="TIKI">TIKI</option>
+                            <option value="WAHANA">WAHANA</option>
+                            <option value="SICEPAT">Sicepat</option>
+                            <option value="J&T">J&T</option>
+                            <option value="Lion">Lion</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="fee" class="col-sm-2 col-form-label">Fee</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="fee" name="fee" value="<%= @service['fee']%>"/>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-outline-primary float-end">Submit</button>
+            </form>
+
+            <!-- Back Button -->
+            <a href="/service_lists"  class="btn btn-outline-secondary float-start">Back</a>
+        </div>
+    </div>
+</div>
