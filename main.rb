@@ -1739,3 +1739,34 @@ get '/edit_a_service/:service_id' do
 
     erb :'admin/services/edit_service', layout: :'layouts/admin/layout'
 end 
+
+post '/edit_a_service/:service_id' do 
+    redirect '/login' unless logged_in?
+
+    @errors = validate_service(params[:service_name], params[:fee], params[:service_id])
+
+    if @errors.empty? 
+
+        # Upload the service in the database 
+        DB.execute("UPDATE services 
+                    SET service_name = ?, 
+                    fee = ?
+                WHERE service_id = ?",    
+            [params[:service_name], params[:fee], params[:service_id]])
+
+        # Flash Message 
+        flash[:success] = "Service has been successfully updated."
+        redirect "/service_lists"
+    else 
+        # Handle Validation errors and re-render the edit form 
+        original_service = DB.execute("SELECT * FROM services WHERE service_id = ?", [params[:service_id]]).first 
+
+        # Merge validation errors and re-render the edit form 
+        @service = {
+            'service_id' => params[:service_id], 
+            'service_name' => params[:service_name] || original_service['service_name'], 
+            'fee' => params[:fee] || original_service['fee']
+        }
+        erb :'admin/services/edit_service', layout: :'layouts/admin/layout'
+    end 
+end 

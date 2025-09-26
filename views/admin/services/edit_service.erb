@@ -8,7 +8,7 @@
             <i class="fas fa-user me-1"></i>
         </div>
         <div class="card-body">
-            <form action="/edit_a_service" method="post">
+            <form action="/edit_a_service/<%= @service['service_id'] %>" method="post">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">
                 </div>
@@ -25,12 +25,22 @@
                             <option value="Lion">Lion</option>
                         </select>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Service Name')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Service Name')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="fee" class="col-sm-2 col-form-label">Fee</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="fee" name="fee" value="<%= @service['fee']%>"/>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Fee')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Fee')} %>
+                        </div>
+                    <% end %>
                 </div>
 
                 <!-- Submit Button -->
