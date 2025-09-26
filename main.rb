@@ -166,6 +166,31 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
+def validate_service(service_name, fee, service_id = nil)
+    errors = []
+
+    # Name validation
+    if service_name.nil? || service_name.strip.empty?
+        errors << "Service Name cannot be blank."
+    end 
+        query = "SELECT service_id FROM users WHERE LOWER(service_name) = ?"
+        query += " AND service_id != ?" if service_id
+        name_exists = DB.get_first_row(query, service_id ? [service_name.downcase, service_id] : [service_name.downcase])
+        errors << "Service Name is already taken." if name_exists
+    end 
+
+    # Fee validation
+    if service_name.nil? || service_name.strip.empty?
+        errors << "Fee cannot be blank."
+    elsif item_price.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "Fee must be a valid number."
+    elsif item_price.to_f <= 0 
+        errors << "Fee must be a positive number."
+    end 
+
+    errors 
+end
+
 def validate_item(item_name, item_brand, item_description, item_price, item_stock, item_category, item_unit, item_status, item_id = nil) 
     errors = []
 
