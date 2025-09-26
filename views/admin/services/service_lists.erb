@@ -37,7 +37,7 @@
                                 <td>
                                     <%= service['service_name'] %>
                                 </td>
-                                <td><%= service['fee'] %></td>
+                                <td><%= rupiah_currency(service['fee']) %></td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
                                         <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" ><i class="fa-solid fa-trash"></i></button>
