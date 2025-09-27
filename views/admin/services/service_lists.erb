@@ -55,15 +55,15 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="mb-3 row">
-                                                        <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
+                                                        <label for="service_name_<%= service['service_id'] %>" class="col-sm-2 col-form-label">Service Name</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" readonly class="form-control-plaintext" id="service_name">
+                                                            <input type="text" readonly class="form-control-plaintext" id="service_name_<%= service['service_id']%>" value="<%= service['service_name']%>">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
-                                                        <label for="fee" class="col-sm-2 col-form-label">Service Fee</label>
+                                                        <label for="fee_<%= service['service_id'] %>" class="col-sm-2 col-form-label">Service Fee</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" readonly class="form-control-plaintext" id="fee">
+                                                            <input type="text" readonly class="form-control-plaintext" id="fee_<%= service['service_id'] %>" value="<%= rupiah_currency(service['fee']) %>">
                                                         </div>
                                                     </div>
                                                 </div>
