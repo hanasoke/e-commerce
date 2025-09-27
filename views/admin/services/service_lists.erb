@@ -41,11 +41,40 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
                                         <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= service['service_id'] %>" ><i class="fa-solid fa-trash"></i></button>
-                                        <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-eye"></i></a>
+                                        <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= service['service_id'] %>" ><i class="fa-solid fa-eye"></i></button>
                                         <a href="/edit_a_service/<%= service['service_id'] %>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
                                     </div>
 
-                                    <!-- Modal -->
+                                    <!-- Detail Modal -->
+                                    <div class="modal fade" id="detailModal<%= service['service_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= service['service_id'] %>" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title fs-5" id="detailModalLabel<%= service['service_id'] %>">Detail</h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3 row">
+                                                        <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" readonly class="form-control-plaintext" id="service_name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="fee" class="col-sm-2 col-form-label">Service Fee</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" readonly class="form-control-plaintext" id="fee">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete Modal -->
                                     <div class="modal fade" id="deleteModal<%= service['service_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= service['service_id'] %>" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
