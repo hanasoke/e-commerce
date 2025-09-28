@@ -29,10 +29,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% @services.each do |service| %>
+                        <% @services.each_with_index do |service, index| %>
                             <tr>
                                 <td>
-                                    <%= service['service_id'] %>
+                                    <%= index + 1 %>
                                 </td>
                                 <td>
                                     <%= service['service_name'] %>
@@ -50,7 +50,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title fs-5" id="detailModalLabel<%= service['service_id'] %>">Detail</h3>
+                                                    <h3 class="modal-title fs-5" id="detailModalLabel<%= service['service_id'] %>">Detail <%= service['service_id'] %></h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
