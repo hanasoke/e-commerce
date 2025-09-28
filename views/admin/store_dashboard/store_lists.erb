@@ -33,9 +33,6 @@
                             Store Photo 
                         </th>
                         <th>
-                            Store Banner
-                        </th>
-                        <th>
                             Store Address 
                         </th>
                         <th>
@@ -65,11 +62,6 @@
                             <td>
                                 <% if store["store_photo"] %>
                                     <img src="/uploads/stores/<%= store["store_photo"]%>" alt="Store Photo" width="80">
-                                <% end %>
-                            </td>
-                            <td>
-                                <% if store["store_banner"] %>
-                                    <img src="/uploads/stores/<%= store["store_banner"] %>" alt="Store Banner" width="120" >
                                 <% end %>
                             </td>
                             <td>
@@ -124,15 +116,65 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3 row">
-                                            <label for="name" class="col-sm-3 col-form-label">Store Name</label>
+                                            <label for="owner_name" class="col-sm-3 col-form-label">Owner Name</label>
                                             <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="name" value="<%= store['store_name'] %>">
+                                                <input type="text" readonly class="form-control-plaintext" id="owner_name" value="<%= store['owner_name'] %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="owner_email" class="col-sm-3 col-form-label">Owner Email</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="owner_email" value="<%= store['owner_email'] %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="store_name" class="col-sm-3 col-form-label">Store Name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="store_name" value="<%= store['store_name'] %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="store_photo" class="col-sm-3 col-form-label">Store Photo</label>
+                                            <div class="col-sm-9">
+                                                <% if store['store_photo'] %>
+                                                    <img src="/uploads/stores/<%= store['store_photo']%>" alt="Store Photo" id="store_photo" width="80" />
+                                                <% else %>
+                                                    <p>No Photo Available</p>
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="store_banner" class="col-sm-3 col-form-label">Store Banner</label>
+                                            <div class="col-sm-9">
+                                                <% if store['store_banner'] %>
+                                                    <% if store["store_banner"] %>
+                                                        <img src="/uploads/stores/<%= store["store_banner"] %>" alt="Store Banner" width="150" >
+                                                    <% end %>
+                                                <% else %>
+                                                    <p>No Banner Available</p>
+                                                <% end %>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
                                             <label for="store_address" class="col-sm-3 col-form-label">Store Address</label>
                                             <div class="col-sm-9">
                                                 <input type="text" readonly class="form-control-plaintext" id="store_address" value="<%= store['store_address'] %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="cs_number" class="col-sm-3 col-form-label">Customer Service</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="cs_number" value="<%= store['cs_number'] %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="store_status" class="col-sm-3 col-form-label">Store Status</label>
+                                            <div class="col-sm-9">
+                                                <% if store["store_status"] == "Active" %>
+                                                    <img src="/img/icons/open.png" alt="Open" id="store_status" width="50"/>
+                                                <% else %>
+                                                    <img src="/img/icons/closed.png" alt="Closed" id="store_status" width="50" />
+                                                <% end %>
                                             </div>
                                         </div>
                                     </div>
