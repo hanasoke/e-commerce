@@ -22,7 +22,6 @@
                     <tr>
                         <th>No</th>
                         <th>User Full Name</th>
-                        <th>User Email</th>
                         <th>User Photo</th>
                         <th>User Phone Number</th>
                         <th>Seller Identity</th>
@@ -35,7 +34,6 @@
                         <tr>
                             <td><%= index + 1 %></td>
                             <td><%= seller['name'] %></td>
-                            <td><%= seller['email'] %></td>
                             <td>
                                 <% if seller['photo'] %>
                                     <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 100px; border-radius: 8px;">
