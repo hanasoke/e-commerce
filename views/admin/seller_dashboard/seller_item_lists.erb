@@ -22,9 +22,7 @@
                     <tr>
                         <th>No</th>
                         <th>Seller Name</th>
-                        <th>Seller Photo</th>
                         <th>Store Name</th>
-                        <th>Store Photo</th>
                         <th>Item Name</th>
                         <th>Item Brand</th>
                         <th>Item Category</th>
@@ -43,17 +41,7 @@
                             <%= row["seller_name"] %>
                         </td>
                         <td>
-                            <% if row["seller_photo"] %>
-                                <img src="/uploads/users/<%= row["seller_photo"] %>" alt="Seller Photo" width="50">
-                            <% end %>
-                        </td>
-                        <td>
                             <%= row["store_name"] %>
-                        </td>
-                        <td>
-                            <% if row["store_photo"] %>
-                                <img src="/uploads/stores/<%= row["store_photo"] %>" alt="Store Photo" width="50">
-                            <% end %>
                         </td>
                         <td>
                             <%= row["item_name"] %>
