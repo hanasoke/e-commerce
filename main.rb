@@ -1124,13 +1124,21 @@ get '/seller_lists' do
         SELECT 
             sellers.*,
             users.name,
+            users.username,
             users.email,
             users.phone,
             users.photo,
+            users.birthdate,
             users.address
         FROM sellers 
         JOIN users ON sellers.user_id = users.user_id
     SQL
+
+    # calculate age if birthdate exists 
+    # if @sellers["birthdate"]
+    #     birthdate = Date.parse(@sellers["birthdate"]) rescue nil 
+    #     @sellers["age"] = ((Date.today - birthdate).to_i / 365) if birthdate
+    # end 
 
     erb :'admin/seller_dashboard/seller_lists', layout: :'layouts/admin/layout'
 end 
