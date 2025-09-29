@@ -1489,23 +1489,6 @@ post '/edit_my_store/:store_id' do
 
 end 
 
-get '/view_an_item/:item_id' do 
-    redirect '/login' unless logged_in?
-
-    @item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
-
-    @errors = []
-    @title = "View Detail An Item"
-
-    # Handle Item where the item does not exist
-    if @item.nil? 
-        session[:error] = "The Item is not found !"
-        redirect "/item_lists/#{current_user['user_id']}"
-    end 
-
-    erb :'seller/seller_items/view', layout: :'layouts/admin/layout'
-end 
-
 get '/edit_an_item/:item_id' do 
     redirect '/login' unless logged_in?
 
