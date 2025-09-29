@@ -53,9 +53,9 @@
                         </td>
                         <td>
                             <% if item['item_status'] == "Active" %>
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge rounded-pill text-bg-success">Active</span>
                             <% else %>
-                                <span class="badge bg-danger">Inactive</span>
+                                <span class="badge rounded-pill text-bg-danger">Inactive</span>
                             <% end %>
                         </td>
                         <td>
@@ -65,7 +65,7 @@
                                 <a href="/edit_an_item/<%= item['item_id'] %>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
                             </div>
 
-                            <!-- Modal -->
+                            <!-- Delete Modal -->
                             <div class="modal fade" id="deleteModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= item['item_id'] %>" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
