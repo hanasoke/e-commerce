@@ -8,12 +8,6 @@
             <i class="fas fa-user me-1"></i>
         </div>
         <div class="card-body">
-            <% if flash[:error] %>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><%= flash[:error] %></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <% end %>
             <form action="/add_a_service" method="post">
                 <div class="mb-3">
                     <input type="hidden" name="_method" value="post">
@@ -21,22 +15,32 @@
                 <div class="mb-3 row">
                     <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
                     <div class="col-sm-10">
-                        <select class="form-select" id="service_name" name="service_name" value="<%= params[:service_name]%>">
-                            <option selected value="">Select A Delivery</option>
-                            <option value="JNE">JNE</option>
-                            <option value="TIKI">TIKI</option>
-                            <option value="WAHANA">WAHANA</option>
-                            <option value="SICEPAT">Sicepat</option>
-                            <option value="J&T">J&T</option>
-                            <option value="Lion">Lion</option>
+                        <select class="form-select" id="service_name" name="service_name">
+                            <option disabled <%= params[:service_name].nil? || params[:service_name].empty? ? 'selected' : '' %> >Select A Delivery</option>
+                            <option value="JNE" <%= params[:service_name] == 'JNE' ? 'selected' : '' %>>JNE</option>
+                            <option value="TIKI <%= params[:service_name] == 'TIKI' ? 'selected' : '' %>">TIKI</option>
+                            <option value="WAHANA" <%= params[:service_name] == 'WAHANA' ? 'selected' : '' %> >WAHANA</option>
+                            <option value="SICEPAT" <%= params[:service_name] == 'SICEPAT' ? 'selected' : '' %> >Sicepat</option>
+                            <option value="J&T" <%= params[:service_name] == 'J&T' ? 'selected' : '' %> >J&T</option>
+                            <option value="Lion" <%= params[:service_name] == 'Lion' ? 'selected' : '' %> >Lion</option>
                         </select>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Service Name')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Service Name')} %>
+                        </div>
+                    <% end %>
                 </div>
                 <div class="mb-3 row">
                     <label for="fee" class="col-sm-2 col-form-label">Fee</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="fee" name="fee" value="<%= params[:fee]%>"/>
                     </div>
+                    <% if @errors.any? { |e| e.include?('Fee')} %>
+                        <div class="form-text text-danger">
+                            <%= @errors.find { |e| e.include?('Fee')} %>
+                        </div>
+                    <% end %>
                 </div>
 
                 <!-- Submit Button -->
