@@ -16,13 +16,13 @@
                     <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
                     <div class="col-sm-10">
                         <select class="form-select" id="service_name" name="service_name">
-                            <option selected value="<%= @service['service_name']%>"><%= @service['service_name']%></option>
-                            <option value="JNE">JNE</option>
-                            <option value="TIKI">TIKI</option>
-                            <option value="WAHANA">WAHANA</option>
-                            <option value="SICEPAT">Sicepat</option>
-                            <option value="J&T">J&T</option>
-                            <option value="Lion">Lion</option>
+                            <option disabled <%= (@service['service_name'].nil? || @service['service_name'].empty?) ? 'selected' : '' %>>Select A Delivery</option>
+                            <option value="JNE" <%= (@service['service_name'] == 'JNE' || params[:service_name] == 'JNE') ? 'selected' : '' %>>JNE</option>
+                            <option value="TIKI" <%= (@service['service_name'] == 'TIKI' || params[:service_name] == 'TIKI') ? 'selected' : '' %>>TIKI</option>
+                            <option value="WAHANA" <%= (@service['service_name'] == 'WAHANA' || params[:service_name] == 'WAHANA') ? 'selected' : '' %> >WAHANA</option>
+                            <option value="SICEPAT" <%= (@service['service_name'] == 'SICEPAT' || params[:service_name] == 'SICEPAT') ? 'selected' : '' %> >Sicepat</option>
+                            <option value="J&T" <%= (@service['service_name'] == 'J&T' || params[:service_name] == 'J&T') ? 'selected' : '' %>>J&T</option>
+                            <option value="Lion" <%= (@service['service_name'] == 'Lion' || params[:service_name] == 'Lion') ? 'selected' : '' %>>Lion</option>
                         </select>
                     </div>
                     <% if @errors.any? { |e| e.include?('Service Name')} %>
