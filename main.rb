@@ -172,11 +172,15 @@ def validate_service(service_name, fee, service_id = nil)
     # Name validation
     if service_name.nil? || service_name.strip.empty? || service_name == "Select A Delivery"
         errors << "Service Name is required."
-    # end 
-    #     query = "SELECT service_id FROM users WHERE LOWER(service_name) = ?"
-    #     query += " AND service_id != ?" if service_id
-    #     name_exists = DB.get_first_row(query, service_id ? [service_name.downcase, service_id] : [service_name.downcase])
-    #     errors << "Service Name is already taken." if name_exists
+    else 
+        #check duplicate service_name in DB
+        if service_id # editing
+            existing = DB.execute("SELECT * FROM services WHERE service_name = ? AND service_id != ?", [service_name, service_id])
+            errors << "Service Name is already taken" if existing.any?
+        else # adding
+            existing = DB.execute("SELECT * FROM services WHERE service_name = ?", [service_name])
+            errors << "Service Name is already taken" if existing.any?
+        end 
     end 
 
     # Fee validation

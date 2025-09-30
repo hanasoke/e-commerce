@@ -15,14 +15,19 @@
                 <div class="mb-3 row">
                     <label for="service_name" class="col-sm-2 col-form-label">Service Name</label>
                     <div class="col-sm-10">
+
+                        <% used_services = DB.execute("SELECT service_name FROM services").map {|s| s['service_name']} %>
+
                         <select class="form-select" id="service_name" name="service_name">
                             <option disabled <%= params[:service_name].nil? || params[:service_name].empty? ? 'selected' : '' %> >Select A Delivery</option>
-                            <option value="JNE" <%= params[:service_name] == 'JNE' ? 'selected' : '' %>>JNE</option>
-                            <option value="TIKI <%= params[:service_name] == 'TIKI' ? 'selected' : '' %>">TIKI</option>
-                            <option value="WAHANA" <%= params[:service_name] == 'WAHANA' ? 'selected' : '' %> >WAHANA</option>
-                            <option value="SICEPAT" <%= params[:service_name] == 'SICEPAT' ? 'selected' : '' %> >Sicepat</option>
-                            <option value="J&T" <%= params[:service_name] == 'J&T' ? 'selected' : '' %> >J&T</option>
-                            <option value="Lion" <%= params[:service_name] == 'Lion' ? 'selected' : '' %> >Lion</option>
+                            
+                            <% ["JNE", "TIKI", "WAHANA", "SICEPAT", "J&T", "Lion"].each do |s| %>
+                                <option value="<%= s %>"
+                                    <%= params[:service_name] == s ? 'selected' : '' %>
+                                    <%= used_services.include?(s) ? 'disabled' : '' %>>
+                                    <%= s %>
+                                </option>
+                            <% end %>
                         </select>
                     </div>
                     <% if @errors.any? { |e| e.include?('Service Name')} %>
