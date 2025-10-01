@@ -63,7 +63,7 @@
                     <form action="/add_to_basket/<%= @item['item_id'] %>" method="POST">
                         <!-- Input Amount -->
                         <div class="mb-3">
-                            <label for="quantity" class="form-label">Jumlah</label>
+                            <label for="quantity" class="form-label">Total</label>
                             <div class="input-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQty()">-</button>
                                 <input type="text" class="form-control text-center" id="quantity" name="quantity" value="1" min="1" max="<%= @item['item_stock'] %>">
@@ -101,14 +101,20 @@
     const price = <%= @item['item_price'].to_i %>;
     const stock = <%= @item['item_stock'].to_i %>;
     const qtyInput = document.getElementById('quantity');
-    const totalPrice = document.getElementById('total_price');
+    const totalPrice = document.getElementById('totalPrice'); // match with HTML
 
     function updateTotal() {
         let qty = parseInt(qtyInput.value) || 1;
         if (qty < 1) qty = 1;
         if (qty > stock) qty = stock;
         qtyInput.value = qty;
-        totalPrice.innerText = new Int1.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price * qty);
+
+
+        totalPrice.innerText = new Intl.NumberFormat('id-ID', 
+        { 
+            style: 'currency', 
+            currency: 'IDR' 
+        }).format(price * qty);
     }
 
     function decreaseQty() {
@@ -122,5 +128,8 @@
     }
 
     qtyInput.addEventListener('input', updateTotal);
+
+    // Initialize subtotal on page load 
+    updateTotal();
 
 </script>

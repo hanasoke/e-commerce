@@ -70,6 +70,10 @@ def seller_item_count_for(user_id)
     result.to_i
 end 
 
+def rupiah_currency(money)
+    "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
@@ -483,10 +487,6 @@ def validate_user_login(email, password)
 
     errors
 end
-
-def rupiah_currency(money)
-    "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
-end 
 
 # Routes 
 
