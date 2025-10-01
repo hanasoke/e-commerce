@@ -82,6 +82,10 @@
                             <b>SubTotal : </b> <span id="totalPrice"><%= rupiah_currency(@item['item_price']) %></span>
                         </p>
 
+                        <div id="stockWarning" class="text-danger fw-bold mb-2" style="display: none;">
+                            Maximum stock capacity has been reached
+                        </div>
+
                         <div class="d-grid gap-2 mb-2">
                             <button type="submit" name="action" value="cart" class="btn btn-success">+ Keranjang</button>
                         </div>
@@ -101,7 +105,8 @@
     const price = <%= @item['item_price'].to_i %>;
     const stock = <%= @item['item_stock'].to_i %>;
     const qtyInput = document.getElementById('quantity');
-    const totalPrice = document.getElementById('totalPrice'); // match with HTML
+    const totalPrice = document.getElementById('totalPrice');
+    const stockWarning = document.getElementById('stockWarning');
 
     function updateTotal() {
         let qty = parseInt(qtyInput.value) || 1;
@@ -115,6 +120,13 @@
             style: 'currency', 
             currency: 'IDR' 
         }).format(price * qty);
+
+        // Show warning when qty == stock 
+        if(qty >= stock) {
+            stockWarning.style.display = 'block';
+        } else {
+            stockWarning.style.display = 'none';
+        }
     }
 
     function decreaseQty() {
