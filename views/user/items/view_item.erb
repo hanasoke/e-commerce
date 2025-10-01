@@ -74,19 +74,22 @@
                         <!-- Input Notes -->
                         <div class="mb-3">
                             <label for="note" class="form-label">Notes</label>
-                            <textarea type="text" name="username" id="username"></textarea>
+                            <textarea class="form-control" name="note" id="note" rows="3" ></textarea>
                         </div>
 
                         <!-- Total Price -->
                         <p>
-                            <b>Total:</b> <span id="totalPrice"><%= rupiah_currency(@item['item_price']) %></span>
+                            <b>SubTotal : </b> <span id="totalPrice"><%= rupiah_currency(@item['item_price']) %></span>
                         </p>
 
-                        <!-- Button -->
-                        <div class="d-grip gap-2">
+                        <div class="d-grid gap-2 mb-2">
                             <button type="submit" name="action" value="cart" class="btn btn-success">+ Keranjang</button>
-                            <button type="submit" name="action" value="buy" class="btn btn-primary">Beli Langsung</button>
                         </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="action" value="buy" class="btn btn-outline-success">Beli Langsung</button>
+                        </div>
+
                     </form>
                 </div>
             </div>
