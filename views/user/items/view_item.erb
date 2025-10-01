@@ -65,10 +65,14 @@
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Total</label>
                             <div class="input-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQty()">-</button>
-                                <input type="text" class="form-control text-center" id="quantity" name="quantity" value="1" min="1" max="<%= @item['item_stock'] %>">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQty()">+</button>
+                                <button id="decreaseBtn" type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQty()">-</button>
+                                <input type="text" class="form-control text-center" id="quantity" name="quantity" value="1">
+                                <button id="increaseBtn" type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQty()">+</button>
                             </div>
+                        </div>
+
+                        <div id="zero" class="text-danger fw-bold mb-2" style="display: none;">
+                            <small>Minimum Order is 1</small>
                         </div>
 
                         <!-- Input Notes -->
@@ -107,13 +111,21 @@
     const qtyInput = document.getElementById('quantity');
     const totalPrice = document.getElementById('totalPrice');
     const stockWarning = document.getElementById('stockWarning');
+    const decreaseBtn = document.getElementById('decreaseBtn');
+    const increaseBtn = document.getElementById('increaseBtn');
+    const zeroNumber = document.getElementById('zero');
 
     function updateTotal() {
-        let qty = parseInt(qtyInput.value) || 1;
-        if (qty < 1) qty = 1;
+        let qty = parseInt(qtyInput.value) || 0;
+        if (qty == 0) {
+            zeroNumber.style.display = 'block';
+            qty = 0; // reset to 0
+        } else {
+            zeroNumber.style.display = 'none';
+        }
+
         if (qty > stock) qty = stock;
         qtyInput.value = qty;
-
 
         totalPrice.innerText = new Intl.NumberFormat('id-ID', 
         { 
@@ -122,11 +134,11 @@
         }).format(price * qty);
 
         // Show warning when qty == stock 
-        if(qty >= stock) {
-            stockWarning.style.display = 'block';
-        } else {
-            stockWarning.style.display = 'none';
-        }
+        stockWarning.style.display = (qty >= stock) ? 'block' : 'none';
+
+        // Disable buttons when at min/max
+        decreaseBtn.disabled = (qty <= 1);
+        increaseBtn.disabled = (qty >= stock);
     }
 
     function decreaseQty() {
