@@ -58,8 +58,66 @@
             <div class="card">
                 <div class="card-body">
                     <p><b>Atur Jumlah dan Catatan</b></p>
+
+                    <!-- Buy Form -->
+                    <form action="/add_to_basket/<%= @item['item_id'] %>" method="POST">
+                        <!-- Input Amount -->
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Jumlah</label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQty()">-</button>
+                                <input type="text" class="form-control text-center" id="quantity" name="quantity" value="1" min="1" max="<%= @item['item_stock'] %>">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQty()">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Input Notes -->
+                        <div class="mb-3">
+                            <label for="note" class="form-label">Notes</label>
+                            <textarea type="text" name="username" id="username"></textarea>
+                        </div>
+
+                        <!-- Total Price -->
+                        <p>
+                            <b>Total:</b> <span id="totalPrice"><%= rupiah_currency(@item['item_price']) %></span>
+                        </p>
+
+                        <!-- Button -->
+                        <div class="d-grip gap-2">
+                            <button type="submit" name="action" value="cart" class="btn btn-success">+ Keranjang</button>
+                            <button type="submit" name="action" value="buy" class="btn btn-primary">Beli Langsung</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const price = <%= @item['item_price'].to_i %>;
+    const stock = <%= @item['item_stock'].to_i %>;
+    const qtyInput = document.getElementById('quantity');
+    const totalPrice = document.getElementById('total_price');
+
+    function updateTotal() {
+        let qty = parseInt(qtyInput.value) || 1;
+        if (qty < 1) qty = 1;
+        if (qty > stock) qty = stock;
+        qtyInput.value = qty;
+        totalPrice.innerText = new Int1.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price * qty);
+    }
+
+    function decreaseQty() {
+        qtyInput.value = Math.max(1, parseInt(qtyInput.value) - 1);
+        updateTotal();
+    }
+
+    function increaseQty() {
+        qtyInput.value = Math.min(stock, parseInt(qtyInput.value) + 1);
+        updateTotal();
+    }
+
+    qtyInput.addEventListener('input', updateTotal);
+
+</script>
