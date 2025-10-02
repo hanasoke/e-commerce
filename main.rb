@@ -1742,3 +1742,34 @@ post '/delete_a_service/:service_id' do
 
     redirect "/service_lists"
 end 
+
+post '/add_to_transaction/:item_id' do 
+    redirect '/login' unless logged_in?
+
+    item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first
+    halt 404, "Item not found" if item.nil?
+
+    quantity = params[:quantity].to_i 
+    note = params[:note]
+
+    # Prevent zero or negative qty 
+    if quantity < 1
+        flash[:error] = "Minimum order is 1"
+        redirect back 
+    end 
+
+    total_price = item['item_price'].to_i * quantity
+
+    if params[:action] == "cart"
+        # Save into baskers
+        DB.execute("INSERT INTO baskets (item_id, store_id, user_id, seller_id, quantity, total_price, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [item['item_id'], item['store_id'], current_user['user_id'], 
+            DB.get_first_value("SELECT seller_id FROM stores WHERE store_id = ?", [item['store_id']]), 
+            quantity, total_price, note])
+        redirect "/basket"
+    elsif params[:action] == "buy"
+
+    end 
+    
+end 
