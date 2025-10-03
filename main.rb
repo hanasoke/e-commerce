@@ -1794,3 +1794,17 @@ get '/basket' do
                                 WHERE b.user_id = ?", [current_user['user_id']])
     erb :'user/basket', layout: :'layouts/user/template'
 end 
+
+#  Transaction page
+get '/transaction' do 
+    redirect '/login' unless logged_in?
+
+    @title = "My Transaction"
+    @transactions = DB.execute("SELECT t.*, i.item_name, i.item_photo, i.item_price
+                                FROM transactions t 
+                                JOIN items i ON t.item_id = i.item_id 
+                                WHERE t.user_id = ?
+                                ORDER BY t.transaction_id DESC LIMIT 1", 
+                                [current_user['user_id']])
+    erb "user/transaction", layout: :'layouts/user/template'
+end 
