@@ -1806,5 +1806,5 @@ get '/transaction' do
                                 WHERE t.user_id = ?
                                 ORDER BY t.transaction_id DESC LIMIT 1", 
                                 [current_user['user_id']])
-    erb "user/transaction", layout: :'layouts/user/template'
+    erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
