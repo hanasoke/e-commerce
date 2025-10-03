@@ -1788,11 +1788,11 @@ get '/basket' do
     redirect '/login' unless logged_in? 
 
     @title = "My Basket"
-    @basket_item = DB.execute("SELECT b.*, i.item_name, i.item_photo, i.item_price 
+    @basket_items = DB.execute("SELECT b.*, i.item_name, i.item_photo, i.item_price 
                                 FROM baskets b 
                                 JOIN items i ON b.item_id = i.item_id
                                 WHERE b.user_id = ?", [current_user['user_id']])
-    erb :'user/basket', layout: :'layouts/user/template'
+    erb :'user/items/basket', layout: :'layouts/user/template'
 end 
 
 #  Transaction page

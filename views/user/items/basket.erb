@@ -1,0 +1,33 @@
+<div class="container mt-4">
+    <h3>My Baskets</h3>
+    <hr>
+
+    <% if @basket_items.empty? %>
+        <p class="text-muted">Empty Basket</p>
+    <% else %>
+        <% @basket_items.each do |item| %>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <% if item['item_photo'] %>
+                            <img src="/uploads/items/<%= item['item_photo'] %>" class="img-fluid rounded-start" alt="">
+                        <% else %>
+                            <img src="/img/question.png" class="img-fluid rounded-start" alt="No Image">
+                        <% end %>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5><%= item['item_name'] %></h5>
+                            <p>Catatan: <%= item['note'] %></p>
+                            <p>Harga Satuan: <%= rupiah_currency(item['item_price']) %></p>
+                            <p><b>Total: <%= rupiah_currency(item['total_price']) %></b></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center justify-content-center">
+                        <a href="/checkout/<%= item['basket_id'] %>" class="btn btn-success">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    <% end %>
+</div>
