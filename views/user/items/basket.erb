@@ -10,7 +10,7 @@
                 <div class="row g-0">
                     <div class="col-md-2">
                         <% if item['item_photo'] %>
-                            <img src="/uploads/items/<%= item['item_photo'] %>" class="img-fluid rounded-start" alt="">
+                            <img src="/uploads/items/<%= item['item_photo'] %>" class="img-fluid rounded-start" alt="<%= item['item_name'] %>">
                         <% else %>
                             <img src="/img/question.png" class="img-fluid rounded-start" alt="No Image">
                         <% end %>
