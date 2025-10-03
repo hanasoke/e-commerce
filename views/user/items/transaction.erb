@@ -1,0 +1,37 @@
+<div class="container mt-4">
+    <h3>Detail Transaction</h3>
+    <hr>
+
+    <% if @transactions.empty? %>
+        <p class="text-muted">Belum ada transaksi</p>
+    <% else %>
+        <% @transactions.each do |trx| %>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <% if trx['item_photo'] %>
+                            <img src="/uploads/items/<%= trx['item_photo'] %>" class="img-fluid rounded-start" alt="<%= trx['item_name'] %>">
+                        <% else %>
+                            <img src="/img/question.png" class="img-fluid rounded-start" alt="No Image">
+                        <% end %>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <h5>
+                                <%= trx['item_name'] %>
+                            </h5>
+                            <p>Jumlah: <%= trx['quantity'] %></p>
+                            <p>Catatan: <%= trx['note'] %></p>
+                            <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
+                            <p>Status Pembayaran: 
+                                <span class="badge bg-warning"><%= trx['payment_status'] %></span>
+                            </p>
+                            <p>Tanggal Transaksi: <%= trx['transaction_date'] %></p>
+                            <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary">Lanjutkan Pembayaran</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+</div>
