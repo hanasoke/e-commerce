@@ -70,9 +70,9 @@ DB.execute <<-SQL
         store_id INTEGER,
         user_id INTEGER,
         seller_id INTEGER,
-        FOREIGN KEY(user_id) REFERENCES users(user_id)
-        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id)
-        FOREIGN KEY(store_id) REFERENCES stores(store_id)
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
         FOREIGN KEY(item_id) REFERENCES items(item_id)
     );
 SQL
@@ -132,7 +132,7 @@ DB.execute <<-SQL
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
         FOREIGN KEY(store_id) REFERENCES stores(store_id),
         FOREIGN KEY(item_id) REFERENCES items(item_id),
-        FOREIGN KEY(basket_id) REFERENCES items(basket_id),
+        FOREIGN KEY(basket_id) REFERENCES baskets(basket_id),
         FOREIGN KEY(service_id) REFERENCES services(service_id)
     );
 SQL
