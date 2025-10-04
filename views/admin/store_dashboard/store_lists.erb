@@ -17,176 +17,182 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>
-                            No
-                        </th>
-                        <th>
-                            Store Owner
-                        </th>
-                        <th>
-                            Store Name
-                        </th>
-                        <th>
-                            Store Photo 
-                        </th>
-                        <th>
-                            Store Address 
-                        </th>
-                        <th>
-                            Customer Service Number
-                        </th>
-                        <th>
-                            Store Status 
-                        </th>
-                        <th>
-                            Action 
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% @stores.each_with_index do |store, index| %>
+            <% if @stores.any? %>
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>
-                                <%= index + 1 %>
-                            </td>
-                            <td>
-                                <%= store["owner_name"] %>
-                                <br>
-                            </td>
-                            <td>
-                                <%= store["store_name"]%>
-                            </td>
-                            <td>
-                                <% if store["store_photo"] %>
-                                    <img src="/uploads/stores/<%= store["store_photo"]%>" alt="Store Photo" width="80">
-                                <% end %>
-                            </td>
-                            <td>
-                                <%= store["store_address"] %>
-                            </td>
-                            <td>
-                                <%= store["cs_number"] %>
-                            </td>
-                            <td>
-                                <% if store["store_status"] == "Active" %>
-                                    <img src="/img/icons/open.png" alt="Open" id="store_status" width="50"/>
-                                <% else %>
-                                    <img src="/img/icons/closed.png" alt="Closed" id="store_status" width="50" />
-                                <% end %>
-                            </td>
-                            <td>
-                                <button type="submit" class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#deleteModal<%= store["store_id"] %>" >
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                <button class="btn btn-info text-white btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#detailModal<%= store['store_id'] %>"><i class="fa-solid fa-eye"></i></button>
-                            </td>
+                            <th>
+                                No
+                            </th>
+                            <th>
+                                Store Owner
+                            </th>
+                            <th>
+                                Store Name
+                            </th>
+                            <th>
+                                Store Photo 
+                            </th>
+                            <th>
+                                Store Address 
+                            </th>
+                            <th>
+                                Customer Service Number
+                            </th>
+                            <th>
+                                Store Status 
+                            </th>
+                            <th>
+                                Action 
+                            </th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <% @stores.each_with_index do |store, index| %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= store["owner_name"] %>
+                                    <br>
+                                </td>
+                                <td>
+                                    <%= store["store_name"]%>
+                                </td>
+                                <td>
+                                    <% if store["store_photo"] %>
+                                        <img src="/uploads/stores/<%= store["store_photo"]%>" alt="Store Photo" width="80">
+                                    <% end %>
+                                </td>
+                                <td>
+                                    <%= store["store_address"] %>
+                                </td>
+                                <td>
+                                    <%= store["cs_number"] %>
+                                </td>
+                                <td>
+                                    <% if store["store_status"] == "Active" %>
+                                        <img src="/img/icons/open.png" alt="Open" id="store_status" width="50"/>
+                                    <% else %>
+                                        <img src="/img/icons/closed.png" alt="Closed" id="store_status" width="50" />
+                                    <% end %>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#deleteModal<%= store["store_id"] %>" >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                    <button class="btn btn-info text-white btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#detailModal<%= store['store_id'] %>"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
 
-                        <!-- Delete Modal -->
-                        <div class="modal fade" id="deleteModal<%= store['store_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= store['store_id'] %>" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title fs-5" id="deleteModalLabel<%= store['store_id'] %>">Confirm Deletion</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure want to delete this Store ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <form action="/delete_store/<%= store['store_id'] %>" method="POST">
-                                            <button type="submit" class="btn btn-primary">Delete</button>
-                                        </form>
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal<%= store['store_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= store['store_id'] %>" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title fs-5" id="deleteModalLabel<%= store['store_id'] %>">Confirm Deletion</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure want to delete this Store ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form action="/delete_store/<%= store['store_id'] %>" method="POST">
+                                                <button type="submit" class="btn btn-primary">Delete</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Detail Modal -->
-                        <div class="modal fade" id="detailModal<%= store['store_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= store['store_id'] %>" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title fs-5" id="detailModalLabel<%= store['store_id'] %>">Detail Store</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3 row">
-                                            <label for="owner_name" class="col-sm-3 col-form-label">Owner Name</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="owner_name" value="<%= store['owner_name'] %>">
-                                            </div>
+                            <!-- Detail Modal -->
+                            <div class="modal fade" id="detailModal<%= store['store_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= store['store_id'] %>" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title fs-5" id="detailModalLabel<%= store['store_id'] %>">Detail Store</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="owner_email" class="col-sm-3 col-form-label">Owner Email</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="owner_email" value="<%= store['owner_email'] %>">
+                                        <div class="modal-body">
+                                            <div class="mb-3 row">
+                                                <label for="owner_name" class="col-sm-3 col-form-label">Owner Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="owner_name" value="<%= store['owner_name'] %>">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="store_name" class="col-sm-3 col-form-label">Store Name</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="store_name" value="<%= store['store_name'] %>">
+                                            <div class="mb-3 row">
+                                                <label for="owner_email" class="col-sm-3 col-form-label">Owner Email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="owner_email" value="<%= store['owner_email'] %>">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="store_photo" class="col-sm-3 col-form-label">Store Photo</label>
-                                            <div class="col-sm-9">
-                                                <% if store['store_photo'] %>
-                                                    <img src="/uploads/stores/<%= store['store_photo']%>" alt="Store Photo" id="store_photo" width="80" />
-                                                <% else %>
-                                                    <p>No Photo Available</p>
-                                                <% end %>
+                                            <div class="mb-3 row">
+                                                <label for="store_name" class="col-sm-3 col-form-label">Store Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="store_name" value="<%= store['store_name'] %>">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="store_banner" class="col-sm-3 col-form-label">Store Banner</label>
-                                            <div class="col-sm-9">
-                                                <% if store['store_banner'] %>
-                                                    <% if store["store_banner"] %>
-                                                        <img src="/uploads/stores/<%= store["store_banner"] %>" alt="Store Banner" width="150" >
+                                            <div class="mb-3 row">
+                                                <label for="store_photo" class="col-sm-3 col-form-label">Store Photo</label>
+                                                <div class="col-sm-9">
+                                                    <% if store['store_photo'] %>
+                                                        <img src="/uploads/stores/<%= store['store_photo']%>" alt="Store Photo" id="store_photo" width="80" />
+                                                    <% else %>
+                                                        <p>No Photo Available</p>
                                                     <% end %>
-                                                <% else %>
-                                                    <p>No Banner Available</p>
-                                                <% end %>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="store_banner" class="col-sm-3 col-form-label">Store Banner</label>
+                                                <div class="col-sm-9">
+                                                    <% if store['store_banner'] %>
+                                                        <% if store["store_banner"] %>
+                                                            <img src="/uploads/stores/<%= store["store_banner"] %>" alt="Store Banner" width="150" >
+                                                        <% end %>
+                                                    <% else %>
+                                                        <p>No Banner Available</p>
+                                                    <% end %>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="store_address" class="col-sm-3 col-form-label">Store Address</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="store_address" value="<%= store['store_address'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="cs_number" class="col-sm-3 col-form-label">Customer Service</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="cs_number" value="<%= store['cs_number'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="store_status" class="col-sm-3 col-form-label">Store Status</label>
+                                                <div class="col-sm-9">
+                                                    <% if store["store_status"] == "Active" %>
+                                                        <img src="/img/icons/open.png" alt="Open" id="store_status" width="50"/>
+                                                    <% else %>
+                                                        <img src="/img/icons/closed.png" alt="Closed" id="store_status" width="50" />
+                                                    <% end %>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="store_address" class="col-sm-3 col-form-label">Store Address</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="store_address" value="<%= store['store_address'] %>">
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="cs_number" class="col-sm-3 col-form-label">Customer Service</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="cs_number" value="<%= store['cs_number'] %>">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="store_status" class="col-sm-3 col-form-label">Store Status</label>
-                                            <div class="col-sm-9">
-                                                <% if store["store_status"] == "Active" %>
-                                                    <img src="/img/icons/open.png" alt="Open" id="store_status" width="50"/>
-                                                <% else %>
-                                                    <img src="/img/icons/closed.png" alt="Closed" id="store_status" width="50" />
-                                                <% end %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <% end %>
-                </tbody>
-            </table>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>
+                <div class="alert alert-info">
+                    No Store Available.
+                </div>
+            <% end %>
         </div>
     </div>
 </div>

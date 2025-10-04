@@ -17,53 +17,57 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Seller Name</th>
-                        <th>Store Name</th>
-                        <th>Item Name</th>
-                        <th>Item Brand</th>
-                        <th>Item Category</th>
-                        <th>Item Photo</th>
-                        <th>Item Price</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <% @seller_items.each_with_index do |row, index| %>
-                    <tr>
-                        <td>
-                            <%= index + 1 %>
-                        </td>
-                        <td>
-                            <%= row["seller_name"] %>
-                        </td>
-                        <td>
-                            <%= row["store_name"] %>
-                        </td>
-                        <td>
-                            <%= row["item_name"] %>
-                        </td>
-                        <td>
-                            <%= row["item_brand"] %>
-                        </td>
-                        <td>
-                            <%= row["item_category"] %>
-                        </td>
-                        <td>
-                            <% if row["item_photo"] %>
-                                <img src="/uploads/items/<%= row["item_photo"] %>" alt="Item Photo" width="50">
-                            <% end %>
-                        </td>
-                        <td>
-                            <%= rupiah_currency(row["item_price"]) %>
-                        </td>
-                    </tr>
-                    <% end %>
-                </tbody>
-            </table>
+            <% if @seller_items.any? %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Seller Name</th>
+                            <th>Store Name</th>
+                            <th>Item Name</th>
+                            <th>Item Brand</th>
+                            <th>Item Category</th>
+                            <th>Item Photo</th>
+                            <th>Item Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @seller_items.each_with_index do |row, index| %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= row["seller_name"] %>
+                            </td>
+                            <td>
+                                <%= row["store_name"] %>
+                            </td>
+                            <td>
+                                <%= row["item_name"] %>
+                            </td>
+                            <td>
+                                <%= row["item_brand"] %>
+                            </td>
+                            <td>
+                                <%= row["item_category"] %>
+                            </td>
+                            <td>
+                                <% if row["item_photo"] %>
+                                    <img src="/uploads/items/<%= row["item_photo"] %>" alt="Item Photo" width="50">
+                                <% end %>
+                            </td>
+                            <td>
+                                <%= rupiah_currency(row["item_price"]) %>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>
+                <div class="alert alert-info">No Seller Item Lists.</div>
+            <% end %>
         </div>
     </div>
 </div>

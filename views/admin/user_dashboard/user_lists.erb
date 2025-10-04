@@ -16,172 +16,176 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Birthdate</th>
-                        <th>Age</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Photo</th>
-                        <th>Access</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% 
-                        english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            <% if @users.any? %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Birthdate</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Photo</th>
+                            <th>Access</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% 
+                            english_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-                        today = Date.today
+                            today = Date.today
 
-                        @users.each_with_index do |user, index| 
-                            begin 
-                                birthdate = user['birthdate'] ? Date.parse(user['birthdate']) :  nil 
+                            @users.each_with_index do |user, index| 
+                                begin 
+                                    birthdate = user['birthdate'] ? Date.parse(user['birthdate']) :  nil 
 
-                                formatted_birthdate = if birthdate
-                                    "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}"
-                                else 
-                                    ''
-                                end 
+                                    formatted_birthdate = if birthdate
+                                        "#{birthdate.day} #{english_months[birthdate.month - 1]} #{birthdate.year}"
+                                    else 
+                                        ''
+                                    end 
 
-                                age = if birthdate
-                                    calculated_age = today.year - birthdate.year
+                                    age = if birthdate
+                                        calculated_age = today.year - birthdate.year
 
-                                    calculated_age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
-                                    calculated_age
-                                else 
-                                    nil
-                                end 
-                            rescue => e 
-                                formatted_birthdate = 'Invalid date'
-                                
-                                age = nil 
-                                # Consider logging the error: puts "Error parsing birthdate for user #{user['user_id']}: #{e.message}"
+                                        calculated_age -= 1 if (today.month < birthdate.month) || (today.month == birthdate.month && today.day < birthdate.day)
+                                        calculated_age
+                                    else 
+                                        nil
+                                    end 
+                                rescue => e 
+                                    formatted_birthdate = 'Invalid date'
+                                    
+                                    age = nil 
+                                    # Consider logging the error: puts "Error parsing birthdate for user #{user['user_id']}: #{e.message}"
 
-                            end     
-                    %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= user['name'] %></td>
-                        <td><%= user['username'] %></td>
-                        <td><%= user['email'] %></td>
-                        <td><%= formatted_birthdate %></td>
-                        <td><%= age ? "#{age} years" : '' %></td>
-                        <td><%= user['address'] %></td>
-                        <td><%= user['phone']%></td>
-                        <td>
-                            <% if user['photo'] %>
-                                <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px"/>
-                            <% else %>
-                                <p>No Photo Available</p>
-                            <% end %>
-                        </td>
-                        <td><%= user['access']%></td>
-                        <td>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user['user_id']%>"><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= user['user_id'] %>" ><i class="fa-solid fa-eye"></i></button>
-                                <a href="/edit_user/<%= user['user_id']%>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Delete Modal -->
-                    <div class="modal fade" id="deleteModal<%= user['user_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user['user_id'] %>" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title fs-5" id="deleteModalLabel<%= user['user_id']%>">Confirm Deletion</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                end     
+                        %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= user['name'] %></td>
+                            <td><%= user['username'] %></td>
+                            <td><%= user['email'] %></td>
+                            <td><%= formatted_birthdate %></td>
+                            <td><%= age ? "#{age} years" : '' %></td>
+                            <td><%= user['address'] %></td>
+                            <td><%= user['phone']%></td>
+                            <td>
+                                <% if user['photo'] %>
+                                    <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px"/>
+                                <% else %>
+                                    <p>No Photo Available</p>
+                                <% end %>
+                            </td>
+                            <td><%= user['access']%></td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user['user_id']%>"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= user['user_id'] %>" ><i class="fa-solid fa-eye"></i></button>
+                                    <a href="/edit_user/<%= user['user_id']%>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
                                 </div>
-                                <div class="modal-body">
-                                    Are you sure want to delete this User ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <form action="/delete_user/<%= user['user_id'] %>" method="POST">
-                                        <button type="submit" class="btn btn-primary">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            </td>
+                        </tr>
 
-                    <!-- Detail Modal -->
-                    <div class="modal fade" id="detailModal<%= user['user_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= user['user_id'] %>" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title fs-5" id="detailModalLabel<%= user['user_id']%>">View Detail</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3 row">
-                                        <label for="name" class="col-sm-3 col-form-label">Name</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="name" value="<%= user['name']%>">
-                                        </div>
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteModal<%= user['user_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user['user_id'] %>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title fs-5" id="deleteModalLabel<%= user['user_id']%>">Confirm Deletion</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="mb-3 row">
-                                        <label for="username" class="col-sm-3 col-form-label">Username</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="username" value="<%= user['username']%>">
-                                        </div>
+                                    <div class="modal-body">
+                                        Are you sure want to delete this User ?
                                     </div>
-                                    <div class="mb-3 row">
-                                        <label for="email" class="col-sm-3 col-form-label">Email</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="email" value="<%= user['email']%>">
-                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <form action="/delete_user/<%= user['user_id'] %>" method="POST">
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </form>
                                     </div>
-                                    <div class="mb-3 row">
-                                        <label for="birthdate" class="col-sm-3 col-form-label">Birthdate</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= formatted_birthdate %>">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="address" class="col-sm-3 col-form-label">Address</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="address" value="<%= user['address']%>">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="phone" class="col-sm-3 col-form-label">Phone</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= user['phone']%>">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="photo" class="col-sm-3 col-form-label">Photo</label>
-                                        <div class="col-sm-9">
-                                            <% if user['photo'] %>
-                                                <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px" id="photo" />
-                                            <% else %>
-                                                <p>No Photo Available</p>
-                                            <% end %>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="access" class="col-sm-3 col-form-label">Access</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" id="access" value="<%= user['access']%>">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <% end %>
-                </tbody>
-            </table>
+
+                        <!-- Detail Modal -->
+                        <div class="modal fade" id="detailModal<%= user['user_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= user['user_id'] %>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title fs-5" id="detailModalLabel<%= user['user_id']%>">View Detail</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3 row">
+                                            <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="name" value="<%= user['name']%>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="username" class="col-sm-3 col-form-label">Username</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="username" value="<%= user['username']%>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="email" value="<%= user['email']%>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="birthdate" class="col-sm-3 col-form-label">Birthdate</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= formatted_birthdate %>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="address" class="col-sm-3 col-form-label">Address</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="address" value="<%= user['address']%>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= user['phone']%>">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="photo" class="col-sm-3 col-form-label">Photo</label>
+                                            <div class="col-sm-9">
+                                                <% if user['photo'] %>
+                                                    <img src="/uploads/users/<%= user['photo']%>" alt="<%= user['username']%>" style="max-width: 100px" id="photo" />
+                                                <% else %>
+                                                    <p>No Photo Available</p>
+                                                <% end %>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="access" class="col-sm-3 col-form-label">Access</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="access" value="<%= user['access']%>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>
+                <div class="alert alert-info">No Users available</div>
+            <% end %>
         </div>
     </div>
 </div>
