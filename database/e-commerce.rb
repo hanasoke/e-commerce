@@ -137,6 +137,8 @@ DB.execute <<-SQL
     );
 SQL
 
+# DB.execute("DROP TABLE transactions");
+
 # Add the 'note' column in transactions table if it doesn't exist 
 # begin 
 #     DB.execute("ALTER TABLE transactions ADD COLUMN note TEXT;")
