@@ -17,149 +17,151 @@
                 </div>
                 <% session[:success] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>User Full Name</th>
-                        <th>User Photo</th>
-                        <th>User Phone Number</th>
-                        <th>Seller Identity</th>
-                        <th>Seller Address</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% @sellers.each_with_index do |seller, index| %>
+            <% if @sellers.any? %>
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><%= index + 1 %></td>
-                            <td><%= seller['name'] %></td>
-                            <td>
-                                <% if seller['photo'] %>
-                                    <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 100px; border-radius: 8px;">
-                                <% else %>
-                                    <p>No Photo Available</p>
-                                <% end %>
-                            </td>
-                            <td><%= seller['phone'] %></td>
-                            <td>
-                                <% if seller['identity_photo'] %>
-                                    <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 100px"/>
-                                <% else %>
-                                    <p>No Photo Available</p>
-                                <% end %>
-                            </td>
-                            <td><%= seller['address'] %></td>
-                            <td>
-                                <div class="btn-group-sm btn-group" role="group" aria-label="Button Group">
-                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= seller['seller_id'] %>"><i class="fa-solid fa-trash"></i></button>
-                                    <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= seller['seller_id'] %>" ><i class="fa-solid fa-eye"></i></button>
-                                </div>
-                            </td>
+                            <th>No</th>
+                            <th>User Full Name</th>
+                            <th>User Photo</th>
+                            <th>User Phone Number</th>
+                            <th>Seller Identity</th>
+                            <th>Seller Address</th>
+                            <th>Action</th>
                         </tr>
-
-                        <!-- Delete Modal -->
-                        <div class="modal fade" id="deleteModal<%= seller['seller_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= seller['seller_id'] %>" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title fs-5" id="deleteModalLabel<%= seller['seller_id'] %>">Confirm Deletion</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </thead>
+                    <tbody>
+                        <% @sellers.each_with_index do |seller, index| %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= seller['name'] %></td>
+                                <td>
+                                    <% if seller['photo'] %>
+                                        <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 100px; border-radius: 8px;">
+                                    <% else %>
+                                        <p>No Photo Available</p>
+                                    <% end %>
+                                </td>
+                                <td><%= seller['phone'] %></td>
+                                <td>
+                                    <% if seller['identity_photo'] %>
+                                        <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 100px"/>
+                                    <% else %>
+                                        <p>No Photo Available</p>
+                                    <% end %>
+                                </td>
+                                <td><%= seller['address'] %></td>
+                                <td>
+                                    <div class="btn-group-sm btn-group" role="group" aria-label="Button Group">
+                                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= seller['seller_id'] %>"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= seller['seller_id'] %>" ><i class="fa-solid fa-eye"></i></button>
                                     </div>
-                                    <div class="modal-body">
-                                        Are you sure want to delete this Seller ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <form action="/delete_seller/<%= seller['seller_id'] %>" method="POST">
-                                            <button type="submit" class="btn btn-primary">Delete</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Detail Modal -->
-                        <div class="modal fade" id="detailModal<%= seller['seller_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= seller['seller_id'] %>" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title fs-5" id="detailModalLabel<%= seller['seller_id'] %>">Detail Profile</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3 row">
-                                            <label for="name" class="col-sm-3 col-form-label">Name</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="name" value="<%= seller['name'] %>">
-                                            </div>
+                                </td>
+                            </tr>
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal<%= seller['seller_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= seller['seller_id'] %>" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title fs-5" id="deleteModalLabel<%= seller['seller_id'] %>">Confirm Deletion</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="username" class="col-sm-3 col-form-label">Username</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="username" value="<%= seller['username'] %>">
-                                            </div>
+                                        <div class="modal-body">
+                                            Are you sure want to delete this Seller ?
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="email" class="col-sm-3 col-form-label">Email</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="email" value="<%= seller['email'] %>">
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form action="/delete_seller/<%= seller['seller_id'] %>" method="POST">
+                                                <button type="submit" class="btn btn-primary">Delete</button>
+                                            </form>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label for="birthdate" class="col-sm-3 col-form-label">Birthdate</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= seller['birthdate'] %>">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="age" class="col-sm-3 col-form-label">Age</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="age" value="<%= seller['age'] || 'N/A' %>">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="address" class="col-sm-3 col-form-label">Address</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="address" value="<%= seller['address'] %>">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="phone" class="col-sm-3 col-form-label">Phone</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= seller['phone'] %>">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="access" class="col-sm-3 col-form-label" for="photo">Photo</label>
-                                            <div class="col-sm-9">
-                                                <% if seller['photo'] %>
-                                                    <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 200px">
-                                                <% else %>
-                                                    <p>No Photo Available</p>
-                                                <% end %>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="identity_photo" class="col-sm-3 col-form-label">Identity Verification</label>
-                                            <div class="col-sm-9">
-                                                <% if seller['identity_photo'] %>
-                                                    <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 200px">
-                                                <% else %>
-                                                    <p>No Identity Photo Available</p>
-                                                <% end %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <% end %>
-                </tbody>
-            </table>
+                            <!-- Detail Modal -->
+                            <div class="modal fade" id="detailModal<%= seller['seller_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= seller['seller_id'] %>" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title fs-5" id="detailModalLabel<%= seller['seller_id'] %>">Detail Profile</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3 row">
+                                                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="name" value="<%= seller['name'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="username" class="col-sm-3 col-form-label">Username</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="username" value="<%= seller['username'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="email" value="<%= seller['email'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="birthdate" class="col-sm-3 col-form-label">Birthdate</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="birthdate" value="<%= seller['birthdate'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="age" class="col-sm-3 col-form-label">Age</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="age" value="<%= seller['age'] || 'N/A' %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="address" class="col-sm-3 col-form-label">Address</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="address" value="<%= seller['address'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly class="form-control-plaintext" id="phone" value="<%= seller['phone'] %>">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="access" class="col-sm-3 col-form-label" for="photo">Photo</label>
+                                                <div class="col-sm-9">
+                                                    <% if seller['photo'] %>
+                                                        <img src="/uploads/users/<%= seller['photo'] %>" style="max-width: 200px">
+                                                    <% else %>
+                                                        <p>No Photo Available</p>
+                                                    <% end %>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label for="identity_photo" class="col-sm-3 col-form-label">Identity Verification</label>
+                                                <div class="col-sm-9">
+                                                    <% if seller['identity_photo'] %>
+                                                        <img src="/uploads/sellers/<%= seller['identity_photo'] %>" style="max-width: 200px">
+                                                    <% else %>
+                                                        <p>No Identity Photo Available</p>
+                                                    <% end %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>
+                <div class="alert alert-info">No Seller Lists available.</div>
+            <% end %>
         </div>
     </div>
 </div>
