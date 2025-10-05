@@ -77,6 +77,8 @@ DB.execute <<-SQL
     );
 SQL
 
+# DB.execute("DROP TABLE wishlists");
+
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS baskets (
         basket_id INTEGER PRIMARY KEY AUTOINCREMENT,
