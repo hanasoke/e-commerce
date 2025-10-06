@@ -7,7 +7,6 @@
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Item Lists
-
             <a href="/add_an_item/<%= current_user['user_id'] %>" class="btn btn-sm btn-success float-end">Add An Item</a>
         </div>
         <div class="card-body">
@@ -25,153 +24,160 @@
                 </div>
                 <% session[:error] = nil %>
             <% end %>
-            <table id="datatablesSimple">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Item Name</th>
-                        <th>Category</th>
-                        <th>Brand</th>
-                        <th>Stock</th>
-                        <th>Price</th>
-                        <th>Photo</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% @items.each_with_index do |item, index| %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= item['item_name'] %></td>
-                        <td><%= item['item_category'] %></td>
-                        <td><%= item['item_brand'] %></td>
-                        <td><%= item['item_stock'] %></td>
-                        <td><%= rupiah_currency(item['item_price']) %></td>
-                        <td>
-                            <img src="/uploads/items/<%= item['item_photo'] %>" alt="Item Photo" width="150">
-                        </td>
-                        <td>
-                            <% if item['item_status'] == "Active" %>
-                                <span class="badge rounded-pill text-bg-success">Active</span>
-                            <% else %>
-                                <span class="badge rounded-pill text-bg-danger">Inactive</span>
-                            <% end %>
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= item['item_id'] %>" ><i class="fa-solid fa-trash"></i></button>
-                                <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= item['item_id'] %>" ><i class="fa-solid fa-eye"></i></button>
-                                <a href="/edit_an_item/<%= item['item_id'] %>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
-                            </div>
+            
+            <% if @items.any? %>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Brand</th>
+                            <th>Stock</th>
+                            <th>Price</th>
+                            <th>Photo</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @items.each_with_index do |item, index| %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= item['item_name'] %></td>
+                            <td><%= item['item_category'] %></td>
+                            <td><%= item['item_brand'] %></td>
+                            <td><%= item['item_stock'] %></td>
+                            <td><%= rupiah_currency(item['item_price']) %></td>
+                            <td>
+                                <img src="/uploads/items/<%= item['item_photo'] %>" alt="Item Photo" width="150">
+                            </td>
+                            <td>
+                                <% if item['item_status'] == "Active" %>
+                                    <span class="badge rounded-pill text-bg-success">Active</span>
+                                <% else %>
+                                    <span class="badge rounded-pill text-bg-danger">Inactive</span>
+                                <% end %>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Button Group">
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= item['item_id'] %>" ><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailModal<%= item['item_id'] %>" ><i class="fa-solid fa-eye"></i></button>
+                                    <a href="/edit_an_item/<%= item['item_id'] %>" class="btn btn-primary"><i class="fa-solid fa-edit"></i></a>
+                                </div>
 
-                            <!-- Delete Modal -->
-                            <div class="modal fade" id="deleteModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= item['item_id'] %>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title fs-5" id="deleteModalLabel<%= item['item_id'] %>">Confirm Deletion</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure want to delete this Item ?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <form action="/delete_an_item/<%= item['item_id'] %>" method="POST">
-                                                <button type="submit" class="btn btn-primary">Delete</button>
-                                            </form>
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= item['item_id'] %>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title fs-5" id="deleteModalLabel<%= item['item_id'] %>">Confirm Deletion</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure want to delete this Item ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form action="/delete_an_item/<%= item['item_id'] %>" method="POST">
+                                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Detail Modal -->
-                            <div class="modal fade" id="detailModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= item['item_id'] %>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title fs-5" id="detailModalLabel<%= item['item_id'] %>">Detail Item</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <input type="hidden" name="_method" value="post">
+                                <!-- Detail Modal -->
+                                <div class="modal fade" id="detailModal<%= item['item_id'] %>" tabindex="-1" aria-labelledby="detailModalLabel<%= item['item_id'] %>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title fs-5" id="detailModalLabel<%= item['item_id'] %>">Detail Item</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_name" class="col-sm-3 col-form-label">Item Name</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" id="item_name" name="item_name" readonly value="<%= item['item_name'] %>" />
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <input type="hidden" name="_method" value="post">
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_category" class="col-sm-3 col-form-label">Category</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" id="item_category" name="item_category" readonly value="<%= item['item_category'] %>" >
+                                                <div class="mb-3 row">
+                                                    <label for="item_name" class="col-sm-3 col-form-label">Item Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" id="item_name" name="item_name" readonly value="<%= item['item_name'] %>" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_brand" class="col-sm-3 col-form-label">Item Brand</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" id="item_brand" name="item_brand" readonly value="<%= item['item_brand'] %>"/>
+                                                <div class="mb-3 row">
+                                                    <label for="item_category" class="col-sm-3 col-form-label">Category</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" id="item_category" name="item_category" readonly value="<%= item['item_category'] %>" >
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_description" class="col-sm-3 col-form-label">Description</label>
-                                                <div class="col-sm-9">
-                                                    <p class="form-control-plaintext mb-0" id="item_description"><%= item['item_description'] %></p>
+                                                <div class="mb-3 row">
+                                                    <label for="item_brand" class="col-sm-3 col-form-label">Item Brand</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" id="item_brand" name="item_brand" readonly value="<%= item['item_brand'] %>"/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_unit" class="col-sm-3 col-form-label">SKU</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" id="item_unit" name="item_unit" readonly value="<%= item['item_unit'] %>" >
+                                                <div class="mb-3 row">
+                                                    <label for="item_description" class="col-sm-3 col-form-label">Description</label>
+                                                    <div class="col-sm-9">
+                                                        <p class="form-control-plaintext mb-0" id="item_description"><%= item['item_description'] %></p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_price" class="col-sm-3 col-form-label">Price</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" id="item_price" name="item_price" readonly value="<%= rupiah_currency(item['item_price']) %>">
+                                                <div class="mb-3 row">
+                                                    <label for="item_unit" class="col-sm-3 col-form-label">SKU</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" id="item_unit" name="item_unit" readonly value="<%= item['item_unit'] %>" >
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_stock" class="col-sm-3 col-form-label">Stock</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control-plaintext" readonly id="item_stock" name="item_stock" value="<%= item['item_stock'] %>">
+                                                <div class="mb-3 row">
+                                                    <label for="item_price" class="col-sm-3 col-form-label">Price</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" id="item_price" name="item_price" readonly value="<%= rupiah_currency(item['item_price']) %>">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label for="item_photo" class="col-sm-3 col-form-label">Photo</label>
-                                                <div class="col-sm-9">
-                                                    <% if item['item_photo'] %>
-                                                        <img src="/uploads/items/<%= item['item_photo'] %>" alt="<%= item['name'] %>" style="max-width: 200px"/>
-                                                    <% end %>
+                                                <div class="mb-3 row">
+                                                    <label for="item_stock" class="col-sm-3 col-form-label">Stock</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control-plaintext" readonly id="item_stock" name="item_stock" value="<%= item['item_stock'] %>">
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <div class="mb-3 row">
+                                                    <label for="item_photo" class="col-sm-3 col-form-label">Photo</label>
+                                                    <div class="col-sm-9">
+                                                        <% if item['item_photo'] %>
+                                                            <img src="/uploads/items/<%= item['item_photo'] %>" alt="<%= item['name'] %>" style="max-width: 200px"/>
+                                                        <% end %>
+                                                    </div>
+                                                </div>
 
-                                            <div class="mb-3 row">
-                                                <label for="item_status" class="col-sm-3 col-form-label">Status</label>
-                                                <div class="col-sm-9 mt-2">
-                                                    <% if item['item_status'] == "Active" %>
-                                                        <span class="badge bg-success">Active</span>
-                                                    <% else %>
-                                                        <span class="badge bg-danger">Inactive</span>
-                                                    <% end %>
+                                                <div class="mb-3 row">
+                                                    <label for="item_status" class="col-sm-3 col-form-label">Status</label>
+                                                    <div class="col-sm-9 mt-2">
+                                                        <% if item['item_status'] == "Active" %>
+                                                            <span class="badge bg-success">Active</span>
+                                                        <% else %>
+                                                            <span class="badge bg-danger">Inactive</span>
+                                                        <% end %>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        </td>
-                    </tr>
-                    <% end %>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% else %>
+                <div class="alert alert-info">
+                    No Item Lists Available.
+                </div>
+            <% end %>
         </div>
     </div>
 </div>
