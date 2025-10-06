@@ -323,6 +323,20 @@ def editing_user(name, username, email, birthdate, address, phone, access, user_
 
     errors << "Access cannot be blank." if access.nil? || access.strip.empty?
 
+    # Validate duplicate name (excluding the current user)
+    if name && !name.strip.empty? 
+        query = user_id ? "SELECT user_id FROM users WHERE LOWER(name) = ? AND user_id != ?" : "SELECT user_id FROM users WHERE LOWER(name) = ?"
+        existing_name = DB.execute(query, user_id ? [name.downcase, user_id] : [name.downcase]).first 
+        errors << "Name already exists. Please choose a different name." if existing_name
+    end 
+
+    # Validate duplicate phone number (excluding the current user)
+    if phone && !phone.strip.empty? 
+        query = user_id ? "SELECT user_id FROM users WHERE phone = ? AND user_id != ?" : "SELECT user_id FROM users WHERE phone = ?"
+        existing_phone = DB.execute(query, user_id ? [phone, user_id] : [phone]).first 
+        errors << "Phone number already exists. Please use a different number." if existing_phone
+    end 
+
     # Validate email 
     errors.concat(validate_email(email, user_id))
     errors
