@@ -545,7 +545,7 @@ get '/account' do
 
     # fetch only active items 
     @items = DB.execute(<<-SQL)
-        SELECT i.*
+        SELECT i.*, s.store_name
         FROM items i
         JOIN stores s ON i.store_id = s.store_id
         WHERE i.item_status = 'Active'
@@ -564,7 +564,7 @@ get '/seller' do
 
     # fetch only active items 
     @items = DB.execute(<<-SQL)
-        SELECT i.*
+        SELECT i.*, s.store_name
         FROM items i
         JOIN stores s ON i.store_id = s.store_id
         WHERE i.item_status = 'Active'
