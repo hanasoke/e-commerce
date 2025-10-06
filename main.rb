@@ -74,11 +74,12 @@ def store_exists_for?(user_id)
     result = DB.get_first_value(<<-SQL, [user_id])
         SELECT COUNT(*)
         FROM stores s 
-        JOIN sellers se ON s.seller_id = se.seller_id 
-        WHERE se.user_id = ? 
-    SQL 
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+    SQL
     result.to_i > 0
 end 
+
 
 def rupiah_currency(money)
     "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
