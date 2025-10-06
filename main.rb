@@ -80,7 +80,6 @@ def store_exists_for?(user_id)
     result.to_i > 0
 end 
 
-
 def rupiah_currency(money)
     "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
 end 
@@ -1229,6 +1228,9 @@ get '/item_lists/:user_id' do
         JOIN sellers se ON s.seller_id = se.seller_id 
         WHERE se.user_id = ?
     SQL
+
+    # Check if the seller has at least one store
+    @has_store = store_exists_for?(params[:user_id])
 
     erb :'seller/seller_items/item_lists', layout: :'layouts/admin/layout'
 end 
