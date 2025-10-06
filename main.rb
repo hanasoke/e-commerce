@@ -161,6 +161,11 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
         errors << "Phone Cannot be Blank."
     elsif phone !~ /\A[0-9]{10,15}\z/
         errors << "Phone must be 10 to 15 digits and contain only numbers."
+    else 
+        query = "SELECT user_id FROM users WHERE phone = ?"
+        query += " AND user_id != ?" if user_id 
+        phone_exists = DB.get_first_row(query, user_id ? [phone.downcase, user_id] : [phone.downcase])
+        errors << "Phone is already taken." if phone_exists
     end
 
     # Validate Email 
