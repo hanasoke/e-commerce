@@ -1,0 +1,45 @@
+/* Make the layout like Tokopedi's item grid */
+.card {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 180px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-body {
+    padding: 10px 12px;
+}
+
+.card-text {
+    font-size: 12px;
+    margin: 0;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Show 2 lines max */
+    -webkit-box-orient: vertical;
+}
+
+.card-price {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 4px;
+}
+
+.card-store {
+    font-size: 13px;
+    color: #777;
+}

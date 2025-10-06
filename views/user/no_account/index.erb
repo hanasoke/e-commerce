@@ -1,25 +1,28 @@
 <div class="container mt-5">
-    <div class="row mb-3">
+    <div class="row g-3">
         <% if @items.any? %>
             <% @items.each do |item| %>
-                <div class="col-md-3 mb-4">
-                        <div class="card h-100 ">
-                            <a href="/view_detail_item_no_user/<%= item['item_id'] %>" class="text-decoration-none text-dark">
-                                <% if item['item_photo'] && !item['item_photo'].empty? %>
-                                    <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" alt="<%= item['item_name'] %>">
-                                <% else %>
-                                    <img src="/img/question.png" class="card-img-top" alt="Default Item">
-                                <% end %>
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        <%= item['item_name'] %>
-                                    </p>
-                                    <p class="card-text">
-                                        <strong><%= rupiah_currency(item['item_price']) %></strong>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="card h-100 ">
+                        <a href="/view_detail_item_no_user/<%= item['item_id'] %>" class="text-decoration-none text-dark">
+                            <% if item['item_photo'] && !item['item_photo'].empty? %>
+                                <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" alt="<%= item['item_name'] %>">
+                            <% else %>
+                                <img src="/img/question.png" class="card-img-top" alt="Default Item">
+                            <% end %>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <%= item['item_name'] %>
+                                </p>
+                                <p class="card-price">
+                                    <strong><%= rupiah_currency(item['item_price']) %></strong>
+                                </p>
+                                <p class="card-store">
+                                    <strong><%= item['store_name'] %></strong>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             <% end %>
         <% else %>
