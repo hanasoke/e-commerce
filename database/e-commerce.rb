@@ -142,11 +142,11 @@ SQL
 # DB.execute("DROP TABLE transactions");
 
 # Add the 'note' column in transactions table if it doesn't exist 
-# begin 
-#     DB.execute("ALTER TABLE transactions ADD COLUMN note TEXT;")
-# rescue SQLite3::SQLException => e 
-#     puts "Column 'note' in transactions table already exists or another error occured: #{e.message}"
-# end 
+begin 
+    DB.execute("ALTER TABLE transactions ADD COLUMN note TEXT;")
+rescue SQLite3::SQLException => e 
+    puts "Column 'note' in transactions table already exists or another error occured: #{e.message}"
+end 
 
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS shipments (
