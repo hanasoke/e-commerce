@@ -1782,24 +1782,31 @@ post '/add_to_transaction/:item_id' do
     halt 404, "Item not found" if item.nil?
 
     quantity = params[:quantity].to_i 
-    note = params[:note]
+    note = params[:note].to_s.strip 
 
-    # Prevent zero or negative qty 
+    # Prevent invalid quantity 
     if quantity < 1
         flash[:error] = "Minimum order is 1"
         redirect back 
     end 
 
-    total_price = item['item_price'].to_i * quantity
+    # Get numeric price safely
+    item_price = item['item_price'].to_i 
+    total_price = item_price * quantity
+
+    # Get seller_id from store_id 
+    seller_id = DB.get_first_value("SELECT seller_id FROM stores WHERE store_id = ?", [item['store_id']])
 
     if params[:action] == "cart"
-        # Save into baskers
-        DB.execute("INSERT INTO baskets (item_id, store_id, user_id, seller_id, quantity, total_price, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [item['item_id'], item['store_id'], current_user['user_id'], 
-            DB.get_first_value("SELECT seller_id FROM stores WHERE store_id = ?", [item['store_id']]), 
-            quantity, total_price, note])
+        # Insert into basket
+        DB.execute(<<-SQL, [item['item_id'], item['store_id'], current_user['user_id'], seller_id, quantity, total_price, note])
+            INSERT INTO baskets (item_id, store_id, user_id, seller_id, quantity, total_price, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        SQL
+
+        flash[:success] = "Item added to basket"
         redirect "/basket"
+        
     elsif params[:action] == "buy"
         # Save into transactions 
         DB.execute("INSERT INTO transactions (item_id, store_id, user_id, seller_id, quantity, total_price, note, transaction_date, payment_status)
