@@ -1809,12 +1809,7 @@ post '/add_to_transaction/:item_id' do
         
     elsif params[:action] == "buy"
         # Save into transactions 
-        DB.execute("INSERT INTO transactions (item_id, store_id, user_id, seller_id, quantity, total_price, note, transaction_date, payment_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [item['item_id'], item['store_id'], current_user['user_id'], 
-            DB.get_first_row("SELECT seller_id FROM stores WHERE store_id = ?", [item['store_id']]),
-            quantity. total_price, note, Date.today.to_s, "Pending" 
-        ])
+        
         redirect "/transaction"
     else 
         flash[:error] = "Invalid action"
