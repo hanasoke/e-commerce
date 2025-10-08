@@ -1808,7 +1808,8 @@ post '/add_to_transaction/:item_id' do
         redirect "/basket"
         
     elsif params[:action] == "buy"
-        # Save into transactions 
+        # Insert into transactions
+         
         
         redirect "/transaction"
     else 
