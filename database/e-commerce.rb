@@ -46,24 +46,24 @@ DB.execute <<-SQL
 SQL
 
 # Items Table
-# DB.execute <<-SQL 
-#     CREATE TABLE IF NOT EXISTS items (
-#         item_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         store_id INTEGER,
-#         item_name TEXT, 
-#         item_brand TEXT,
-#         item_photo TEXT,
-#         item_description TEXT,
-#         item_price TEXT,
-#         item_stock INTEGER,
-#         item_category TEXT,
-#         item_unit TEXT,
-#         item_status TEXT,
-#         FOREIGN KEY(store_id) REFERENCES stores(store_id)
-#     );
-# SQL
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS items (
+        item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        store_id INTEGER,
+        item_name TEXT, 
+        item_brand TEXT,
+        item_photo TEXT,
+        item_description TEXT,
+        item_price INTEGER,
+        item_stock INTEGER,
+        item_category TEXT,
+        item_unit TEXT,
+        item_status TEXT,
+        FOREIGN KEY(store_id) REFERENCES stores(store_id)
+    );
+SQL
 
-DB.execute("DROP TABLE items");
+# DB.execute("DROP TABLE items");
 
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS wishlists (
