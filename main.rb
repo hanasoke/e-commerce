@@ -1823,7 +1823,7 @@ post '/add_to_transaction/:item_id' do
         DB.execute(sql, [
             item['store_id'], seller_id, item['item_id'], current_user['user_id'],
             nil, nil, nil, quantity, total_price,
-            'Cash', nil, nil, 'Pending', Date.today.to_s. note
+            'Cash', nil, nil, 'Pending', Date.today.to_s, note
         ])
         
         flash[:success] = "Transaction created successfully"
