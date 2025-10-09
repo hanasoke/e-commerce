@@ -91,6 +91,7 @@ DB.execute <<-SQL
         seller_id INTEGER,
         quantity INTEGER,
         total_price INTEGER,
+        note TEXT,
         FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
         FOREIGN KEY(user_id) REFERENCES users(user_id),
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
@@ -99,12 +100,7 @@ DB.execute <<-SQL
     )
 SQL
 
-# Add the 'note' column in basket table if it doesn't exist 
-# begin 
-#     DB.execute("ALTER TABLE baskets ADD COLUMN note TEXT;")
-# rescue SQLite3::SQLException => e 
-#     puts "Column 'note' in basket table already exists or another error occured: #{e.message}"
-# end 
+# DB.execute("DROP TABLE baskets");
 
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS services (
@@ -131,6 +127,7 @@ DB.execute <<-SQL
         payment_photo TEXT,
         payment_status TEXT,
         transaction_date TEXT, 
+        note TEXT,
         FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
         FOREIGN KEY(user_id) REFERENCES users(user_id),
         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
@@ -142,13 +139,6 @@ DB.execute <<-SQL
 SQL
 
 # DB.execute("DROP TABLE transactions");
-
-# Add the 'note' column in transactions table if it doesn't exist 
-# begin 
-#     DB.execute("ALTER TABLE transactions ADD COLUMN note TEXT;")
-# rescue SQLite3::SQLException => e 
-#     puts "Column 'note' in transactions table already exists or another error occured: #{e.message}"
-# end 
 
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS shipments (
