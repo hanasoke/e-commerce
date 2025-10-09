@@ -1859,3 +1859,21 @@ get '/transaction' do
                                 [current_user['user_id']])
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
+
+get '/seller_basket_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "Seller Basket Lists"
+
+    erb :'admin/seller_dashboard/seller_basket_lists', layout: :'layouts/admin/layout'
+end 
+
+get '/seller_transaction_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "Seller Transaction Lists"
+
+    erb :'admin/seller_dashboard/seller_transaction_lists', layout: :'layouts/admin/layout'
+end 

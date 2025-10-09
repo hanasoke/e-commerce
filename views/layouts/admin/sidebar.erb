@@ -36,12 +36,18 @@
                     <a class="nav-link" href="/service_lists">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-truck"></i></div>
                         Delivery
-                    </a>                    
+                    </a>
+                                        
+                    <a class="nav-link" href="/seller_basket_lists">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
+                        Seller Basket Lists
+                    </a>
 
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="/seller_transaction_lists">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
                         Seller Transaction Lists
                     </a>
+
                 <% elsif current_user['access'].to_i == 2 %>
                     <a class="nav-link" href="/item_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
