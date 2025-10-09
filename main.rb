@@ -1808,9 +1808,25 @@ post '/add_to_transaction/:item_id' do
         redirect "/basket"
         
     elsif params[:action] == "buy"
-        # Insert into transactions
-         
+        # Insert into transactions 
+        sql = "
+            INSERT INTO transactions (
+                store_id, seller_id, item_id, user_id,
+                wishlist_id, basket_id, service_id,
+                quantity, total_price,
+                payment_method, account_number, payment_photo, payment_status,
+                transaction_date, note
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        "
+
+        DB.execute(sql, [
+            item['store_id'], seller_id, item['item_id'], current_user['user_id'],
+            nil, nil, nil, quantity, total_price,
+            'Cash', nil, nil, 'Pending', Date.today.to_s. note
+        ])
         
+        flash[:success] = "Transaction created successfully"
         redirect "/transaction"
     else 
         flash[:error] = "Invalid action"
