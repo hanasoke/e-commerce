@@ -24,10 +24,28 @@
                             <p>Catatan: <%= trx['note'] %></p>
                             <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
                             <p>Status Pembayaran: 
-                                <span class="badge bg-warning"><%= trx['payment_status'] %></span>
+                                <span class="badge bg-info"><%= trx['payment_status'] %></span>
                             </p>
                             <p>Tanggal Transaksi: <%= trx['transaction_date'] %></p>
-                            <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary">Lanjutkan Pembayaran</a>
+                            <div class="mb-3">
+                                <label for="pan" class="form-label">Payment Account Number</label>
+                                <input type="email" class="form-control" id="pan" placeholder="input your account number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="payment_method" class="form-label">Payment Method</label>
+                                <select class="form-select" id="payment_method">
+                                    <option selected>Select Your Payment Method</option>
+                                    <option value="1">E-Wallet</option>
+                                    <option value="2">Bank</option>
+                                    <option value="3">Virtual Account</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="payment_photo" class="form-label">Payment Photo</label>
+                                <input class="form-control" type="file" id="payment_photo">
+                            </div>
+                            <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary float-end mb-3">Checkout</a>
                         </div>
                     </div>
                 </div>
