@@ -61,9 +61,9 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="item_unit" name="item_unit" value="<%= @item['item_unit'] %>" >
                     </div>
-                    <% if @errors.any? { |e| e.include?('Item Unit')} %>
+                    <% if @errors.any? { |e| e.include?('SKU')} %>
                         <div class="form-text text-danger">
-                            <%= @errors.find { |e| e.include?('Item Unit')} %>
+                            <%= @errors.find { |e| e.include?('SKU')} %>
                         </div>
                     <% end %>
                 </div>
