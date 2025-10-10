@@ -37,7 +37,56 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+                   <% if @transactions.any? %>
+                        <% @transactions.each_with_index do |t, index| %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= t['store_name'] %>
+                                </td>
+                                <td>
+                                    <%= t['item_name'] %>
+                                </td>
+                                <td>
+                                    Delivery TBD
+                                </td>
+                                <td>
+                                    <%= t['quantity'] %>
+                                </td>
+                                <td>
+                                    <% rupiah_currency(t['item_price']) %>
+                                </td>
+                                <td>
+                                    <% rupiah_currency(t['total_price']) %>
+                                </td>
+                                <td>
+                                    <%= t['payment_method'] %>
+                                </td>
+                                <td>
+                                    <%= t['account_number'] || '-' %>
+                                </td>
+                                <td>
+                                    <% if t['payment_photo'] && !t['payment_photo'].empty? %>
+                                        <img src="/uploads/<%= t['payment_photo'] %>" width="50">
+                                    <% else %>
+                                        No Photo
+                                    <% end %>
+                                </td>
+                                <td>
+                                    <%= t['payment_status'] %>
+                                </td>
+                                <td>
+                                    <%= t['transaction_date'] %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    <% else %>
+                        <tr>
+                            <td colspan="13" class="text-center">No transaction data available</td>
+                        </tr>
+                    <% end %>
                 </tbody>
             </table>
         </div>
