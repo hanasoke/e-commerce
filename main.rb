@@ -1794,14 +1794,11 @@ post '/add_to_transaction/:item_id' do
     item_price = item['item_price'].to_i 
     total_price = item_price * quantity
 
-    # Get seller_id from store_id 
-    seller_id = DB.get_first_value("SELECT seller_id FROM stores WHERE store_id = ?", [item['store_id']])
-
     if params[:action] == "cart"
         # Insert into basket
-        DB.execute(<<-SQL, [item['item_id'], item['store_id'], current_user['user_id'], seller_id, quantity, total_price, note])
-            INSERT INTO baskets (item_id, store_id, user_id, seller_id, quantity, total_price, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?);
+        DB.execute(<<-SQL, [item['item_id'], item['store_id'], current_user['user_id'], quantity, total_price, note])
+            INSERT INTO baskets (item_id, store_id, user_id, quantity, total_price, note)
+            VALUES (?, ?, ?, ?, ?, ?);
         SQL
 
         flash[:success] = "Item added to basket"
@@ -1811,17 +1808,17 @@ post '/add_to_transaction/:item_id' do
         # Insert into transactions 
         sql = "
             INSERT INTO transactions (
-                store_id, seller_id, item_id, user_id,
+                store_id, item_id, user_id,
                 wishlist_id, basket_id, service_id,
                 quantity, total_price,
                 payment_method, account_number, payment_photo, payment_status,
                 transaction_date, note
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         "
 
         DB.execute(sql, [
-            item['store_id'], seller_id, item['item_id'], current_user['user_id'],
+            item['store_id'], item['item_id'], current_user['user_id'],
             nil, nil, nil, quantity, total_price,
             'Cash', nil, nil, 'Start', Date.today.to_s, note
         ])
@@ -1897,34 +1894,7 @@ get '/seller_transaction_lists' do
 
     @errors = []
     @title = "Seller Transaction Lists"
-
-    # Fetch the current seller's transactions
-    seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [current_user['user_id']]).first 
-    if seller 
-        @transactions = DB.execute(<<-SQL, [seller['seller_id']])
-            SELECT 
-                t.transaction_id, 
-                s.store_name,
-                i.item_name,
-                u.name AS user_name,
-                t.quantity,
-                i.item_price,
-                t.total_price,
-                t.payment_method,
-                t.account_number,
-                t.payment_photo,
-                t.payment_status,
-                t.transaction_date,
-                t.note
-            FROM transactions t
-            JOIN items i ON t.item_id = i.item_id
-            JOIN stores s ON t.store_id = s.store_id
-            JOIN users u ON t.user_id = u.user_id
-            WHERE t.seller_id = ?
-        SQL
-    else 
-        @transactions = []
-    end 
+    
 
     erb :'admin/seller_dashboard/seller_transaction_lists', layout: :'layouts/admin/layout'
 end 
