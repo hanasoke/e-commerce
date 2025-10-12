@@ -11,14 +11,16 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-danger">
       <div class="container">
-        <a class="navbar-brand text-info" href="/account">Main Page</a>
+        <a class="navbar-brand text-info" href="/user_profile/<%= current_user['user_id'] %>">
+          <%= current_user['username'] %>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active text-warning" aria-current="page" href="/seller">Home</a>
+              <a class="nav-link active text-warning" aria-current="page" href="/account">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="/user_profile/<%= current_user['user_id'] %>">User Profile</a>
@@ -27,7 +29,16 @@
 
           <!-- Right-aligned nav items (Login & Register) -->
           <ul class="navbar-nav mb-2 mb-lg-0">
-            
+            <li class="nav-item">
+              <a class="nav-link text-white" href="basket">
+                <img src="/img/icons/cart.svg" alt="My Basket">
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="transaction">
+                <img src="/img/icons/cart-check-fill.svg" alt="My Wishlists">
+              </a>
+            </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="#">
                 <img src="/img/icons/heart-fill.svg" alt="My Wishlists">
