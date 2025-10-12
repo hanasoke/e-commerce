@@ -81,26 +81,25 @@ SQL
 
 # DB.execute("DROP TABLE wishlists");
 
-DB.execute <<-SQL
-    CREATE TABLE IF NOT EXISTS baskets (
-        basket_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        wishlist_id INTEGER,
-        item_id INTEGER,
-        store_id INTEGER,
-        user_id INTEGER,
-        seller_id INTEGER,
-        quantity INTEGER,
-        total_price INTEGER,
-        note TEXT,
-        FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
-        FOREIGN KEY(user_id) REFERENCES users(user_id),
-        FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
-        FOREIGN KEY(store_id) REFERENCES stores(store_id),
-        FOREIGN KEY(item_id) REFERENCES items(item_id)
-    )
-SQL
+# DB.execute <<-SQL
+#     CREATE TABLE IF NOT EXISTS baskets (
+#         basket_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         wishlist_id INTEGER,
+#         item_id INTEGER,
+#         store_id INTEGER,
+#         user_id INTEGER,
+#         quantity INTEGER,
+#         total_price INTEGER,
+#         note TEXT,
+#         FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
+#         FOREIGN KEY(user_id) REFERENCES users(user_id),
+#         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
+#         FOREIGN KEY(store_id) REFERENCES stores(store_id),
+#         FOREIGN KEY(item_id) REFERENCES items(item_id)
+#     )
+# SQL
 
-# DB.execute("DROP TABLE baskets");
+DB.execute("DROP TABLE baskets");
 
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS services (
@@ -110,35 +109,33 @@ DB.execute <<-SQL
     )
 SQL
 
-# DB.execute <<-SQL 
-#     CREATE TABLE IF NOT EXISTS transactions (
-#         transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         store_id INTEGER,
-#         seller_id INTEGER, 
-#         item_id INTEGER, 
-#         user_id INTEGER,
-#         wishlist_id INTEGER,
-#         basket_id INTEGER,
-#         service_id INTEGER,
-#         quantity INTEGER,
-#         total_price INTEGER,
-#         payment_method TEXT,
-#         account_number TEXT,
-#         payment_photo TEXT,
-#         payment_status TEXT,
-#         transaction_date TEXT, 
-#         note TEXT,
-#         FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
-#         FOREIGN KEY(user_id) REFERENCES users(user_id),
-#         FOREIGN KEY(seller_id) REFERENCES sellers(seller_id),
-#         FOREIGN KEY(store_id) REFERENCES stores(store_id),
-#         FOREIGN KEY(item_id) REFERENCES items(item_id),
-#         FOREIGN KEY(basket_id) REFERENCES baskets(basket_id),
-#         FOREIGN KEY(service_id) REFERENCES services(service_id)
-#     );
-# SQL
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS transactions (
+        transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        store_id INTEGER,
+        item_id INTEGER, 
+        user_id INTEGER,
+        wishlist_id INTEGER,
+        basket_id INTEGER,
+        service_id INTEGER,
+        quantity INTEGER,
+        total_price INTEGER,
+        payment_method TEXT,
+        account_number TEXT,
+        payment_photo TEXT,
+        payment_status TEXT,
+        transaction_date TEXT, 
+        note TEXT,
+        FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
+        FOREIGN KEY(item_id) REFERENCES items(item_id),
+        FOREIGN KEY(basket_id) REFERENCES baskets(basket_id),
+        FOREIGN KEY(service_id) REFERENCES services(service_id)
+    );
+SQL
 
-DB.execute("DROP TABLE transactions");
+# DB.execute("DROP TABLE transactions");
 
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS shipments (
