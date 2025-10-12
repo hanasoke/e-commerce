@@ -1864,7 +1864,7 @@ get '/user_basket_lists/:user_id' do
     @title = "User Basket Lists"
     
 
-    erb :'seller/seller_dashboard/seller_basket_lists', layout: :'layouts/admin/layout'
+    erb :'seller/seller_items/user_basket_lists', layout: :'layouts/admin/layout'
 end 
 
 get '/user_transaction_lists/:user_id' do 
