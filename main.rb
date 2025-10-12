@@ -1857,44 +1857,21 @@ get '/transaction' do
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
 
-get '/seller_basket_lists' do 
+get '/user_basket_lists' do 
     redirect '/login' unless logged_in?
 
     @errors = []
-    @title = "Seller Basket Lists"
-
-    # Fetch the current seller's basket items 
-    seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [current_user['user_id']]).first 
-    if seller 
-        @baskets = DB.execute(<<-SQL, [seller['seller_id']])
-            SELECT 
-                b.basket_id,
-                i.item_name,
-                s.store_name,
-                u.name AS user_name,
-                b.quantity,
-                i.item_price,
-                b.total_price,
-                b.note
-            FROM baskets b 
-            JOIN items i ON b.item_id = i.item_id
-            JOIN stores s ON b.store_id = s.store_id 
-            JOIN users u ON b.user_id = u.user_id
-            WHERE b.seller_id = ?
-        SQL
-    else 
-        @baskets = []
-    end 
-
-    erb :'admin/seller_dashboard/seller_basket_lists', layout: :'layouts/admin/layout'
-end 
-
-get '/seller_transaction_lists' do 
-    redirect '/login' unless logged_in?
-
-    @errors = []
-    @title = "Seller Transaction Lists"
+    @title = "User Basket Lists"
     
 
-    erb :'admin/seller_dashboard/seller_transaction_lists', layout: :'layouts/admin/layout'
+    erb :'seller/seller_dashboard/seller_basket_lists', layout: :'layouts/admin/layout'
+end 
+
+get '/user_transaction_lists' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "User Transaction Lists"
+
+    erb :'seller/seller_items/user_transaction_lists', layout: :'layouts/admin/layout'
 end 
