@@ -1857,7 +1857,7 @@ get '/transaction' do
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
 
-get '/user_basket_lists' do 
+get '/user_basket_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
     @errors = []
@@ -1867,7 +1867,7 @@ get '/user_basket_lists' do
     erb :'seller/seller_dashboard/seller_basket_lists', layout: :'layouts/admin/layout'
 end 
 
-get '/user_transaction_lists' do 
+get '/user_transaction_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
     @errors = []
