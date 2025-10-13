@@ -1935,7 +1935,13 @@ post '/add_to_wishlist/:item_id' do
     store_id = store['store_id']
 
     # Check if the item is already in user's wishlist 
-    existing = DB.get_first_row("")
+    existing = DB.get_first_row("SELECT * FROM wishlists WHERE user_id = ? AND item_id = ?", [user_id, item_id])
+    if existing 
+        flash[:notice] = "Item already in your wishlist."
+    else 
+        DB.execute("INSERT INTO wishlists (item_id, store_id, user_id) VALUES (?, ?, ?)", [item_id, store_id, user_id])
+        flash[:success] = "Item added to your wishlist!"
+    end 
 
     erb :'user/items/wishlist', layout: :'layouts/user/template'
 end 
