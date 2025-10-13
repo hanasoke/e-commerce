@@ -1918,11 +1918,24 @@ get '/user_transaction_lists/:user_id' do
     erb :'seller/seller_items/user_transaction_lists', layout: :'layouts/admin/layout'
 end 
 
-get '/add_to_wishlist/:item_id' do 
+post '/add_to_wishlist/:item_id' do 
     redirect '/login' unless logged_in?
 
-    @errors = []
-    @title = "My Wishlists"
+    item_id = params[:item_id].to_i 
+    user_id = session[:user_id]
+
+    # Find store_id from the item 
+    store = DB.get_first_row("SELECT store_id FROM items WHERE item_id = ?", [item_id])
+
+    if store.nil?
+        flash[:error] = "Item not found."
+        redirect back
+    end 
+
+    store_id = store['store_id']
+
+    # Check if the item is already in user's wishlist 
+    existing = DB.get_first_row("")
 
     erb :'user/items/wishlist', layout: :'layouts/user/template'
 end 
