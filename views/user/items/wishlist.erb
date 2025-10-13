@@ -1,0 +1,29 @@
+<div class="container mt-5">
+    <h3>My Wishlists</h3>
+    <div class="row">
+        <% if @wishlists.empty? %>
+            <p>You have no items in your wishlist yet.</p>
+        <% else %>
+            <% @wishlists.each do |w| %>
+                <div class="col-md-3 md-4">
+                    <div class="card">
+                        <% if w['item_photo'] && !w['item_photo'].empty? %>
+                            <img src="/uploads/items/<%= w['item_photo'] %>" class="card-img-top" alt="<%= w['item_name'] %>">
+                        <% else %>
+                            <img src="/img/question.png" class="card-img-top" alt="No image">
+                        <% end %>
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <%= w['item_name'] %>
+                            </h6>
+                            <p><%= rupiah_currency(w['item_price']) %></p>
+                            <p>
+                                <small><%= w['store_name'] %></small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+</div>

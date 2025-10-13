@@ -1945,3 +1945,25 @@ post '/add_to_wishlist/:item_id' do
 
     redirect back
 end 
+
+get '/my_wishlists/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    user_id = session[:user_id]
+
+    @wishlists = DB.execute(<<-SQL, [user_id])
+        SELECT 
+            w.wishlist_id, 
+            i.item_name,
+            i.item_photo,
+            i.item_price,
+            s.store_name
+        FROM wishlists w 
+        JOIN items i ON w.item_id = i.item_id 
+        JOIN stores s ON w.store_id = s.store_id 
+        WHERE w.user_id = ? 
+        ORDER BY w.wishlist_id DESC
+    SQL
+
+    erb :'user/items/wishlist', layout: :'layouts/user/template'
+end 
