@@ -65,19 +65,19 @@ SQL
 
 # DB.execute("DROP TABLE items");
 
-# DB.execute <<-SQL 
-#     CREATE TABLE IF NOT EXISTS wishlists (
-#         wishlist_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         item_id INTEGER,
-#         store_id INTEGER,
-#         user_id INTEGER,
-#         FOREIGN KEY(user_id) REFERENCES users(user_id),
-#         FOREIGN KEY(store_id) REFERENCES stores(store_id),
-#         FOREIGN KEY(item_id) REFERENCES items(item_id)
-#     );
-# SQL
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS wishlists (
+        wishlist_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_id INTEGER,
+        store_id INTEGER,
+        user_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
+        FOREIGN KEY(item_id) REFERENCES items(item_id)
+    );
+SQL
 
-DB.execute("DROP TABLE wishlists");
+# DB.execute("DROP TABLE wishlists");
 
 DB.execute <<-SQL
     CREATE TABLE IF NOT EXISTS baskets (
