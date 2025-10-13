@@ -1950,6 +1950,7 @@ get '/my_wishlists/:user_id' do
     redirect '/login' unless logged_in?
 
     user_id = session[:user_id]
+    @title = "My Wishlist"
 
     @wishlists = DB.execute(<<-SQL, [user_id])
         SELECT 
