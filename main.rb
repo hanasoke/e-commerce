@@ -1917,3 +1917,12 @@ get '/user_transaction_lists/:user_id' do
 
     erb :'seller/seller_items/user_transaction_lists', layout: :'layouts/admin/layout'
 end 
+
+get '/add_to_wishlist/:item_id' do 
+    redirect '/login' unless logged_in?
+
+    @errors = []
+    @title = "My Wishlists"
+
+    erb :'user/items/wishlist', layout: :'layouts/user/template'
+end 
