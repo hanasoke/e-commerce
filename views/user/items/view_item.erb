@@ -92,13 +92,29 @@
 
                         <div class="d-grid gap-2 mb-2">
                             <button type="submit" name="action" value="cart" class="btn btn-success">+ Keranjang</button>
-                        </div>
-
-                        <div class="d-grid gap-2">
                             <button type="submit" name="action" value="buy" class="btn btn-outline-success">Beli Langsung</button>
                         </div>
-
                     </form>
+
+                    <hr>
+
+                    <!-- Additional Buttons -->
+                    <div class="d-flex justify-content-around">
+                        <%# /chat_seller/<%= @item['store_id'] %>
+                        <a href="#" class="text-dark text-decoration-none text-center">
+                            <img src="/img/icons/chat-left-text.svg" class="mb-1" alt="Chat">
+                            <small>Chat</small>
+                        </a>
+                        <a href="/add_to_wishlist/<%= @item['item_id'] %>" class="text-dark text-decoration-none text-center">
+                            <img src="/img/icons/heart.svg" class="mb-1" alt="Wishlist">
+                            <small>Wishlist</small>
+                        </a>
+                        <a href="javascript:void(0);" onclick="shareItem()" class="text-dark text-decoration-none text-center">
+                            <img src="/img/icons/share.svg" class="mb-1" alt="Wishlist">
+                            <small>Share</small>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -155,5 +171,17 @@
 
     // Initialize subtotal on page load 
     updateTotal();
+
+    function shareItem() {
+        if (navigator.share) {
+            navigator.share({
+                title: '<%= @item['item_name'] %>',
+                text: 'Lihat produk menarik ini di toko kami!',
+                url: window.location.href 
+            });
+        } else {
+            alert("Fitur berbagi tidak didukung di browser ini.");
+        }
+    }
 
 </script>
