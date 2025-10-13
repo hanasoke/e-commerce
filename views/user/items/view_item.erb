@@ -1,6 +1,24 @@
 <div class="container mt-5">
     <div class="row mb-3">
         <div class="col-12 col-md-9">
+            <% if flash[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:success] = nil %>
+            <% end %>
+        </div>
+        <div class="col-12 col-md-9">
+            <% if flash[:notice] %>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:notice] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:notice] = nil %>
+            <% end %>
+        </div>
+        <div class="col-12 col-md-9">
             <div class="card mb-3">
                 <div class="row g-0">
                     <div class="col-md-6">
@@ -105,10 +123,12 @@
                             <img src="/img/icons/chat-left-text.svg" class="mb-1" alt="Chat">
                             <small>Chat</small>
                         </a>
-                        <a href="/add_to_wishlist/<%= @item['item_id'] %>" class="text-dark text-decoration-none text-center">
-                            <img src="/img/icons/heart.svg" class="mb-1" alt="Wishlist">
-                            <small>Wishlist</small>
-                        </a>
+                        <form action="/add_to_wishlist/<%= @item['item_id'] %>" method="POST" class="text-center">
+                            <button type="submit" class="btn btn-link text-dark text-decoration-none p-0 text-center">
+                                <img src="/img/icons/heart.svg" class="mb-1" alt="Wishlist">
+                                <small>Wishlist</small>
+                            </button>
+                        </form>
                         <a href="javascript:void(0);" onclick="shareItem()" class="text-dark text-decoration-none text-center">
                             <img src="/img/icons/share.svg" class="mb-1" alt="Wishlist">
                             <small>Share</small>

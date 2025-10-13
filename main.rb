@@ -1943,5 +1943,5 @@ post '/add_to_wishlist/:item_id' do
         flash[:success] = "Item added to your wishlist!"
     end 
 
-    erb :'user/items/wishlist', layout: :'layouts/user/template'
+    redirect back
 end 
