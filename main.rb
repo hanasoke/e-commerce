@@ -1950,3 +1950,11 @@ get '/my_wishlists/:user_id' do
 
     erb :'user/items/wishlist', layout: :'layouts/user/template'
 end 
+
+get '/users_wishlist/:user_id' do 
+    redirect '/login' unless logged_in?
+    
+    @title = "Users Wishlist"
+
+    erb :'seller/seller_items/users_wishlist', layout: :'layouts/admin/layout'
+end 
