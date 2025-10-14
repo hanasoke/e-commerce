@@ -555,25 +555,6 @@ get '/account' do
     erb :'user/index', layout: :'layouts/user/template'
 end 
 
-# Seller
-get '/seller' do 
-    redirect '/login' unless logged_in?
-    
-    @errors = []
-    @title = 'My Homepage'
-
-    # fetch only active items 
-    @items = DB.execute(<<-SQL)
-        SELECT i.*, s.store_name
-        FROM items i
-        JOIN stores s ON i.store_id = s.store_id
-        WHERE i.item_status = 'Active'
-            AND s.store_status = 'Active'
-    SQL
-
-    erb :'user/index', layout: :'layouts/user/template'
-end 
-
 # Login
 get '/login' do 
     @errors = []
@@ -603,7 +584,7 @@ post '/login' do
                 redirect '/account'
             elsif user['access'] == 2 
                 # Redirect to the viewer page for sellers
-                redirect '/seller'
+                redirect '/account'
             elsif user['access'] == 3
                 # Redirect to the admin page for admins
                 redirect '/admin'
@@ -1123,7 +1104,7 @@ post '/user_profile_edit/:user_id' do
         if updated_user['access'].to_i == 1
             redirect '/account'
         elsif updated_user['access'].to_i == 2
-            redirect '/seller'
+            redirect '/account'
         else 
             redirect '/' #fallback
         end 
@@ -1954,7 +1935,8 @@ get '/my_wishlists/:user_id' do
 
     @wishlists = DB.execute(<<-SQL, [user_id])
         SELECT 
-            w.wishlist_id, 
+            w.wishlist_id,
+            i.item_id, 
             i.item_name,
             i.item_photo,
             i.item_price,
