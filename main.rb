@@ -84,6 +84,18 @@ def rupiah_currency(money)
     "Rp #{money.to_i.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1.').reverse}"
 end 
 
+# Prevent sellers from ordering their own item
+def owns_item?(user_id, item_id)
+    result = DB.get_first_value(<<-SQL, [user_id, item_id])
+        SELECT COUNT(*)
+        FROM items i
+        JOIN stores s ON i.store_id = s.store_id
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND i.item_id = ?
+    SQL
+    result.to_i > 0
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
