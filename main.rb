@@ -1927,6 +1927,12 @@ post '/add_to_wishlist/:item_id' do
     item_id = params[:item_id].to_i 
     user_id = session[:user_id]
 
+    # Prevent seller from wishlisting their own product 
+    if owns_item?(user_id, item_id)
+        flash[:notice] = "You cannot add to wishlish for your product."
+        redirect back
+    end 
+
     # Find store_id from the item 
     store = DB.get_first_row("SELECT store_id FROM items WHERE item_id = ?", [item_id])
 
