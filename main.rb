@@ -1986,3 +1986,23 @@ get '/users_wishlist/:user_id' do
 
     erb :'seller/seller_items/users_wishlist', layout: :'layouts/admin/layout'
 end 
+
+get '/chat_seller/:store_id' do 
+    redirect '/login' unless logged_in?
+
+    user_id = session[:user_id]
+    store_id = params[:store_id].to_i
+
+    # Check if this store belongs to the current user
+    owns_store = DB.get_first_value(<<-SQL, [user_id, store_id])
+        SELECT COUNT(*)
+        FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ?
+    SQL
+
+    if owns_store.to_i > 0
+        flash[:notice] = "You cannot chat with your own store."
+        redirect back
+    end 
+end 
