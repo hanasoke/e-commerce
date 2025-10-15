@@ -1869,6 +1869,59 @@ get '/basket' do
     erb :'user/items/basket', layout: :'layouts/user/template'
 end 
 
+post '/checkout/:basket_id' do 
+    redirect '/login' unless logged_in?
+    basket_id = params[:basket_id]
+
+    # Step 1: Get basket data 
+    basket = DB.execute("SELECT * FROM baskets WHERE basket_id = ? AND user_id = ?", [basket_id, current_user['user_id']]).first 
+
+    if basket.nil?
+        flash[:error] = "Basket not found or access denied."
+        redirect '/basket'
+    end 
+
+    # Step 2: Create new transaction record
+    begin 
+        DB.execute(
+            <<-SQL,
+            INSERT INTO transactions (
+                store_id, item_id, user_id, wishlist_id, basket_id, service_id,
+                quantity, total_price, payment_method, account_number,
+                payment_photo, payment_status, transaction_date, note
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            SQL
+            [
+                basket['store_id'],
+                basket['item_id'],
+                basket['user_id'],
+                basket['wishlist_id'],
+                basket['basket_id'],
+                nil,
+                basket['quantity'],
+                basket['total_price'],
+                nil, 
+                nil,
+                nil,
+                "Pending",
+                Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+                basket['note']
+            ]
+        )
+
+        # Step 3: Delete basket record after transaction created
+        DB.execute("DELETE FROM baskets WHERE basket_id = ?", [basket_id])
+
+        flash[:success] = "Checkout successful! Basket moved to transactions."
+        redirect '/transaction'
+
+        rescue SQLite3::Exception => e 
+            flash[:error] = "Error processing checkout: #{e.message}"
+            redirect '/basket'
+    end 
+end 
+
 #  Transaction page
 get '/transaction' do 
     redirect '/login' unless logged_in?

@@ -1,4 +1,15 @@
 <div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <% if flash[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:success] = nil %>
+            <% end %>
+        </div>
+    </div>    
     <h3>Detail Transaction</h3>
     <hr>
 

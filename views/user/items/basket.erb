@@ -21,8 +21,11 @@
                             <p><b>Total: <%= rupiah_currency(item['total_price']) %></b></p>
                         </div>
                     </div>
+                    
                     <div class="col-md-3 d-flex align-items-center justify-content-center">
-                        <a href="/checkout/<%= item['basket_id'] %>" class="btn btn-success">Checkout</a>
+                        <form action="/checkout/<%= item['basket_id'] %>" method="POST">
+                            <button type="submit" class="btn btn-success">Checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>
