@@ -1777,6 +1777,16 @@ post '/add_to_transaction/:item_id' do
     quantity = params[:quantity].to_i 
     note = params[:note].to_s.strip 
 
+    item_id = params[:item_id].to_i 
+    user_id = session[:user_id]
+    action = params[:action]
+
+    # Prevent seller from ordering their own product 
+    if owns_item?(user_id, item_id)
+        flash[:notice] = "You cannot order your product."
+        redirect back
+    end 
+
     # Prevent invalid quantity 
     if quantity < 1
         flash[:error] = "Minimum order is 1"
