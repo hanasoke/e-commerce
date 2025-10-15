@@ -96,6 +96,29 @@ def owns_item?(user_id, item_id)
     result.to_i > 0
 end 
 
+# Count Helpers for Logged-in User
+
+def wishlist_count(user_id)
+    result = DB.get_first_value("SELECT COUNT(*) FROM wishlists WHERE user_id = ?", [user_id])
+    result.to_i
+end 
+
+def basket_count(user_id)
+    result = DB.get_first_value("SELECT COUNT(*) FROM baskets WHERE user_id = ?", [user_id])
+    result.to_i
+end 
+
+def transaction_count(user_id)
+    result = DB.get_first_value("SELECT COUNT(*) FROM transactions WHERE user_id = ?", [user_id])
+    result.to_i
+end 
+
+# Format count for display (hide if zero, cap at 99+)
+def format_count_badge(count)
+    return "" if count == 0
+    count > 99 ? "99+" : count.to_s
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
