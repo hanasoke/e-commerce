@@ -31,17 +31,18 @@
                             <h5>
                                 <%= trx['item_name'] %>
                             </h5>
-                            <p>Jumlah: <%= trx['quantity'] %></p>
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                                <label for="jumlah" class="form-label">Jumlah</label>
+                                <input type="number" class="form-control" id="jumlah" value="<%= trx['quantity'] %>">
                             </div>
-                            <p>Catatan: <%= trx['note'] %></p>
+                            <div class="mb-3">
+                                <label for="jumlah" class="form-label">Catatan : </label>
+                                <textarea type="email" class="form-control" id="jumlah" value="<%= trx['note'] %>"><%= trx['note'] %></textarea>
+                            </div>
                             <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
                             <p>Status Pembayaran: 
                                 <span class="badge bg-info"><%= trx['payment_status'] %></span>
                             </p>
-                            <p>Tanggal Transaksi: <%= trx['transaction_date'] %></p>
                             <div class="mb-3">
                                 <label for="pan" class="form-label">Payment Account Number</label>
                                 <input type="email" class="form-control" id="pan" placeholder="input your account number">
@@ -60,7 +61,17 @@
                                 <label for="payment_photo" class="form-label">Payment Photo</label>
                                 <input class="form-control" type="file" id="payment_photo">
                             </div>
-                            <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary float-end mb-3">Checkout</a>
+
+                            <div class="row">
+                                <div class="col">
+                                    <p class="float-end">Tanggal Transaksi : <%= trx['transaction_date'] %></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary float-end">Checkout</a>  
+                                </div>
+                            </div>                          
                         </div>
                     </div>
                 </div>
