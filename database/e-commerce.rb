@@ -123,6 +123,7 @@ DB.execute <<-SQL
         payment_status TEXT,
         transaction_date TEXT, 
         note TEXT,
+        payment_name TEXT,
         FOREIGN KEY(wishlist_id) REFERENCES wishlists(wishlist_id),
         FOREIGN KEY(user_id) REFERENCES users(user_id),
         FOREIGN KEY(store_id) REFERENCES stores(store_id),
@@ -131,13 +132,6 @@ DB.execute <<-SQL
         FOREIGN KEY(service_id) REFERENCES services(service_id)
     );
 SQL
-
-# Add the 'payment_name' column if it doesn't exist
-begin 
-    DB.execute("ALTER TABLE transactions ADD COLUMN payment_name TEXT;")
-rescue SQLite3::SQLException => e 
-    puts "Column 'payment_name' already exists or another error occured: #{e.message}"
-end 
 
 # DB.execute("DROP TABLE transactions");
 
