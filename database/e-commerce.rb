@@ -132,6 +132,13 @@ DB.execute <<-SQL
     );
 SQL
 
+# Add the 'payment_name' column if it doesn't exist
+begin 
+    DB.execute("ALTER TABLE transactions ADD COLUMN payment_name TEXT;")
+rescue SQLite3::SQLException => e 
+    puts "Column 'payment_name' already exists or another error occured: #{e.message}"
+end 
+
 # DB.execute("DROP TABLE transactions");
 
 DB.execute <<-SQL
