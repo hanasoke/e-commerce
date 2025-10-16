@@ -1927,12 +1927,25 @@ get '/transaction' do
     redirect '/login' unless logged_in?
 
     @title = "My Transaction"
-    @transactions = DB.execute("SELECT t.*, i.item_name, i.item_photo, i.item_price
-                                FROM transactions t 
-                                JOIN items i ON t.item_id = i.item_id 
-                                WHERE t.user_id = ?
-                                ORDER BY t.transaction_id DESC LIMIT 1", 
-                                [current_user['user_id']])
+    @transactions = DB.execute(<<-SQL, [current_user['user_id']])
+        SELECT 
+            t.transaction_id,
+            t.transaction_date,
+            t.quantity,
+            t.total_price,
+            t.payment_status,
+            t.note,
+            i.item_name,
+            i.item_photo,
+            i.item_price,
+            s.store_name
+        FROM transactions t
+        JOIN items i ON t.item_id = i.item_id
+        JOIN stores s ON t.store_id = s.store_id
+        WHERE t.user_id = ?
+        ORDER BY t.transaction_id DESC
+    SQL
+
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
 
