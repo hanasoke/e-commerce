@@ -1846,7 +1846,7 @@ post '/add_to_transaction/:item_id' do
         DB.execute(sql, [
             item['store_id'], item['item_id'], current_user['user_id'],
             nil, nil, nil, quantity, total_price,
-            'Cash', nil, nil, 'Start', Date.today.to_s, note
+            nil, nil, nil, 'Waited', Date.today.to_s, note
         ])
         
         flash[:success] = "Transaction created successfully"
@@ -1904,7 +1904,7 @@ post '/checkout/:basket_id' do
                 nil, 
                 nil,
                 nil,
-                "Pending",
+                "Waited",
                 Time.now.strftime("%Y-%m-%d %H:%M:%S"),
                 basket['note']
             ]

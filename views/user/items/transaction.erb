@@ -32,6 +32,10 @@
                                 <%= trx['item_name'] %>
                             </h5>
                             <p>Jumlah: <%= trx['quantity'] %></p>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                            </div>
                             <p>Catatan: <%= trx['note'] %></p>
                             <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
                             <p>Status Pembayaran: 
