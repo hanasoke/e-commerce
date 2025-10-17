@@ -1791,7 +1791,7 @@ post '/delete_a_service/:service_id' do
     redirect "/service_lists"
 end 
 
-post '/add_to_transaction/:item_id' do 
+post '/add_to_buyer/:item_id' do 
     redirect '/login' unless logged_in?
 
     item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first
