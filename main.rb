@@ -552,6 +552,22 @@ def validate_user_login(email, password)
     errors
 end
 
+def validate_payment() 
+    errors = []
+
+    # Payment Account Validation
+    if payment_account.nil? || payment_account.to_s.strip.empty? 
+        errors << "CS Number Cannot be Blank."
+    elsif payment_account.to_s !~ /\A\d+(\.\d{1,2})?\z/
+        errors << "CS Number must be a valid number."
+    elsif payment_account.to_f <= 0 
+        errors << "CS Number must be a positive number."
+    end
+
+    errors << "Payment Method cannot be blank." if payment_method.nil? || payment_method.strip.empty?
+
+end 
+
 # Routes 
 
 # Homepage 
