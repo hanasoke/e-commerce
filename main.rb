@@ -2095,3 +2095,7 @@ get '/chat_seller/:store_id' do
         redirect back
     end 
 end 
+
+post '/payment/:item_id' do 
+
+end 
