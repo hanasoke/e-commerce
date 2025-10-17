@@ -32,7 +32,7 @@
                                 <%= trx['item_name'] %>
                             </h5>
 
-                            <form action="payment" method="POST">
+                            <form action="/payment/<%= trx['transaction_id'] %>" method="POST" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="jumlah" class="form-label">Jumlah</label>
                                     <input type="number" class="form-control" id="jumlah" value="<%= trx['quantity'] %>">
@@ -47,20 +47,20 @@
                                 </p>
                                 <div class="mb-3">
                                     <label for="pan" class="form-label">Payment Account Number</label>
-                                    <input type="email" class="form-control" id="pan" placeholder="input your account number">
+                                    <input type="text" class="form-control" id="pan" placeholder="input your account number">
                                 </div>
                                 <div class="mb-3">
                                     <label for="payment_method" class="form-label">Payment Method</label>
-                                    <select class="form-select" id="payment_method">
-                                        <option selected>Select Your Payment Method</option>
-                                        <option value="1">E-Wallet</option>
-                                        <option value="2">Bank</option>
-                                        <option value="3">Virtual Account</option>
+                                    <select class="form-select" id="payment_method" name="payment_method">
+                                        <option value="Select Your Payment Method">Select Your Payment Method</option>
+                                        <option value="E-Wallet">E-Wallet</option>
+                                        <option value="Bank">Bank</option>
+                                        <option value="Virtual Account">Virtual Account</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="payment_photo" class="form-label">Payment Photo</label>
-                                    <input class="form-control" type="file" id="payment_photo">
+                                    <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
                                 </div>
                                 <div class="row">
                                     <div class="col">
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <a href="/payment/<%= trx['transaction_id'] %>" class="btn btn-primary float-end">Checkout</a>  
+                                        <button type="submit" class="btn btn-primary float-end">Checkout</button>  
                                     </div>
                                 </div>
                             </form>
