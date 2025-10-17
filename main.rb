@@ -2127,9 +2127,9 @@ post '/payment/:transaction_id' do
     # Update transaction record 
     DB.execute(<<-SQL, [payment_method, account_number, filename, 'Paid', transaction_id])
         UPDATE transactions 
-        SET payment_method = ?
-            account_number = ?
-            payment_photo = ?
+        SET payment_method = ?,
+            account_number = ?,
+            payment_photo = ?,
             payment_status = ?
         WHERE transaction_id = ?;
     SQL
