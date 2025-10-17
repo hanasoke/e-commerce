@@ -2096,6 +2096,44 @@ get '/chat_seller/:store_id' do
     end 
 end 
 
-post '/payment/:item_id' do 
+post '/payment/:transaction_id' do 
+    redirect '/login' unless logged_in?
 
+    transaction_id = params[:transaction_id].to_i 
+    account_number = params[:account_number].to_s.strip 
+    payment_method = params[:payment_method].to_s.strip 
+    payment_photo = params[:payment_photo]
+
+    # Check if transaction exists and belongs to this user 
+    trx = DB.execute("SELECT * FROM transactions WHERE transaction_id = ? AND user_id = ?", [transaction_id, session[:user_id]]).first 
+    halt 404, "Transaction not found" if trx.nil?
+
+    # Validate inputs
+    if account_number.empty? || payment_method.empty? || payment_photo.nil?
+        flash[:error] = "Please fill all payment fields."
+        redirect back 
+    end 
+
+    # Handle file upload 
+    filename = nil 
+    if payment_photo[:filename] && payment_photo[:tempfile]
+        ext = File.extname(payment_photo[:filename])
+        filename = "payment_#{transaction_id}_#{Time.now.to_i}#{ext}"
+        save_path = File.join("public", "uploads", "payments", filename)
+        Dir.mkdir("public/uploads/payments") unless Dir.exist?("public/uploads/payments")
+        File.open(save_path, "wb") { |f| f.write(payment_photo[:tempfile].read) }
+    end 
+
+    # Update transaction record 
+    DB.execute(<<-SQL, [payment_method, account_number, filename, 'Paid', transaction_id])
+        UPDATE transactions 
+        SET payment_method = ?
+            account_number = ?
+            payment_photo = ?
+            payment_status = ?
+        WHERE transaction_id = ?;
+    SQL
+
+    flash[:success] = "Payment submitted successfully! Waiting for seller confirmation."
+    redirect '/transaction'
 end 

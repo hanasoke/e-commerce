@@ -62,6 +62,14 @@
                                     <label for="payment_photo" class="form-label">Payment Photo</label>
                                     <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <% if trx['payment_photo'] %>
+                                        <p>Payment Proof:</p>
+                                        <img class="img-fluid rounded" src="/uploads/payments/<%= trx['payment_photo'] %>" style="max-width: 200px;" >
+                                    <% end %>
+                                </div>
+
                                 <div class="row">
                                     <div class="col">
                                         <p class="float-end">Tanggal Transaksi : <%= trx['transaction_date'] %></label>
