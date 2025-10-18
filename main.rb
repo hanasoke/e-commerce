@@ -220,30 +220,26 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
-def validate_service(service_name, fee, service_id = nil)
+def validate_service(payment_name, fee, service_id = nil)
     errors = []
 
-    # Name validation
-    if service_name.nil? || service_name.strip.empty? || service_name == "Select A Delivery"
-        errors << "Service Name is required."
-    else 
-        #check duplicate service_name in DB
-        if service_id # editing
-            existing = DB.execute("SELECT * FROM services WHERE service_name = ? AND service_id != ?", [service_name, service_id])
-            errors << "Service Name is already taken" if existing.any?
-        else # adding
-            existing = DB.execute("SELECT * FROM services WHERE service_name = ?", [service_name])
-            errors << "Service Name is already taken" if existing.any?
-        end 
+    # Bank/E-Wallet/VA Name
+    if payment_name.nil? || payment_name.strip.empty? || payment_name == "Input Your Payment Name"
+        errors << "Payment Name is required."
     end 
 
-    # Fee validation
-    if fee.nil? || fee.strip.empty?
-        errors << "Fee cannot be blank."
-    elsif fee.to_s !~ /^\d+$/
-        errors << "Fee must be a number."
-    elsif fee.to_f <= 0 
-        errors << "Fee must be a positive number."
+    # Payment Method 
+    if payment_method.nil? || payment_method.strip.empty? || payment_method == "Select Your Payment Method"
+        errors << "Payment Method is required."
+    end 
+
+    # Account Number validation
+    if account_number.nil? || account_number.strip.empty?
+        errors << "Account Number cannot be blank."
+    elsif account_number.to_s !~ /^\d+$/
+        errors << "Account Number must be a number."
+    elsif account_number.to_f <= 0 
+        errors << "Account Number must be a positive number."
     end 
 
     errors 
@@ -2151,5 +2147,5 @@ post '/payment/:transaction_id' do
     SQL
 
     flash[:success] = "Payment submitted successfully! Waiting for seller confirmation."
-    redirect '/transaction'
+    redirect '/account'
 end 
