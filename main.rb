@@ -220,31 +220,6 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
-def validate_service(payment_name, fee, service_id = nil)
-    errors = []
-
-    # Bank/E-Wallet/VA Name
-    if payment_name.nil? || payment_name.strip.empty? || payment_name == "Input Your Payment Name"
-        errors << "Payment Name is required."
-    end 
-
-    # Payment Method 
-    if payment_method.nil? || payment_method.strip.empty? || payment_method == "Select Your Payment Method"
-        errors << "Payment Method is required."
-    end 
-
-    # Account Number validation
-    if account_number.nil? || account_number.strip.empty?
-        errors << "Account Number cannot be blank."
-    elsif account_number.to_s !~ /^\d+$/
-        errors << "Account Number must be a number."
-    elsif account_number.to_f <= 0 
-        errors << "Account Number must be a positive number."
-    end 
-
-    errors 
-end
-
 def validate_item(item_name, item_brand, item_description, item_price, item_stock, item_category, item_unit, item_status, item_id = nil) 
     errors = []
 
@@ -548,21 +523,30 @@ def validate_user_login(email, password)
     errors
 end
 
-def validate_payment() 
+def validate_payment(payment_name, fee, service_id = nil)
     errors = []
 
-    # Payment Account Validation
-    if payment_account.nil? || payment_account.to_s.strip.empty? 
-        errors << "CS Number Cannot be Blank."
-    elsif payment_account.to_s !~ /\A\d+(\.\d{1,2})?\z/
-        errors << "CS Number must be a valid number."
-    elsif payment_account.to_f <= 0 
-        errors << "CS Number must be a positive number."
-    end
+    # Bank/E-Wallet/VA Name
+    if payment_name.nil? || payment_name.strip.empty? || payment_name == "Input Your Payment Name"
+        errors << "Payment Name is required."
+    end 
 
-    errors << "Payment Method cannot be blank." if payment_method.nil? || payment_method.strip.empty?
+    # Payment Method 
+    if payment_method.nil? || payment_method.strip.empty? || payment_method == "Input Your Payment Method"
+        errors << "Payment Method is required."
+    end 
 
-end 
+    # Account Number validation
+    if account_number.nil? || account_number.strip.empty?
+        errors << "Account Number cannot be blank."
+    elsif account_number.to_s !~ /^\d+$/
+        errors << "Account Number must be a number."
+    elsif account_number.to_f <= 0 
+        errors << "Account Number must be a positive number."
+    end 
+
+    errors 
+end
 
 # Routes 
 
