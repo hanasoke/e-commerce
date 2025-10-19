@@ -550,7 +550,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(quantity, note, payment_name, payment_method, account_number, service_id = nil)
+def editing_payment(quantity, total_price, note, payment_name, payment_method, account_number, service_id = nil)
     errors = []
 
     # Quantity validation
@@ -561,6 +561,9 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     elsif quantity.to_f <= 0 
         errors << "Quantity must be a positive number."
     end 
+
+    # Total Price
+    errors << "Total Price is required" if total_price.nil? || total_price.strip.empty? 
 
     # Note
     errors << "Note is required" if note.nil? || note.strip.empty? 
@@ -2159,29 +2162,25 @@ post '/payment/:transaction_id' do
         # Flash Message
         session[:success] = "A Payment has been added."
 
-        def editing_payment(quantity, note, payment_name, payment_method, account_number, service_id = nil)
-
         # Update the payment 
-        DB.execute("UPDATE transactions SET quantity = ?, note = ?, payment_method = ?, account_number = ?, payment_photo = COALESCE(?, photo), payment_status = ?, transaction_date = ?, payment_name = ?", [params[:quantity], params[:note], params[:payment_method], params[:account_number], photo_filename, 'Paid',  transaction_date, params[:payment_name], params[:transaction_id]])
+        DB.execute("UPDATE transactions SET quantity = ?, total_price = ?, note = ?, payment_method = ?, account_number = ?, payment_photo = COALESCE(?, photo), payment_status = ?, transaction_date = ?, payment_name = ?", [params[:quantity], params[:total_price], params[:note], params[:payment_method], params[:account_number], photo_filename, 'Paid',  transaction_date, params[:payment_name], params[:transaction_id]])
 
         redirect '/transaction'
-        
     else
         # Handle Payment errors and re-render the edit payment form 
         original_transaction = DB.execute("SELECT * FROM transactions WHERE transaction_id = ?", [params[:transaction_id]]).first
-
-        def editing_payment(quantity, note, payment_name, payment_method, account_number, service_id = nil)
+        
         # Merge payment input with original transaction data to retain user payment
         @original_transaction = {
             'transaction_id' => params[:transaction_id],
             'quantity' => params[:quantity] || original_transaction['quantity'],
+            'total_price' => params[:total_price] || original_transaction['total_price'],
             'note' => params[:note] || original_transaction['note'],
             'payment_name' => params[:payment_name] || original_transaction['payment_name'],
+            'account_number' => params[:account_number] || original_transaction['account_number'],
             'payment_method' => params[:payment_method] || original_transaction['payment_method'],
-            'account_number' => params[:account_number] || original_transaction['account_number']
+            'payment_photo' => photo_filename || original_transaction['payment_photo']
         }
-        erb :
-            
-
+        redirect '/transaction'
     end 
 end 
