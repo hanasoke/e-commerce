@@ -2153,24 +2153,30 @@ post '/payment/:transaction_id' do
     # Validate only if a new payment photo is provided
     @errors += validate_payment_photo(photo) if photo && photo[:tempfile]
 
-    if @errors.empty? 
-
+    if @errors.empty?
         photo_filename = nil 
-
-        # Handle file image upload
-        if photo && photo[:template] 
+        if photo && photo[:tempfile]
             photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
-
-            # Uploaded image to uploads folder
-            File.open("./public/uploads/payments/#{photo_filename}", 'wb') 
-            {
-                |f| f.write(photo[:tempfile].read)
-            }
+            File.open("./public/uploads/payments/#{photo_filename}", 'wb') { |f| f.write(photo[:tempfile].read) }
         end 
 
         transaction_date = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
-        DB.execute(<<-SQL. [
+        sql = <<-SQL 
+            UPDATE transactions 
+            SET quantity = ?, 
+                total_price = ?, 
+                note = ?, 
+                payment_method = ?,
+                account_number = ?,
+                payment_photo = ?,
+                payment_status = ?, 
+                transaction_date = ?, 
+                payment_name = ?
+                WHERE transaction_id = ?
+            SQL
+        
+        DB.execute(sql, [
             params[:quantity],
             params[:total_price],
             params[:note],
@@ -2182,10 +2188,6 @@ post '/payment/:transaction_id' do
             params[:payment_name],
             transaction_id
         ])
-            UPDATE transactions 
-            SET quantity = ?, total_price = ?, note = ?, payment_method = ?, account_number = ?, payment_status = ?, transaction_date = ?, payment_name = ?
-            WHERE transaction_id = ?
-        SQL
 
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'

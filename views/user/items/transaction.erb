@@ -1,4 +1,7 @@
-<div class="container mt-4">
+<div class="container mt-4">  
+    <h3>Detail Transaction</h3>
+    <hr>
+
     <div class="row">
         <div class="col-12">
             <% if flash[:success] %>
@@ -9,9 +12,19 @@
                 <% flash[:success] = nil %>
             <% end %>
         </div>
-    </div>    
-    <h3>Detail Transaction</h3>
-    <hr>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <% if flash[:error] %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:error] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:error] = nil %>
+            <% end %>
+        </div>
+    </div>   
 
     <% if @transactions.empty? %>
         <p class="text-muted">Belum ada transaksi</p>
@@ -149,8 +162,18 @@
                                                 </div>
                                             <% end %>
                                         </div>
-                                    </div>
 
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Status Pembayaran : </label>
+                                            <% if trx['payment_status'] == 'Paid' %>
+                                                <span class="badge bg-success">Paid</span>  
+                                            <% else %>
+                                                <span class="badge bg-warning text-dark">
+                                                    <%= trx['payment_status'] %>
+                                                </span>
+                                            <% end %>
+                                        </div>
+                                    </div>
                                 </section>
                             <% end %>
                         </div>
