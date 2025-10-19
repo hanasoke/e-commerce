@@ -523,7 +523,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def validate_payment(payment_name, fee, service_id = nil)
+def validate_payment(payment_name, payment_method, account_number, service_id = nil)
     errors = []
 
     # Bank/E-Wallet/VA Name
@@ -2093,12 +2093,8 @@ get '/chat_seller/:store_id' do
 end 
 
 post '/payment/:transaction_id' do 
-    redirect '/login' unless logged_in?
 
-    transaction_id = params[:transaction_id].to_i 
-    account_number = params[:account_number].to_s.strip 
-    payment_method = params[:payment_method].to_s.strip 
-    payment_photo = params[:payment_photo]
+    @errors = 
 
     # Check if transaction exists and belongs to this user 
     trx = DB.execute("SELECT * FROM transactions WHERE transaction_id = ? AND user_id = ?", [transaction_id, session[:user_id]]).first 
