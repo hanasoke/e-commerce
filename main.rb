@@ -523,7 +523,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def validate_payment(payment_name, payment_method, account_number, service_id = nil)
+def editing_payment(payment_name, payment_method, account_number, service_id = nil)
     errors = []
 
     # Bank/E-Wallet/VA Name
