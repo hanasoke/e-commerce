@@ -34,12 +34,12 @@
 
                             <form action="/payment/<%= trx['transaction_id'] %>" method="POST" enctype="multipart/form-data">
                                 <div class="mb-3">
-                                    <label for="jumlah" class="form-label">Jumlah</label>
-                                    <input type="number" class="form-control" id="jumlah" value="<%= trx['quantity'] %>">
+                                    <label for="quantity" class="form-label">Jumlah</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" value="<%= trx['quantity'] %>">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="jumlah" class="form-label">Catatan : </label>
-                                    <textarea type="email" class="form-control" id="jumlah" value="<%= trx['note'] %>"><%= trx['note'] %></textarea>
+                                    <label for="note" class="form-label">Catatan : </label>
+                                    <textarea type="text" class="form-control" name="note" id="note" value="<%= trx['note'] %>"><%= trx['note'] %></textarea>
                                 </div>
                                 <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
                                 <p>Status Pembayaran: 
@@ -55,12 +55,12 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="pan" class="form-label">Bank/E-Wallet/VA Name</label>
-                                    <input type="text" class="form-control" id="pan" placeholder="Input Your Payment Name">
+                                    <label for="payment_name" class="form-label">Bank/E-Wallet/VA Name</label>
+                                    <input type="text" class="form-control" id="payment_name" name="payment_name" placeholder="Input Your Payment Name">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="pan" class="form-label">Payment Account Number</label>
-                                    <input type="text" class="form-control" id="pan" placeholder="input your account number">
+                                    <label for="account_number" class="form-label">Payment Account Number</label>
+                                    <input type="text" class="form-control" id="account_number" name="account_number" placeholder="input your account number">
                                 </div>
                                
                                 <div class="mb-3">
@@ -68,16 +68,16 @@
                                     <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
                                 </div>
                                 
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <% if trx['payment_photo'] %>
                                         <p>Payment Proof:</p>
                                         <img class="img-fluid rounded" src="/uploads/payments/<%= trx['payment_photo'] %>" style="max-width: 200px;" >
                                     <% end %>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                     <div class="col">
-                                        <p class="float-end">Tanggal Transaksi : <%= trx['transaction_date'] %></label>
+                                        <p class="float-end">Tanggal Pemilihan Barang : <%= trx['transaction_date'] %></label>
                                     </div>
                                 </div>
                                 <div class="row">

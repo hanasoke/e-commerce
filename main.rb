@@ -2150,7 +2150,7 @@ post '/payment/:transaction_id' do
         session[:success] = "A Payment has been added."
 
         # Update the payment 
-        
+        DB.execute("UPDATE transactions SET payment_method = ?, account")
 
     end 
 
