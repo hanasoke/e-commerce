@@ -2133,8 +2133,19 @@ get '/chat_seller/:store_id' do
 end 
 
 post '/payment/:transaction_id' do 
+    transaction_id = params[:transaction_id]
+    trx = DB.execute("SELECT * FROM transactions WHERE transaction_id = ? AND user_id = ?", [transaction_id, session[:user_id]]).first 
+    halt 404, "Transaction not found" if trx.nil?
 
-    @errors = editing_payment(params[:quantity], params[:note],params[:payment_name], params[:payment_method], params[:account_number], params[:service_id])
+    @errors = editing_payment(
+        params[:quantity], 
+        params[:total_price],
+        params[:note],
+        params[:payment_name], 
+        params[:payment_method], 
+        params[:account_number], 
+        params[:service_id]
+    )
 
     # error payment_photo variable check
     photo = params['payment_photo']
@@ -2142,34 +2153,46 @@ post '/payment/:transaction_id' do
     # Validate only if a new payment photo is provided
     @errors += validate_payment_photo(photo) if photo && photo[:tempfile]
 
-    # Check if transaction exists and belongs to this user 
-    trx = DB.execute("SELECT * FROM transactions WHERE transaction_id = ? AND user_id = ?", [transaction_id, session[:user_id]]).first 
-    halt 404, "Transaction not found" if trx.nil?
-
-    photo_filename = nil 
-
     if @errors.empty? 
+
+        photo_filename = nil 
+
         # Handle file image upload
         if photo && photo[:template] 
             photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
 
             # Uploaded image to uploads folder
-            File.open("./public/uploads/payments/#{photo_filename}", 'wb') do |f|
-                f.write(photo[:tempfile].read)
-            end 
+            File.open("./public/uploads/payments/#{photo_filename}", 'wb') 
+            {
+                |f| f.write(photo[:tempfile].read)
+            }
         end 
 
-        # Flash Message
-        session[:success] = "A Payment has been added."
+        transaction_date = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
-        # Update the payment 
-        DB.execute("UPDATE transactions SET quantity = ?, total_price = ?, note = ?, payment_method = ?, account_number = ?, payment_photo = COALESCE(?, photo), payment_status = ?, transaction_date = ?, payment_name = ?", [params[:quantity], params[:total_price], params[:note], params[:payment_method], params[:account_number], photo_filename, 'Paid',  transaction_date, params[:payment_name], params[:transaction_id]])
+        DB.execute(<<-SQL. [
+            params[:quantity],
+            params[:total_price],
+            params[:note],
+            params[:payment_method],
+            params[:account_number],
+            photo_filename || trx['payment_photo'],
+            'Paid',
+            transaction_date,
+            params[:payment_name],
+            transaction_id
+        ])
+            UPDATE transactions 
+            SET quantity = ?, total_price = ?, note = ?, payment_method = ?, account_number = ?, payment_status = ?, transaction_date = ?, payment_name = ?
+            WHERE transaction_id = ?
+        SQL
 
+        flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
         # Handle Payment errors and re-render the edit payment form 
         original_transaction = DB.execute("SELECT * FROM transactions WHERE transaction_id = ?", [params[:transaction_id]]).first
-        
+
         # Merge payment input with original transaction data to retain user payment
         @original_transaction = {
             'transaction_id' => params[:transaction_id],
@@ -2181,6 +2204,9 @@ post '/payment/:transaction_id' do
             'payment_method' => params[:payment_method] || original_transaction['payment_method'],
             'payment_photo' => photo_filename || original_transaction['payment_photo']
         }
+
+        flash[:error] = 'Payment Failed'
+
         redirect '/transaction'
     end 
 end 
