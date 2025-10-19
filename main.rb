@@ -550,13 +550,23 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(payment_name, payment_method, account_number, service_id = nil)
+def editing_payment(quantity, note, payment_name, payment_method, account_number, service_id = nil)
     errors = []
 
-    # Bank/E-Wallet/VA Name
-    if payment_name.nil? || payment_name.strip.empty? || payment_name == "Input Your Payment Name"
-        errors << "Payment Name is required."
+    # Quantity validation
+    if quantity.nil? || quantity.strip.empty?
+        errors << "Quantity cannot be blank."
+    elsif quantity.to_s !~ /^\d+$/
+        errors << "Quantity must be a number."
+    elsif quantity.to_f <= 0 
+        errors << "Quantity must be a positive number."
     end 
+
+    # Note
+    errors << "Note is required" if note.nil? || note.strip.empty? 
+
+    # Bank/E-Wallet/VA Name
+    errors << "Payment Name is required" if payment_name.nil? || payment_name.strip.empty? 
 
     # Payment Method 
     if payment_method.nil? || payment_method.strip.empty? || payment_method == "Input Your Payment Method"
