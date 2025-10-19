@@ -35,13 +35,23 @@
                             <form action="/payment/<%= trx['transaction_id'] %>" method="POST" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="quantity" class="form-label">Jumlah</label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" value="<%= trx['quantity'] %>">
+                                    <input 
+                                        type="number" 
+                                        class="form-control quantity-input" 
+                                        id="quantity" 
+                                        name="quantity" 
+                                        value="<%= trx['quantity'] %>"
+                                        data-price="<%= trx['item_price'] %>"
+                                        data-id="<%= trx['transaction_id'] %>"
+                                        min="1">
                                 </div>
                                 <div class="mb-3">
                                     <label for="note" class="form-label">Catatan : </label>
                                     <textarea type="text" class="form-control" name="note" id="note" value="<%= trx['note'] %>"><%= trx['note'] %></textarea>
                                 </div>
-                                <p>Total: <b><%= rupiah_currency(trx['total_price']) %></b></p>
+                                <p>Total:     
+                                    <b id="total_<%= trx['transaction_id'] %>"><%= rupiah_currency(trx['total_price']) %></b>
+                                </p>
                                 <p>Status Pembayaran: 
                                     <span class="badge bg-info"><%= trx['payment_status'] %></span>
                                 </p>
@@ -85,8 +95,7 @@
                                         <button type="submit" class="btn btn-primary float-end">Checkout</button>  
                                     </div>
                                 </div>
-                            </form>
-                                                      
+                            </form>                                                      
                         </div>
                     </div>
                 </div>
@@ -94,3 +103,27 @@
         <% end %>
     <% end %>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const formatter = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        });
+
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", function() {
+                const price = parseInt(this.dataset.price);
+                const qty = parseInt(this.value) || 0;
+                const total = price * qty;
+                const trxId = this.dataset.id;
+
+                const totalElement = document.getElementById(`total_${trxId}`);
+                if (totalElement) {
+                    totalElement.textContent = formatter.format(total);
+                }
+            });
+        });
+    });
+</script>
