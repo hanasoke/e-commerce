@@ -479,6 +479,33 @@ def validate_store_photo(photo)
     errors 
 end 
 
+def validate_payment_photo(photo)
+    errors = []
+
+    # Check if the photo parameter is valid and has expected structure
+    if photo.nil? || !photo.is_a?(Hash) || photo[:tempfile].nil?
+        errors << 'Payment Photo is required.'
+    else 
+        # Check file type
+        valid_types = ["image/jpeg", "image/png", "image/gif"]
+        if !photo[:type] || !valid_types.include?(photo[:type])
+            errors << "Payment Photo must be a JPG, PNG, or GIF file."
+        end 
+
+        # Check file sizee (8MB max)
+        max_size = 8 * 1024 * 1024 # 8MB in bytes
+        file_size = photo[:tempfile].size if photo[:tempfile] && photo[:tempfile].respond_to?(:size)
+
+        if file_size.nil? 
+            errors << "Payment Photo file size could not be determined."
+        elsif file_size > max_size 
+            errors << "Payment Photo size must be less than 8MB."
+        end 
+    end 
+
+    errors 
+end 
+
 def validate_store_banner(photo)
     errors = []
 
@@ -2094,27 +2121,39 @@ end
 
 post '/payment/:transaction_id' do 
 
-    @errors = 
+    @errors = editing_payment(params[:payment_name], params[:payment_method], params[:account_number], params[:service_id])
+
+    # error payment_photo variable check
+    photo = params['payment_photo']
+
+    # Validate only if a new payment photo is provided
+    @errors += validate_payment_photo(photo) if photo && photo[:tempfile]
+
+    photo_filename = nil 
 
     # Check if transaction exists and belongs to this user 
     trx = DB.execute("SELECT * FROM transactions WHERE transaction_id = ? AND user_id = ?", [transaction_id, session[:user_id]]).first 
     halt 404, "Transaction not found" if trx.nil?
 
-    # Validate inputs
-    if account_number.empty? || payment_method.empty? || payment_photo.nil?
-        flash[:error] = "Please fill all payment fields."
-        redirect back 
+    if @errors.empty? 
+        # Handle file image upload
+        if photo && photo[:template] 
+            photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
+
+            # Uploaded image to uploads folder
+            File.open("./public/uploads/payments/#{photo_filename}", 'wb') do |f|
+                f.write(photo[:tempfile].read)
+            end 
+        end 
+
+        # Flash Message
+        session[:success] = "A Payment has been added."
+
+        # Update the payment 
+        
+
     end 
 
-    # Handle file upload 
-    filename = nil 
-    if payment_photo[:filename] && payment_photo[:tempfile]
-        ext = File.extname(payment_photo[:filename])
-        filename = "payment_#{transaction_id}_#{Time.now.to_i}#{ext}"
-        save_path = File.join("public", "uploads", "payments", filename)
-        Dir.mkdir("public/uploads/payments") unless Dir.exist?("public/uploads/payments")
-        File.open(save_path, "wb") { |f| f.write(payment_photo[:tempfile].read) }
-    end 
 
     # Update transaction record 
     DB.execute(<<-SQL, [payment_method, account_number, filename, 'Paid', transaction_id])
