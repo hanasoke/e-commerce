@@ -2189,7 +2189,7 @@ post '/payment/:transaction_id' do
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
-        # Handle validation errors and re-render the edit payment form 
+        # Handle validation errors and re-render the edit payment form
         original_transaction = DB.execute("SELECT * FROM transactions WHERE transaction_id = ?", transaction_id).first 
 
         @original_transaction = {
@@ -2204,6 +2204,25 @@ post '/payment/:transaction_id' do
 
         flash[:error] = @errors.join(', ')
 
-        redirect '/transaction'
+        # Re-fetch all transactions for the transaction.erb view
+        @transactions = DB.execute(<<-SQL, [current_user['user_id']])
+            SELECT 
+                t.transaction_id,
+                t.transaction_date,
+                t.quantity,
+                t.total_price,
+                t.note,
+                i.item_name,
+                i.item_photo,
+                i.item_price,
+                s.store_name
+            FROM transactions t 
+            JOIN items i ON t.item_id = i.item_id
+            JOIN stores s ON t.store_id = s.store_id
+            WHERE t.user_id = ?
+            ORDER BY t.transaction_id DESC
+        SQL
+
+        erb :'user/items/transaction', layout: :'layouts/user/template'
     end 
 end 
