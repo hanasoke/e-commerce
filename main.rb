@@ -2189,6 +2189,19 @@ post '/payment/:transaction_id' do
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
+        # Handle validation errors and re-render the edit payment form 
+        original_transaction = DB.execute("SELECT * FROM transactions WHERE transaction_id = ?", transaction_id).first 
+
+        @original_transaction = {
+            'transaction_id' => transaction_id,
+            'quantity' => params[:quantity] || original_transaction['quantity'],
+            'total_price' => params[:total_price] || original_transaction['total_price'],
+            'note' => params[:note] || original_transaction['note'],
+            'payment_name' => params[:payment_name] || original_transaction['payment_name'],
+            'account_number' => params[:account_number] || original_transaction['account_number'],
+            'payment_photo' => photo_filename || original_transaction['payment_photo']
+        }
+
         flash[:error] = @errors.join(', ')
 
         redirect '/transaction'
