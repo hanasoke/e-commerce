@@ -4,27 +4,15 @@
 
     <div class="row">
         <div class="col-12">
-            <% if flash[:success] %>
+            <% if session[:success] %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><%= flash[:success] %></strong>
+                    <strong><%= session[:success] %></strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <% flash[:success] = nil %>
+                <% session[:success] = nil %>
             <% end %>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <% if flash[:error] %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong><%= flash[:error] %></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% flash[:error] = nil %>
-            <% end %>
-        </div>
-    </div>   
 
     <% if @transactions.empty? %>
         <p class="text-muted">Belum ada transaksi</p>

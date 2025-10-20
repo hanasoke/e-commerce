@@ -2157,7 +2157,9 @@ post '/payment/:transaction_id' do
         photo_filename = nil 
         if photo && photo[:tempfile]
             photo_filename = "#{Time.now.to_i}_#{photo[:filename]}"
-            File.open("./public/uploads/payments/#{photo_filename}", 'wb') { |f| f.write(photo[:tempfile].read) }
+            File.open("./public/uploads/payments/#{photo_filename}", 'wb') do|f| 
+                f.write(photo[:tempfile].read)
+            end
         end 
 
         transaction_date = Time.now.strftime("%Y-%m-%d %H:%M:%S")
@@ -2176,6 +2178,8 @@ post '/payment/:transaction_id' do
                 WHERE transaction_id = ?
             SQL
         
+        session[:success] = "Payment successful! Transaction marked as Paid."
+        
         DB.execute(sql, [
             params[:quantity],
             params[:total_price],
@@ -2189,7 +2193,6 @@ post '/payment/:transaction_id' do
             transaction_id
         ])
 
-        flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
         # Handle Payment errors and re-render the edit payment form 
