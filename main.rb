@@ -1981,6 +1981,12 @@ get '/transaction' do
         ORDER BY t.transaction_id DESC
     SQL
 
+    # If previous submission failed, restore the form data 
+    if session[:form_data]
+        @original_transaction = session[:form_data]
+        session.delete(:form_data) # clear it after one render
+    end 
+
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
 
@@ -2189,40 +2195,19 @@ post '/payment/:transaction_id' do
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
-        # Handle validation errors and re-render the edit payment form
-        original_transaction = DB.execute("SELECT * FROM transactions WHERE transaction_id = ?", transaction_id).first 
-
-        @original_transaction = {
+        # Store user-entered data temporarily in the session
+        session[:form_data] = {
             'transaction_id' => transaction_id,
-            'quantity' => params[:quantity] || original_transaction['quantity'],
-            'total_price' => params[:total_price] || original_transaction['total_price'],
-            'note' => params[:note] || original_transaction['note'],
-            'payment_name' => params[:payment_name] || original_transaction['payment_name'],
-            'account_number' => params[:account_number] || original_transaction['account_number'],
-            'payment_photo' => photo_filename || original_transaction['payment_photo']
+            'quantity' => params[:quantity],
+            'total_price' => params[:total_price],
+            'note' => params[:note],
+            'payment_name' => params[:payment_name],
+            'account_number' => params[:account_number],
+            # Don't store the photo file in session. only name for re-display if any 
+            'payment_photo' => trx['payment_photo']
         }
 
         flash[:error] = @errors.join(', ')
-
-        # Re-fetch all transactions for the transaction.erb view
-        @transactions = DB.execute(<<-SQL, [current_user['user_id']])
-            SELECT 
-                t.transaction_id,
-                t.transaction_date,
-                t.quantity,
-                t.total_price,
-                t.note,
-                i.item_name,
-                i.item_photo,
-                i.item_price,
-                s.store_name
-            FROM transactions t 
-            JOIN items i ON t.item_id = i.item_id
-            JOIN stores s ON t.store_id = s.store_id
-            WHERE t.user_id = ?
-            ORDER BY t.transaction_id DESC
-        SQL
-
-        erb :'user/items/transaction', layout: :'layouts/user/template'
+        redirect '/transaction'
     end 
 end 
