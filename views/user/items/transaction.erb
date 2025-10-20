@@ -4,12 +4,24 @@
 
     <div class="row">
         <div class="col-12">
-            <% if session[:success] %>
+            <% if flash[:success] %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><%= session[:success] %></strong>
+                    <strong><%= flash[:success] %></strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <% session[:success] = nil %>
+                <% flash[:success] = nil %>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <% if flash[:error] %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:error] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:error] = nil %>
             <% end %>
         </div>
     </div>
@@ -56,6 +68,10 @@
                                         <p>Total:     
                                             <b id="total_<%= trx['transaction_id'] %>"><%= rupiah_currency(trx['total_price']) %></b>
                                         </p>
+
+                                        <!-- Hidden input to send total_price -->
+                                        <input type="hidden" name="total_price" id="hidden_total_<%= trx['transaction_id'] %>" value="<%= trx['total_price'] %>">
+
                                         <p>Status Pembayaran: 
                                             <span class="badge bg-info"><%= trx['payment_status'] %></span>
                                         </p>
@@ -187,9 +203,16 @@
                 const total = price * qty;
                 const trxId = this.dataset.id;
 
+                // Update the formatted display
                 const totalElement = document.getElementById(`total_${trxId}`);
                 if (totalElement) {
                     totalElement.textContent = formatter.format(total);
+                }
+
+                // Update the hidden numeric total_price
+                const hiddenInput = document.getElementById(`hidden_total_${trxId}`);
+                if(hiddenInput) {
+                    hiddenInput.value = total; 
                 }
             });
         });
