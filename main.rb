@@ -2207,8 +2207,6 @@ post '/payment/:transaction_id' do
             'payment_photo' => photo_filename || original_transaction['payment_photo']
         }
 
-        flash[:error] = 'Payment Failed'
-
         redirect '/transaction'
     end 
 end 
