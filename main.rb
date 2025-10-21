@@ -1989,7 +1989,7 @@ get '/transaction' do
 
     if session[:field_errors] 
         @field_errors = session[:field_errors]
-        session.delete[:field_errors]
+        session.delete(:field_errors)
     end 
 
     erb :'user/items/transaction', layout: :'layouts/user/template'
@@ -2211,6 +2211,8 @@ post '/payment/:transaction_id' do
                 field_errors['note'] = error 
             when /Payment Name/
                 field_errors['payment_name'] = error 
+            when /Payment Method/
+                field_errors['payment_method'] = error 
             when /Account Number/
                 field_errors['account_number'] = error 
             when /Payment Photo/
