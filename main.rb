@@ -1987,6 +1987,11 @@ get '/transaction' do
         session.delete(:form_data) # clear it after one render
     end 
 
+    if session[:field_errors] 
+        @field_errors = session[:field_errors]
+        session.delete[:field_errors]
+    end 
+
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
 
@@ -2195,6 +2200,24 @@ post '/payment/:transaction_id' do
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
     else
+        # Create a hash to store field-specific errors 
+        field_errors = {}
+
+        @errors.each do |error| 
+            case error 
+            when /Quantity/
+                field_errors['quantity'] = error 
+            when /Note/
+                field_errors['note'] = error 
+            when /Payment Name/
+                field_errors['payment_name'] = error 
+            when /Account Number/
+                field_errors['account_number'] = error 
+            when /Payment Photo/
+                field_errors['payment_photo'] = error 
+            end 
+        end 
+
         # Store user-entered data temporarily in the session
         session[:form_data] = {
             'transaction_id' => transaction_id,
@@ -2202,12 +2225,17 @@ post '/payment/:transaction_id' do
             'total_price' => params[:total_price],
             'note' => params[:note],
             'payment_name' => params[:payment_name],
+            'payment_method' => params[:payment_method],
             'account_number' => params[:account_number],
             # Don't store the photo file in session. only name for re-display if any 
             'payment_photo' => trx['payment_photo']
         }
 
-        flash[:error] = @errors.join(', ')
+        session[:field_errors] = {
+            'transaction_id' => transaction_id,
+            'errors' => field_errors
+        }
+
         redirect '/transaction'
     end 
 end 

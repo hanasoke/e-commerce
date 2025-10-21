@@ -55,9 +55,11 @@
                                                 data-id="<%= trx['transaction_id'] %>"
                                                 min="1"
                                             >
-                                            <% if @errors.any? { |e| e.include?('Quantity')} %>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['quantity'] %>
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Quantity')} %>
+                                                    <%= @field_errors['errors']['quantity'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -71,9 +73,11 @@
                                                 end  
                                             %>
                                             </textarea>
-                                            <% if @errors.any? { |e| e.include?('Note')} %>
+                                            <% if defined?(@field_errors) && 
+                                                    @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                    @field_errors['errors']['note'] %>
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Note')} %>
+                                                    <%= @field_errors['errors']['note'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -96,9 +100,12 @@
                                                 <option value="Bank" <%= 'selected' if selected_method == 'Bank' %>>Bank</option>
                                                 <option value="Virtual Account" <%= 'selected' if selected_method == 'Virtual Account'%> >Virtual Account</option>
                                             </select>
-                                            <% if @errors.any? { |e| e.include?('Payment Method')} %>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_method'] %>
+
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Payment Method')} %>
+                                                    <%= @field_errors['errors']['payment_method'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -118,9 +125,12 @@
                                                     end 
                                                 %>"
                                             >
-                                            <% if @errors.any? { |e| e.include?('Payment Name')} %>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_name'] %>
+
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Payment Name')} %>
+                                                    <%= @field_errors['errors']['payment_name'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -139,9 +149,12 @@
                                                     end 
                                                 %>"
                                             >
-                                            <% if @errors.any? { |e| e.include?('Account Number')} %>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['account_number'] %>
+
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Account Number')} %>
+                                                    <%= @field_errors['errors']['account_number'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -149,9 +162,12 @@
                                         <div class="mb-3">
                                             <label for="payment_photo" class="form-label">Payment Photo</label>
                                             <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
-                                            <% if @errors.any? { |e| e.include?('Payment Photo')} %>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_photo'] %>
+
                                                 <div class="form-text text-danger">
-                                                    <%= @errors.find { |e| e.include?('Payment Photo')} %>
+                                                    <%= @field_errors['errors']['payment_photo'] %>
                                                 </div>
                                             <% end %>
                                         </div>
