@@ -14,18 +14,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <% if flash[:error] %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong><%= flash[:error] %></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% flash[:error] = nil %>
-            <% end %>
-        </div>
-    </div>
-
     <% if @transactions.empty? %>
         <p class="text-muted">Belum ada transaksi</p>
     <% else %>
@@ -65,7 +53,13 @@
                                                 %>"
                                                 data-price="<%= trx['item_price'] %>"
                                                 data-id="<%= trx['transaction_id'] %>"
-                                                min="1">
+                                                min="1"
+                                            >
+                                            <% if @errors.any? { |e| e.include?('Quantity')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Quantity')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
                                         <div class="mb-3">
                                             <label for="note" class="form-label">Catatan : </label>
@@ -77,6 +71,11 @@
                                                 end  
                                             %>
                                             </textarea>
+                                            <% if @errors.any? { |e| e.include?('Note')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Note')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
                                         <p>Total:     
                                             <b id="total_<%= trx['transaction_id'] %>"><%= rupiah_currency(trx['total_price']) %></b>
@@ -97,6 +96,11 @@
                                                 <option value="Bank" <%= 'selected' if selected_method == 'Bank' %>>Bank</option>
                                                 <option value="Virtual Account" <%= 'selected' if selected_method == 'Virtual Account'%> >Virtual Account</option>
                                             </select>
+                                            <% if @errors.any? { |e| e.include?('Payment Method')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Payment Method')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
                                         <div class="mb-3">
                                             <label for="payment_name" class="form-label">Bank/E-Wallet/VA Name</label>
@@ -114,6 +118,11 @@
                                                     end 
                                                 %>"
                                             >
+                                            <% if @errors.any? { |e| e.include?('Payment Name')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Payment Name')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
                                         <div class="mb-3">
                                             <label for="account_number" class="form-label">Payment Account Number</label>
@@ -128,12 +137,23 @@
                                                     else 
                                                         ''
                                                     end 
-                                                %>">
+                                                %>"
+                                            >
+                                            <% if @errors.any? { |e| e.include?('Account Number')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Account Number')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
                                     
                                         <div class="mb-3">
                                             <label for="payment_photo" class="form-label">Payment Photo</label>
                                             <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
+                                            <% if @errors.any? { |e| e.include?('Payment Photo')} %>
+                                                <div class="form-text text-danger">
+                                                    <%= @errors.find { |e| e.include?('Payment Photo')} %>
+                                                </div>
+                                            <% end %>
                                         </div>
 
                                         <div class="row">
