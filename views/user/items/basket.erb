@@ -18,6 +18,7 @@
                             <h5><%= item['item_name'] %></h5>
                             <p>Catatan: <%= item['note'] %></p>
                             <p>Harga Satuan: <%= rupiah_currency(item['item_price']) %></p>
+                            <p>Jumlah yang mau dipesan: <%= item['quantity'] %></p>
                             <p><b>Total: <%= rupiah_currency(item['total_price']) %></b></p>
                         </div>
                     </div>
