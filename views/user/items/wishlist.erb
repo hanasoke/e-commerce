@@ -23,7 +23,12 @@
                                 <small><%= w['store_name'] %></small>
                             </p>
                         </div>
-                        <a href="/view_detail_item/<%= w['item_id'] %>" class="btn btn-primary">Detail</a>
+                        <div class="d-flex justify-content-between">
+                            <form action="#">
+                                <button type="button" class="btn btn-secondary float-left">Delete</button>
+                            </form>
+                            <a href="/view_detail_item/<%= w['item_id'] %>" class="btn btn-danger float-right">Detail</a>
+                        </div>
                     </div>
                 </div>
             <% end %>
