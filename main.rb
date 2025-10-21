@@ -2149,6 +2149,10 @@ post '/payment/:transaction_id' do
 
     halt 404, "Transaction not found" if trx.nil?
 
+    # Fetch the related item 
+    item = DB.execute("SELECT * FROM items WHERE item_id = ?", [trx['item_id']]).first 
+    halt 404, "Item not found" if item.nil? 
+
     @errors = editing_payment(
         params[:quantity],
         params[:note],
@@ -2157,6 +2161,15 @@ post '/payment/:transaction_id' do
         params[:account_number], 
         params[:service_id]
     )
+
+    # Convert stock availability
+    entered_quantity = params[:quantity].to_i 
+    item_stock = item['item_stock'].to_i 
+
+    # Check stock availability
+    if entered_quantity > item_stock 
+        @errors << "Quantity cannot exceed #{item_stock}"
+    end 
 
     photo = params['payment_photo']
     @errors += validate_payment_photo(photo) # validate always
@@ -2196,6 +2209,9 @@ post '/payment/:transaction_id' do
             params[:payment_name],
             transaction_id
         ])
+
+        new_stock = item_stock - entered_quantity
+        DB.execute("UPDATE items SET item_stock = ? WHERE item_id = ?", [new_stock, item['item_id']])
 
         flash[:success] = "Payment successful! Transaction marked as Paid."
         redirect '/transaction'
