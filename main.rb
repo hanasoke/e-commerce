@@ -2269,7 +2269,7 @@ post '/payment/:transaction_id' do
     end 
 end 
 
-get '/transaction' do 
+get '/transaction/:transaction_id' do 
     redirect '/login' unless logged_in?
 
     @title = "My Transaction"
