@@ -2221,7 +2221,7 @@ post '/payment/:transaction_id' do
             transaction_id
         ])
 
-        new_stock = item_stock - entered_quantity
+        new_stock = [item_stock - entered_quantity, 0].max
         DB.execute("UPDATE items SET item_stock = ? WHERE item_id = ?", [new_stock, item['item_id']])
 
         flash[:success] = "Payment successful! Transaction marked as Paid."
@@ -2272,7 +2272,7 @@ end
 get '/transaction/:transaction_id' do 
     redirect '/login' unless logged_in?
 
-    @title = "My Transaction"
+    @title = "My Transaction Detail"
 
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
