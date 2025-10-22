@@ -17,26 +17,60 @@
                         <h5 class="card-title">
                             <%= @transaction['item_name'] %>
                         </h5>
-                         <p class="card-text mb-2">
+                         <p class="card-text mb-1">
                             <b>Brand:</b> <%= @transaction['item_brand'] || '-' %> 
                         </p>
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>Price per unit:</b> <%= rupiah_currency(@transaction['item_price']) %> 
                         </p>
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>Description:</b> <%= @transaction['item_description'] %> 
                         </p>
 
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>SKU:</b> <%= @transaction['item_unit'] %>  
                         </p>
 
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>Quantity:</b> <%= rupiah_currency(@transaction['quantity']) %>
                         </p>
 
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>Total Price:</b> <%= rupiah_currency(@transaction['total_price']) %>
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <b>Payment Method:</b> <%= @transaction['payment_method'] %> 
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <b>Account Number:</b> <%= @transaction['account_number'] %> 
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <b>Payment Status:</b> 
+                            <span class="badge <%= @transaction['payment_status'] == 'Paid' ? 'bg-success' : 'bg-warning' %>">
+                                <%= @transaction['payment_status'] %>
+                            </span> 
+                        </p>
+
+                        <% if @transaction['payment_photo'] %>
+                        <p>
+                            <b>Payment Proof:</b>
+                            <img src="/uploads/payments/<%= @transaction['payment_photo'] %>" class="img-fluid rounded mb-2" style="max-width: 200px;">
+                        </p>
+                        <% end %>
+
+                        <p class="card-text mb-1">
+                            <b>Note:</b> <%= @transaction['note'] || '-' %>
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <b>Store:</b> <%= @transaction['store_name'] %>
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <b>Address:</b> <%= @transaction['store_address'] %>
                         </p>
                         
                         <p class="card-text">
