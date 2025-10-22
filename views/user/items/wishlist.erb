@@ -1,7 +1,14 @@
 <link rel="stylesheet" href="/css/style.css">
 
 <div class="container mt-5">
-    <h3>My Wishlists</h3>
+    <h3 class="mb-3">My Wishlists</h3>
+    <% if flash[:success] %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= flash[:success] %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% flash[:success] = nil %>
+    <% end %>
     <div class="row">
         <% if @wishlists.empty? %>
             <p>You have no items in your wishlist yet.</p>
@@ -45,8 +52,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <form action="/delete_my_wishlist/<%= w['item_id'] %>">
-                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    <form action="/delete_my_wishlist/<%= w['wishlist_id'] %>" method="POST">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>                                    
                                 </div>
                             </div>

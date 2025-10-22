@@ -2115,13 +2115,14 @@ get '/my_wishlists/:user_id' do
 end 
 
 # Delete a post 
-post '/delete_my_wishlist/:user_id' do 
+post '/delete_my_wishlist/:wishlist_id' do 
     # Flash message
     flash[:success] = "My Wishlist has been successfully deleted"
 
     # Delete logic 
     DB.execute("DELETE FROM wishlists WHERE wishlist_id = ?", [params[:wishlist_id]])
-    
+
+    redirect "/my_wishlists/#{current_user['user_id']}"
 end 
 
 get '/users_wishlist/:user_id' do 
