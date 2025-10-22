@@ -1957,7 +1957,7 @@ end
 get '/transaction_lists' do 
     redirect '/login' unless logged_in?
 
-    @title = "My Transaction"
+    @title = "My Transaction Lists"
     @transactions = DB.execute(<<-SQL, [current_user['user_id']])
         SELECT 
             t.transaction_id,
@@ -2269,3 +2269,10 @@ post '/payment/:transaction_id' do
     end 
 end 
 
+get '/transaction' do 
+    redirect '/login' unless logged_in?
+
+    @title = "My Transaction"
+
+    erb :'user/items/transaction', layout: :'layouts/user/template'
+end 
