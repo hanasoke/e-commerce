@@ -2273,6 +2273,39 @@ get '/transaction/:transaction_id' do
     redirect '/login' unless logged_in?
 
     @title = "My Transaction Detail"
+    transaction_id = params[:transaction_id]
+
+    # Query full transaction details
+
+    @transaction = DB.execute(<<-SQL, [transaction_id, session[:user_id]]).first
+        SELECT 
+                t.transaction_id,
+                t.transaction_date,
+                t.quantity,
+                t.total_price,
+                t.payment_status,
+                t.payment_method,
+                t.payment_name,
+                t.account_number,
+                t.note,
+                t.payment_photo,
+                i.item_id,
+                i.item_name,
+                i.item_brand,
+                i.item_photo,
+                i.item_description,
+                i.item_price,
+                i.item_unit,
+                s.store_name,
+                s.store_photo,
+                s.store_address
+            FROM transactions t
+            JOIN items i ON t.item_id = i.item_id
+            JOIN stores s ON t.store_id = s.store_id
+            WHERE t.transaction_id = ? AND t.user_id = ?
+        SQL
+
+    halt 404, "Transaction not found" if @transaction.nil?
 
     erb :'user/items/transaction', layout: :'layouts/user/template'
 end 
