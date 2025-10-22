@@ -2114,6 +2114,16 @@ get '/my_wishlists/:user_id' do
     erb :'user/items/wishlist', layout: :'layouts/user/template'
 end 
 
+# Delete a post 
+post '/delete_my_wishlist/:user_id' do 
+    # Flash message
+    flash[:success] = "My Wishlist has been successfully deleted"
+
+    # Delete logic 
+    DB.execute("DELETE FROM wishlists WHERE wishlist_id = ?", [params[:wishlist_id]])
+    
+end 
+
 get '/users_wishlist/:user_id' do 
     redirect '/login' unless logged_in?
     
@@ -2257,3 +2267,4 @@ post '/payment/:transaction_id' do
         redirect '/transaction'
     end 
 end 
+
