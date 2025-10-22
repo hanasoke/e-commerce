@@ -80,15 +80,15 @@
             <% end %>
 
             <li class="nav-item">
-              <button class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="/img/icons/box-arrow-right.svg" alt="Log Out"></button>
+              <button class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#userModal<%= current_user['user_id'] %>"><img src="/img/icons/box-arrow-right.svg" alt="Log Out"></button>
             </li>
 
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="userModal<%= current_user['user_id'] %>" tabindex="-1" aria-labelledby="userModalLabel<%= current_user['user_id'] %>" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Log Out</h1>
+                    <h1 class="modal-title fs-5" id="userModalLabel<%= current_user['user_id'] %>">Log Out</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">

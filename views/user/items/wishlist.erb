@@ -24,18 +24,18 @@
                             </p>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-outline-secondary float-left" data-bs-toggle="modal" data-bs-target="#deleteAwishlist">
+                            <button type="button" class="btn btn-outline-secondary float-left" data-bs-toggle="modal" data-bs-target="#deleteAwishlist<%= w['item_id'] %>">
                                 <img src="/img/icons/trash.svg" alt="Trash">
                             </button>
                             <a href="/view_detail_item/<%= w['item_id'] %>" class="btn btn-danger float-right">Detail</a>
                         </div>
                     </div>
                     <!-- Modal -->
-                    <div class="modal fade" id="deleteAwishlist" tabindex="-1" aria-labelledby="deleteWishlist" aria-hidden="true">
+                    <div class="modal fade" id="deleteAwishlist<%= w['item_id'] %>" tabindex="-1" aria-labelledby="deleteWishlist<%= w['item_id'] %>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="deleteWishlist">
+                                    <h1 class="modal-title fs-5" id="deleteWishlist<%= w['item_id'] %>">
                                         Confirm Deletion
                                     </h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
