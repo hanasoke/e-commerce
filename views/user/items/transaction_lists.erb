@@ -1,0 +1,293 @@
+<div class="container mt-4">  
+    <h3>The Lists of My Transaction</h3>
+    <hr>
+
+    <div class="row">
+        <div class="col-12">
+            <% if flash[:success] %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><%= flash[:success] %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% flash[:success] = nil %>
+            <% end %>
+        </div>
+    </div>
+
+    <% if @transactions.empty? %>
+        <p class="text-muted">Belum ada transaksi</p>
+    <% else %>
+        <% @transactions.each do |trx| %>
+            <div class="card mb-4">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <% if trx['item_photo'] %>
+                            <img src="/uploads/items/<%= trx['item_photo'] %>" class="img-fluid rounded-start" alt="<%= trx['item_name'] %>">
+                        <% else %>
+                            <img src="/img/question.png" class="img-fluid rounded-start" alt="No Image">
+                        <% end %>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <h5>
+                                <%= trx['item_name'] %>
+                            </h5>
+
+                            <!-- UNPAID VIEW: show -->
+                            <% if trx['payment_status'] != 'Paid' %>
+                                <section class="unpaid_view">
+                                    <form action="/payment/<%= trx['transaction_id'] %>" method="POST" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label for="quantity" class="form-label">Jumlah</label>
+                                            <input 
+                                                type="number" 
+                                                class="form-control quantity-input" 
+                                                id="quantity" 
+                                                name="quantity" 
+                                                value="<%= 
+                                                    if defined?(@original_transaction) && @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s
+                                                        @original_transaction['quantity']
+                                                    else 
+                                                        trx['quantity']
+                                                    end 
+                                                %>"
+                                                data-price="<%= trx['item_price'] %>"
+                                                data-id="<%= trx['transaction_id'] %>"
+                                                min="1"
+                                            >
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['quantity'] %>
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['quantity'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="note" class="form-label">Catatan : </label>
+                                            <textarea class="form-control" name="note" id="note"><%= 
+                                                if defined?(@original_transaction) && @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s
+                                                    @original_transaction['note']
+                                                else 
+                                                    trx['note']
+                                                end  
+                                            %></textarea>
+                                            <% if defined?(@field_errors) && 
+                                                    @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                    @field_errors['errors']['note'] %>
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['note'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                        <p>Total:     
+                                            <b id="total_<%= trx['transaction_id'] %>"><%= rupiah_currency(trx['total_price']) %></b>
+                                        </p>
+
+                                        <!-- Hidden input to send total_price -->
+                                        <input type="hidden" name="total_price" id="hidden_total_<%= trx['transaction_id'] %>" value="<%= trx['total_price'] %>">
+
+                                        <p>Status Pembayaran: 
+                                            <span class="badge bg-info"><%= trx['payment_status'] %></span>
+                                        </p>
+                                        <div class="mb-3">
+                                            <label for="payment_method" class="form-label">Payment Method</label>
+                                            <select class="form-select" id="payment_method" name="payment_method">
+                                                <% selected_method = (defined?(@original_transaction) && @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s) ? @original_transaction['payment_method'] : nil %>
+                                                <option value="Select Your Payment Method" <%= 'selected' if selected_method.nil? %> >Select Your Payment Method</option>
+                                                <option value="E-Wallet" <%= 'selected' if selected_method === 'E-Wallet' %>>E-Wallet</option>
+                                                <option value="Bank" <%= 'selected' if selected_method == 'Bank' %>>Bank</option>
+                                                <option value="Virtual Account" <%= 'selected' if selected_method == 'Virtual Account'%> >Virtual Account</option>
+                                            </select>
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_method'] %>
+
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['payment_method'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="payment_name" class="form-label">Bank/E-Wallet/VA Name</label>
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="payment_name" 
+                                                name="payment_name" 
+                                                placeholder="Input Your Payment Name"
+                                                value="<%= 
+                                                    if defined?(@original_transaction) && @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s 
+                                                        @original_transaction['payment_name']
+                                                    else 
+                                                        ''
+                                                    end 
+                                                %>"
+                                            >
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_name'] %>
+
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['payment_name'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="account_number" class="form-label">Payment Account Number</label>
+                                            <input type="text" 
+                                                class="form-control" 
+                                                id="account_number" 
+                                                name="account_number" 
+                                                placeholder="input your account number"
+                                                value="<%= 
+                                                    if defined?(@original_transaction) && @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s 
+                                                        @original_transaction['account_number']
+                                                    else 
+                                                        ''
+                                                    end 
+                                                %>"
+                                            >
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['account_number'] %>
+
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['account_number'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                    
+                                        <div class="mb-3">
+                                            <label for="payment_photo" class="form-label">Payment Photo</label>
+                                            <input class="form-control" type="file" id="payment_photo" name="payment_photo" >
+                                            <% if defined?(@field_errors) && 
+                                                @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
+                                                @field_errors['errors']['payment_photo'] %>
+
+                                                <div class="form-text text-danger">
+                                                    <%= @field_errors['errors']['payment_photo'] %>
+                                                </div>
+                                            <% end %>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="float-end">Tanggal Pemilihan Barang : <%= trx['transaction_date'] %></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-primary float-end">Checkout</button>  
+                                            </div>
+                                        </div>
+                                    </form>
+                                </section>
+                            <% end %>
+                            
+                            <!-- PAID VIEW: shown only when payment_status IS 'Paid' -->
+                            <% if trx['payment_status'] == 'Paid' %>
+                                <section class="paid_view">
+                                    <div class="mb-3">
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Jumlah</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" value="<%= trx['quantity'] %>" >
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Catatan</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" value="<%= trx['note'] %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label for="total_price" class="col-sm-2 col-form-label">Total Price</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" id="total_price" value="<%= rupiah_currency(trx['total_price']) %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Payment Method</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" value="<%= trx['payment_method'] %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Payment Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" value="<%= trx['payment_name'] %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Account Number</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" readonly class="form-control-plaintext" value="<%= trx['account_number'] %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Payment Photo</label>
+                                            <% if trx['payment_photo'] %>
+                                                <div class="mb-3">
+                                                    <img class="img-fluid rounded" src="/uploads/payments/<%= trx['payment_photo'] %>" style="max-width: 200px;" >
+                                                </div>
+                                            <% end %>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">Status Pembayaran : </label>
+                                            <% if trx['payment_status'] == 'Paid' %>
+                                                <span class="badge bg-success">Paid</span>  
+                                            <% else %>
+                                                <span class="badge bg-warning text-dark">
+                                                    <%= trx['payment_status'] %>
+                                                </span>
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                </section>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    <% end %>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const formatter = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        });
+
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", function() {
+                const price = parseInt(this.dataset.price);
+                const qty = parseInt(this.value) || 0;
+                const total = price * qty;
+                const trxId = this.dataset.id;
+
+                // Update the formatted display
+                const totalElement = document.getElementById(`total_${trxId}`);
+                if (totalElement) {
+                    totalElement.textContent = formatter.format(total);
+                }
+
+                // Update the hidden numeric total_price
+                const hiddenInput = document.getElementById(`hidden_total_${trxId}`);
+                if(hiddenInput) {
+                    hiddenInput.value = total; 
+                }
+            });
+        });
+    });
+</script>

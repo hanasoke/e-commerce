@@ -1881,7 +1881,7 @@ post '/add_to_buyer/:item_id' do
         ])
         
         flash[:success] = "Transaction created successfully"
-        redirect "/transaction"
+        redirect "/transaction_lists"
     else 
         flash[:error] = "Invalid action"
         redirect back
@@ -1945,7 +1945,7 @@ post '/checkout/:basket_id' do
         DB.execute("DELETE FROM baskets WHERE basket_id = ?", [basket_id])
 
         flash[:success] = "Checkout successful! Basket moved to transactions."
-        redirect '/transaction'
+        redirect '/transaction_lists'
 
         rescue SQLite3::Exception => e 
             flash[:error] = "Error processing checkout: #{e.message}"
@@ -1954,7 +1954,7 @@ post '/checkout/:basket_id' do
 end 
 
 #  Transaction page
-get '/transaction' do 
+get '/transaction_lists' do 
     redirect '/login' unless logged_in?
 
     @title = "My Transaction"
@@ -1992,7 +1992,7 @@ get '/transaction' do
         session.delete(:field_errors)
     end 
 
-    erb :'user/items/transaction', layout: :'layouts/user/template'
+    erb :'user/items/transaction_lists', layout: :'layouts/user/template'
 end 
 
 get '/user_basket_lists/:user_id' do 
@@ -2225,7 +2225,7 @@ post '/payment/:transaction_id' do
         DB.execute("UPDATE items SET item_stock = ? WHERE item_id = ?", [new_stock, item['item_id']])
 
         flash[:success] = "Payment successful! Transaction marked as Paid."
-        redirect '/transaction'
+        redirect '/transaction_lists'
     else
         # Create a hash to store field-specific errors 
         field_errors = {}
@@ -2265,7 +2265,7 @@ post '/payment/:transaction_id' do
             'errors' => field_errors
         }
 
-        redirect '/transaction'
+        redirect '/transaction_lists'
     end 
 end 
 
