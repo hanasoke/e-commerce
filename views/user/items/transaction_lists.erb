@@ -29,9 +29,16 @@
                     </div>
                     <div class="col-md-10">
                         <div class="card-body">
-                            <h5>
-                                <%= trx['item_name'] %>
-                            </h5>
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <h5>
+                                        <%= trx['item_name'] %>
+                                    </h5>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-outline-secondary float-end" role="button">Detail</a>
+                                </div>
+                            </div>
 
                             <!-- UNPAID VIEW: show -->
                             <% if trx['payment_status'] != 'Paid' %>
