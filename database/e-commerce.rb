@@ -101,10 +101,13 @@ SQL
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS services (
         service_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        service_name TEXT, 
+        service_name TEXT,
+        service_status TEXT, 
         fee INTEGER
     )
 SQL
+
+# DB.execute("DROP TABLE services");
 
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS transactions (
