@@ -584,7 +584,6 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
 end
 
 def validate_service(service_name, fee, service_id = nil)
-
     errors = []
 
     errors << "Service Name is required" if service_name.nil? || service_name.strip.empty? 
@@ -2326,4 +2325,10 @@ get '/transaction/:transaction_id' do
     halt 404, "Transaction not found" if @transaction.nil?
 
     erb :'user/items/transaction', layout: :'layouts/user/template'
+end 
+
+get '/goods_delivery/:user_id' do 
+    @title = "Goods Delivery"
+
+    erb :'seller/store_panel/goods_delivery', layout: :'layouts/admin/layout'
 end 

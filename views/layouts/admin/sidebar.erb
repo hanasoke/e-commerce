@@ -40,8 +40,16 @@
 
                 <% elsif current_user['access'].to_i == 2 %>
                     <a class="nav-link" href="/item_lists/<%= current_user['user_id'] %>">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
                         Item Lists
+                    </a>
+                    <a class="nav-link" href="/goods_delivery/<%= current_user['user_id'] %>">
+                        <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
+                        Goods Delivery 
+                    </a>
+                    <a class="nav-link" href="/users_wishlist/<%= current_user['user_id'] %>">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-heart"></i></div>
+                        User Wishlists
                     </a>
                     <a class="nav-link" href="/user_basket_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
@@ -50,10 +58,6 @@
                     <a class="nav-link" href="/user_transaction_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
                         User Transaction Lists
-                    </a>
-                    <a class="nav-link" href="/users_wishlist/<%= current_user['user_id'] %>">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-heart"></i></div>
-                        Users Wishlist
                     </a>
                 <% end %>
             </div>
