@@ -550,7 +550,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(quantity, note, payment_name, payment_method, account_number, service_id = nil)
+def editing_payment(quantity, note, payment_name, payment_method, account_number, transaction_id = nil)
     errors = []
 
     # Quantity validation
@@ -582,6 +582,24 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
 
     errors 
 end
+
+def validate_service(service_name, fee, service_id = nil)
+
+    errors = []
+
+    errors << "Service Name is required" if service_name.nil? || service_name.strip.empty? 
+
+    # Fee validation
+    if fee.nil? || fee.strip.empty?
+        errors << "Fee cannot be blank"
+    elsif fee.to_s !~ /^\d+$/
+        errors << "Fee must be a number"
+    elsif fee.to_f <= 0 
+        errors << "Fee must be a positive number"
+    end 
+
+    errors 
+end 
 
 # Routes 
 
@@ -2170,7 +2188,7 @@ post '/payment/:transaction_id' do
         params[:payment_name], 
         params[:payment_method], 
         params[:account_number], 
-        params[:service_id]
+        transaction_id
     )
 
     # Convert stock availability
