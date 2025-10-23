@@ -127,7 +127,7 @@ DB.execute <<-SQL
         user_id INTEGER,
         wishlist_id INTEGER,
         basket_id INTEGER,
-        service_id INTEGER,
+        store_service_id INTEGER,
         quantity INTEGER,
         total_price INTEGER,
         payment_method TEXT,
@@ -153,6 +153,9 @@ DB.execute <<-SQL
         shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
         transaction_id INTEGER,
         shipping_status TEXT,
-        shipping_date TEXT
+        shipping_date TEXT,
+        FOREIGN KEY(transaction_id) REFERENCES transactions(transaction_id)
     );
 SQL
+
+# DB.execute("DROP TABLE shipments");
