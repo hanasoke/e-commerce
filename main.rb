@@ -2349,5 +2349,39 @@ get '/goods_delivery/:user_id' do
     @store_services = DB.execute("SELECT * FROM store_services WHERE store_id = ?", [store_id])
 
     erb :'seller/store_panel/goods_delivery', layout: :'layouts/admin/layout' 
-
 end 
+
+# Post endpoint to toggle service activation
+post '/toggle_service' do 
+    redirect '/login' unless logged_in?
+
+    service_id = params[:service_id]
+    user_id = session[:user_id]
+    new_status = params[:status] == "true" ? "active" : "inactive"
+
+    # Find store_id by user_id 
+    store = DB.execute(<<-SQL, [user_id]).first 
+        SELECT s.store_id 
+        FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+    SQL
+
+    halt 404, "Store not found" unless store 
+    store_id = store['store_id']
+
+    # Check if the record exists in store_services
+    existing = DB.execute("SELECT * FROM store_services WHERE store_id = ? AND service_id = ?", [store_id, service_id]).first 
+
+    if existing 
+        # Update service_status 
+        DB.execute("UPDATE store_services SET service_status = ? WHERE store_service_id = ?", [new_status, existing['store_service_id']])
+    else 
+        # Create new record 
+        DB.execute("INSERT INTO store_services (store_id, service_id, service_status) VALUES (?, ?, ?)", [store_id, service_id, new_status])
+    end 
+
+    status 200
+    "Service #{new_status}"
+end 
+
