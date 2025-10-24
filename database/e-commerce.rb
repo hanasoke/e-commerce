@@ -119,6 +119,8 @@ DB.execute <<-SQL
     );
 SQL
 
+# DB.execute("DROP TABLE store_services");
+
 DB.execute <<-SQL 
     CREATE TABLE IF NOT EXISTS transactions (
         transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
