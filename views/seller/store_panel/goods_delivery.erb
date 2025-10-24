@@ -34,3 +34,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.service-toggle').forEach(function(toggle) {
+        toggle.addEventListener('change', function() {
+            const serviceId = this.dataset.serviceId;
+            const status = this.checked;
+
+            fetch('/toggle_service', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x=www-form-urlencoded' },
+                body: `service_id=${serviceId}&status=${status}`
+            });
+        });
+    });
+</script>
