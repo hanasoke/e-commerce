@@ -2328,7 +2328,26 @@ get '/transaction/:transaction_id' do
 end 
 
 get '/goods_delivery/:user_id' do 
+    redirect '/login' unless logged_in?
+
     @title = "Goods Delivery"
 
-    erb :'seller/store_panel/goods_delivery', layout: :'layouts/admin/layout'
+    store = DB.execute(<<-SQL, [params[:user_id]]).first
+        SELECT s.store_id 
+        FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+    SQL
+
+    halt 404, "Store not found" unless store 
+    store_id = store['store_id']
+
+    # Get all available services 
+    @services = DB.execute("SELECT * FROM services")
+
+    # Get store's current service activations
+    @store_services = DB.execute("SELECT * FROM store_services WHERE store_id = ?", [store_id])
+
+    erb :'seller/store_panel/goods_delivery', layout: :'layouts/admin/layout' 
+
 end 
