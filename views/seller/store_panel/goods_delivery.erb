@@ -9,46 +9,27 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                                <label class="form-check-label" for="switchCheckDefault">Service Name</label>
+                <% @services.each do |service| %>
+                    <% store_service = @store_services.find { |ss| ss['service_id'] == service['service_id'] } %>
+                    <% active = store_service && store_service['service_status'] == 'active' %>
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="form-check form-switch">
+                                    <input 
+                                        class="form-check-input service-toggle" 
+                                        type="checkbox" 
+                                        id="service_<%service['service_id'] %>"
+                                        data-service-id="<%= service['service_id'] %>"
+                                        <%= active ? 'checked' : '' %>>
+                                    <label class="form-check-label" for="service_<%= service['service_id'] %>">
+                                        <%= service['service_name'] %> - <%= rupiah_currency(service['fee']) %>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                                <label class="form-check-label" for="switchCheckDefault">Service Name</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                                <label class="form-check-label" for="switchCheckDefault">Service Name</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                                <label class="form-check-label" for="switchCheckDefault">Service Name</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% end %>
             </div>
         </div>
     </div>
