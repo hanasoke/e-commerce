@@ -550,7 +550,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(quantity, note, payment_name, payment_method, account_number, transaction_id = nil)
+def editing_payment(quantity, note, payment_name, payment_method, account_number, store_service_id, transaction_id = nil)
     errors = []
 
     # Quantity validation
@@ -579,6 +579,9 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     elsif account_number.to_f <= 0 
         errors << "Account Number must be a positive number"
     end 
+
+    # Store Service
+    errors << "A Service is required" if store_service_id.nil? || store_service_id.strip.empty? 
 
     errors 
 end
