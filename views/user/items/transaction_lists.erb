@@ -181,11 +181,17 @@
                                         <div class="mb-3">
                                             <label for="delivery" class="form-label">Select A Delivery</label>
                                             <select class="form-select" id="delivery" name="delivery">
-                                                <option value="Select Your Payment Method">Select Your Delivery</option>
-                                                <option value="JNE">JNE</option>
-                                                <option value="J&T">J&T</option>
-                                                <option value="Wahana">Wahana</option>
-                                                <option value="Wahana">Tiki</option>
+                                                <option value="">Select Your Delivery</option>
+                                                <% active_services = active_store_services_for(trx['store_id']) %>
+                                                <% if active_services.any? %>
+                                                    <% active_services.each do |service| %>
+                                                        <option value="<%= service['service_name'] %>">
+                                                            <%= service['service_name'] %> - <%= rupiah_currency(service['fee']) %>
+                                                        </option>
+                                                    <% end %>
+                                                <% else %>
+                                                    <option disabled>No active shipping service available</option>
+                                                <% end %>
                                             </select>
                                         </div>
 
