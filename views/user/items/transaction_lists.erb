@@ -178,6 +178,17 @@
                                             <% end %>
                                         </div>
 
+                                        <div class="mb-3">
+                                            <label for="delivery" class="form-label">Select A Delivery</label>
+                                            <select class="form-select" id="delivery" name="delivery">
+                                                <option value="Select Your Payment Method">Select Your Delivery</option>
+                                                <option value="JNE">JNE</option>
+                                                <option value="J&T">J&T</option>
+                                                <option value="Wahana">Wahana</option>
+                                                <option value="Wahana">Tiki</option>
+                                            </select>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col">
                                                 <p class="float-end">Tanggal Pemilihan Barang : <%= trx['transaction_date'] %></label>
