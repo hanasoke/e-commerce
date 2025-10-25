@@ -1883,7 +1883,7 @@ post '/add_to_buyer/:item_id' do
         sql = "
             INSERT INTO transactions (
                 store_id, item_id, user_id,
-                wishlist_id, basket_id, service_id,
+                wishlist_id, basket_id, store_service_id,
                 quantity, total_price,
                 payment_method, account_number, payment_photo, payment_status,
                 transaction_date, note
