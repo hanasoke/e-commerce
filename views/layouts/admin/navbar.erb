@@ -1,6 +1,12 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="index.html"><%= current_user['username'] %></a>
+    <% if current_user['access'].to_i == 3 %>
+      <a class="navbar-brand ps-3" href="/admin_view_profile/<%= current_user['user_id'] %>"><%= current_user['username'] %></a>
+    <% elsif current_user['access'].to_i == 2 %>
+      <a class="navbar-brand ps-3" href="/view_seller/<%= current_user['user_id'] %>"><%= current_user['username'] %></a>
+    <% end %>
+
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
@@ -17,7 +23,7 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <% if current_user['access'].to_i == 3 %>
                 <li><a class="dropdown-item" href="/admin_view_profile/<%= current_user['user_id'] %>">Settings</a></li>
-              <%elsif current_user['access'].to_i == 2 %>
+              <% elsif current_user['access'].to_i == 2 %>
                 <li>
                   <a class="dropdown-item" href="/view_seller/<%= current_user['user_id'] %>">Seller Profile</a>
                 </li>
