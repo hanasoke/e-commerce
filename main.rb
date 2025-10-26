@@ -2397,3 +2397,10 @@ post '/toggle_service' do
     "Service #{new_status}"
 end 
 
+get '/view_delivery/:user_id' do 
+    redirect '/login' unless logged_in?
+
+    @title = "View Delivery"
+
+    erb :'seller/store_panel/view_delivery', layout: :'layouts/admin/layout' 
+end 
