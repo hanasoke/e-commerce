@@ -121,7 +121,7 @@ end
 
 def active_store_services_for(store_id)
     DB.execute(<<-SQL, [store_id])
-        SELECT ss.store_service_id, s.service_name, s.fee
+        SELECT ss.*, s.service_name, s.fee
         FROM store_services ss
         JOIN services s ON ss.service_id = s.service_id
         WHERE ss.store_id = ? AND ss.service_status = 'active'
