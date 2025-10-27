@@ -2026,7 +2026,8 @@ get '/transaction_lists' do
             i.item_name,
             i.item_photo,
             i.item_price,
-            s.store_name
+            s.store_name,
+            s.store_id
         FROM transactions t
         JOIN items i ON t.item_id = i.item_id
         JOIN stores s ON t.store_id = s.store_id
