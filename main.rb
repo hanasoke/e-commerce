@@ -614,7 +614,7 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Selecty A Delivery"
+    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Selecty Your Delivery"
 
     errors 
 end
