@@ -133,7 +133,7 @@ def store_services_for_user(user_id)
         SELECT 
             u.user_id,
             u.name AS user_name,
-            st.store_id
+            st.store_id,
             st.store_name,
             s.service_id,
             s.service_name,

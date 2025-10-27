@@ -9,7 +9,40 @@
         </div>
         <div class="card-body">
             <div class="row">
-                
+                <div class="col">
+                    <% if @store_services.any? %>
+                        <table class="table table-bordered table-striped" >
+                            <thead>
+                                <tr>
+                                    <th>Store Name</th>
+                                    <th>Service Name</th>
+                                    <th>Fee</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% @store_services.each do |service| %>
+                                    <tr>
+                                        <td>
+                                            <%= service['store_name'] %>
+                                        </td>
+                                        <td>
+                                            <%= service['service_name'] %>
+                                        </td>
+                                        <td>
+                                            <%= rupiah_currency(service['fee']) %>
+                                        </td>
+                                        <td>
+                                            <%= service['service_status'] %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    <% else %>
+                        <p>No Store services found fo this user.</p>
+                    <% end %>
+                </div>
             </div>
         </div>
     </div>
