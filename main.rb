@@ -583,7 +583,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(quantity, note, payment_name, payment_method, account_number, store_service_id, transaction_id = nil)
+def editing_payment(quantity, note, payment_name, payment_method, account_number, delivery, transaction_id = nil)
     errors = []
 
     # Quantity validation
@@ -614,7 +614,7 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    errors << "A Service is required" if store_service_id.nil? || store_service_id.strip.empty? 
+    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Selecty A Delivery"
 
     errors 
 end
@@ -2224,6 +2224,7 @@ post '/payment/:transaction_id' do
         params[:payment_name], 
         params[:payment_method], 
         params[:account_number], 
+        params[:delivery],
         transaction_id
     )
 
