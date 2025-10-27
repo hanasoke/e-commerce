@@ -128,6 +128,26 @@ def active_store_services_for(store_id)
     SQL
 end 
 
+def store_services_for_user(user_id)
+    DB.execute(<<-SQL, [user_id])
+        SELECT 
+            u.user_id,
+            u.name AS user_name,
+            st.store_id
+            st.store_name,
+            s.service_id,
+            s.service_name,
+            s.fee,
+            ss.service_status
+        FROM users u 
+        JOIN sellers se ON u.user_id = se.user_id
+        JOIN stores st ON se.seller_id = st.seller_id
+        JOIN store_services ss ON st.store_id = ss.store_id
+        JOIN services s ON ss.service_id = s.service_id
+        WHERE u.user_id = ?
+    SQL
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
