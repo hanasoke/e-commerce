@@ -195,9 +195,9 @@
                                             </select>
                                             <% if defined?(@field_errors) && 
                                                 @field_errors['transaction_id'].to_s == trx['transaction_id'].to_s && 
-                                                @field_errors['errors']['service_name'] %>
+                                                @field_errors['errors']['delivery'] %>
                                                 <div class="form-text text-danger">
-                                                    <%= @field_errors['errors']['service_name'] %>
+                                                    <%= @field_errors['errors']['delivery'] %>
                                                 </div>
                                             <% end %>
                                         </div>
@@ -280,6 +280,20 @@
                                                     <%= trx['payment_status'] %>
                                                 </span>
                                             <% end %>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-2 col-form-label">
+                                                Delivery 
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <% if trx['store_service_id'] %>
+                                                    <% service = DB.execute("SELECT s.service_name FROM store_services ss JOIN services s ON ss.service_id = s.service_id WHERE ss.store_service_id = ?", [trx['store_service_id']]).first %>
+                                                    <input type="text" readonly class="form-control-plaintext" value="<%= service ? service['service_name'] : 'N/A' %>">
+                                                <% else %>
+                                                    <input type="text" readonly class="form-control-plaintext" value="N/A">
+                                                <% end %>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
