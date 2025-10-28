@@ -614,7 +614,7 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Selecty Your Delivery"
+    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Select Your Delivery"
 
     errors 
 end
@@ -2218,13 +2218,22 @@ post '/payment/:transaction_id' do
     item = DB.execute("SELECT * FROM items WHERE item_id = ?", [trx['item_id']]).first 
     halt 404, "Item not found" if item.nil? 
 
+    transaction_id = params[:transaction_id]
+    quantity = params[:quantity]
+    note = params[:note]
+    payment_name = params[:payment_name]
+    payment_method = params[:payment_method]
+    account_number = params[:account_number]
+    delivery = params[:delivery] # now this contains store_service_id
+    total_price = params[:total_price]
+
     @errors = editing_payment(
-        params[:quantity],
-        params[:note],
-        params[:payment_name], 
-        params[:payment_method], 
-        params[:account_number], 
-        params[:delivery],
+        quantity,
+        note,
+        payment_name, 
+        payment_method, 
+        account_number, 
+        delivery,
         transaction_id
     )
 
