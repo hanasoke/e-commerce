@@ -2268,7 +2268,8 @@ post '/payment/:transaction_id' do
                 payment_photo = ?,
                 payment_status = ?, 
                 transaction_date = ?, 
-                payment_name = ?
+                payment_name = ?,
+                store_service_id = ?
             WHERE transaction_id = ?
         SQL
         
@@ -2282,6 +2283,7 @@ post '/payment/:transaction_id' do
             'Paid',
             transaction_date,
             params[:payment_name],
+            params[:delivery], # This is the store_service_id (delivery)
             transaction_id
         ])
 
