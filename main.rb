@@ -2308,6 +2308,8 @@ post '/payment/:transaction_id' do
                 field_errors['account_number'] = error 
             when /Payment Photo/
                 field_errors['payment_photo'] = error 
+            when /Service/, /Delivery/
+                field_errors['delivery'] = error
             end 
         end 
 
