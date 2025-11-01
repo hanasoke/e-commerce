@@ -583,7 +583,7 @@ def validate_user_login(email, password)
     errors
 end
 
-def editing_payment(quantity, note, payment_name, payment_method, account_number, delivery, transaction_id = nil)
+def editing_payment(quantity, note, payment_name, payment_method, account_number, store_service_id, transaction_id = nil)
     errors = []
 
     # Quantity validation
@@ -614,7 +614,13 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    errors << "A Service is required" if delivery.nil? || delivery.strip.empty? || delivery == "Select Your Delivery"
+    if store_service_id.nil? || store_service_id.strip.empty?
+        errors << "Store Service cannot be blank"
+    elsif store_service_id.to_s !~ /^\d+$/
+        errors << "Store Service must be a number"
+    elsif store_service_id.to_f <= 0 
+        errors << "Store Service must be a positive number"
+    end 
 
     errors 
 end
