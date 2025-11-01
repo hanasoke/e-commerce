@@ -615,11 +615,7 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
 
     # Store Service
     if store_service_id.nil? || store_service_id.strip.empty?
-        errors << "Store Service cannot be blank"
-    elsif store_service_id.to_s !~ /^\d+$/
-        errors << "Store Service must be a number"
-    elsif store_service_id.to_f <= 0 
-        errors << "Store Service must be a positive number"
+        errors << "Please select a valid delivery service"        
     end 
 
     errors 
