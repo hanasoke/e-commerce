@@ -1970,7 +1970,7 @@ post '/checkout/:basket_id' do
         DB.execute(
             <<-SQL,
             INSERT INTO transactions (
-                store_id, item_id, user_id, wishlist_id, basket_id, service_id,
+                store_id, item_id, user_id, wishlist_id, basket_id, store_service_id,
                 quantity, total_price, payment_method, account_number,
                 payment_photo, payment_status, transaction_date, note
             )
