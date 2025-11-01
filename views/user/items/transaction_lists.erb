@@ -183,13 +183,20 @@
                                             <select class="form-select" id="delivery" name="delivery">
                                                 <option value="">Select Your Delivery</option>
                                                 <% active_services = active_store_services_for(trx['store_id']) %>
+                                                <% selected_delivery = if defined?(@original_transaction) &&
+                                                                        @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s 
+                                                                    @original_transaction['delivery']
+                                                                else 
+                                                                    trx['store_service_id']
+                                                                end %>
                                                 <% if active_services.any? %>
                                                     <% active_services.each do |service| %>
-                                                        <option value="<%= service['store_service_id'] %>">
-                                                            <%= service['service_name'] %> - <%= rupiah_currency(service['fee']) %>
-                                                        </option>
+                                                        <option value="<%= service['store_service_id'] %>"
+                                                            <%= 'selected' if service['store_service_id'].to_s == selected_delivery.to_s %>>
+                                                            <%= service['service_name'] %> - <%= rupiah_currency(service['fee']) %>    
+                                                        </option>   
                                                     <% end %>
-                                                <% else %>
+                                                <% else %>    
                                                     <option disabled>No active shipping service available</option>
                                                 <% end %>
                                             </select>
@@ -288,7 +295,13 @@
                                             </label>
                                             <div class="col-sm-10">
                                                 <% if trx['store_service_id'] %>
-                                                    <% service = DB.execute("SELECT s.service_name FROM store_services ss JOIN services s ON ss.service_id WHERE ss.store_service_id = ?", [trx['store_service_id']]).first %>
+                                                    <% service = DB.execute(<<-SQL, [trx['store_service_id']]).first
+                                                            SELECT s.service_name
+                                                            FROM store_services ss
+                                                            JOIN services s ON s.service_id = ss.service_id
+                                                            WHERE ss.store_service_id = ?
+                                                        SQL
+                                                    %>
                                                     <input type="text" readonly class="form-control-plaintext" value="<%= service ? service['service_name'] : 'N/A' %>">
                                                 <% else %>
                                                     <input type="text" readonly class="form-control-plaintext" value="N/A">
