@@ -2376,7 +2376,8 @@ get '/transaction/:transaction_id' do
             FROM transactions t
             JOIN items i ON t.item_id = i.item_id
             JOIN stores s ON t.store_id = s.store_id
-            JOIN store_services ss ON t.store_id = ss.store_id
+            LEFT JOIN store_services ss ON t.store_service_id = ss.store_service_id 
+            LEFT JOIN services sv ON ss.service_id = sv.service_id
             WHERE t.transaction_id = ? AND t.user_id = ?
         SQL
 
