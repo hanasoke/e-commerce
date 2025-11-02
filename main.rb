@@ -614,8 +614,8 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    if store_service_id.nil? || store_service_id.to_s.strip.empty?
-        errors << "Store Service cannot be blank"
+    if store_service_id.nil? || store_service_id.to_i <= 0
+        errors << "Store Service cannot be blank or invalid"
     end 
 
     errors 
@@ -2227,8 +2227,8 @@ post '/payment/:transaction_id' do
     payment_method = params[:payment_method]
     account_number = params[:account_number]
 
-    store_service_id = params[:delivery].to_s.strip 
-    store_service_id = store_service_id.empty? ? nil : store_service_id.to_i
+    existing_store_service_id = trx['store_service_id'] 
+    store_service_id = store_service_id.nil? ? existing_store_service_id : store_service_id
 
     total_price = params[:total_price]
 
@@ -2316,7 +2316,7 @@ post '/payment/:transaction_id' do
             when /Payment Photo/
                 field_errors['payment_photo'] = error 
             when /Service/, /Delivery/
-                field_errors['delivery'] = error
+                field_errors['store_service_id'] = error
             end 
         end 
 
@@ -2329,6 +2329,7 @@ post '/payment/:transaction_id' do
             'payment_name' => params[:payment_name],
             'payment_method' => params[:payment_method],
             'account_number' => params[:account_number],
+            'store_service_id' => params[:store_service_id],
             # Don't store the photo file in session. only name for re-display if any 
             'payment_photo' => trx['payment_photo']
         }

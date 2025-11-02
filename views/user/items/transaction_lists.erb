@@ -179,13 +179,13 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="delivery" class="form-label">Select A Delivery</label>
-                                            <select class="form-select" id="delivery" name="delivery">
+                                            <label for="store_service_id" class="form-label">Select A Delivery</label>
+                                            <select class="form-select" id="store_service_id" name="store_service_id" required>
                                                 <option value="">Select Your Delivery</option>
                                                 <% active_services = active_store_services_for(trx['store_id']) %>
                                                 <% selected_delivery = if defined?(@original_transaction) &&
                                                                         @original_transaction['transaction_id'].to_s == trx['transaction_id'].to_s 
-                                                                    @original_transaction['delivery']
+                                                                    @original_transaction['store_service_id']
                                                                 else 
                                                                     trx['store_service_id']
                                                                 end %>
