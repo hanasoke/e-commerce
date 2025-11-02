@@ -614,7 +614,7 @@ def editing_payment(quantity, note, payment_name, payment_method, account_number
     end 
 
     # Store Service
-    if store_service_id.nil? || store_service_id.strip.empty?
+    if store_service_id.nil? || store_service_id.to_s.strip.empty?
         errors << "Store Service cannot be blank"
     end 
 
@@ -2226,7 +2226,10 @@ post '/payment/:transaction_id' do
     payment_name = params[:payment_name]
     payment_method = params[:payment_method]
     account_number = params[:account_number]
-    delivery = params[:delivery] # now this contains store_service_id
+
+    store_service_id = params[:delivery].to_s.strip 
+    store_service_id = store_service_id.empty? ? nil : store_service_id.to_i
+
     total_price = params[:total_price]
 
     @errors = editing_payment(
@@ -2235,7 +2238,7 @@ post '/payment/:transaction_id' do
         payment_name, 
         payment_method, 
         account_number, 
-        delivery,
+        store_service_id,
         transaction_id
     )
 
@@ -2285,7 +2288,7 @@ post '/payment/:transaction_id' do
             'Paid',
             transaction_date,
             params[:payment_name],
-            params[:delivery], # This is the store_service_id (delivery)
+            store_service_id, # safely converted integer or nil 
             transaction_id
         ])
 
@@ -2368,10 +2371,12 @@ get '/transaction/:transaction_id' do
                 i.item_unit,
                 s.store_name,
                 s.store_photo,
-                s.store_address
+                s.store_address,
+                ss.store_service_id
             FROM transactions t
             JOIN items i ON t.item_id = i.item_id
             JOIN stores s ON t.store_id = s.store_id
+            JOIN store_services ss ON t.store_id = ss.store_id
             WHERE t.transaction_id = ? AND t.user_id = ?
         SQL
 
