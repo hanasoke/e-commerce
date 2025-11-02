@@ -180,7 +180,7 @@
 
                                         <div class="mb-3">
                                             <label for="store_service_id" class="form-label">Select A Delivery</label>
-                                            <select class="form-select" id="store_service_id" name="store_service_id" required>
+                                            <select class="form-select" id="store_service_id" name="store_service_id">
                                                 <option value="">Select Your Delivery</option>
                                                 <% active_services = active_store_services_for(trx['store_id']) %>
                                                 <% selected_delivery = if defined?(@original_transaction) &&
