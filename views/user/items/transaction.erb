@@ -74,7 +74,8 @@
                         </p>
 
                         <p class="card-text mb-1">
-                            <b>Service Name</b> <%= @transaction['store_service_id'] %>
+                            <b>Service Name:</b> <%= @transaction['service_name'] || '-' %>
+                            <b>Service Fee:</b> <%= rupiah_currency(@transaction['fee']) if @transaction['fee'] %>
                         </p>
                         
                         <p class="card-text">
