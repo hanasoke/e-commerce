@@ -2227,8 +2227,7 @@ post '/payment/:transaction_id' do
     payment_method = params[:payment_method]
     account_number = params[:account_number]
 
-    existing_store_service_id = trx['store_service_id'] 
-    store_service_id = store_service_id.nil? ? existing_store_service_id : store_service_id
+    store_service_id = params[:store_service_id]
 
     total_price = params[:total_price]
 
