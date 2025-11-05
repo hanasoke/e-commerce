@@ -639,7 +639,7 @@ def validate_service(service_name, fee, service_id = nil)
 end 
 
 def get_user_transactions(user_id)
-    DB.get_user_transactions(user_id)
+    DB.execute(<<-SQL, [user_id])
         SELECT 
             t.*,
             i.item_name,
