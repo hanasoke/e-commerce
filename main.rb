@@ -638,6 +638,30 @@ def validate_service(service_name, fee, service_id = nil)
     errors 
 end 
 
+def get_user_transactions(user_id)
+    DB.get_user_transactions(user_id)
+        SELECT 
+            t.*,
+            i.item_name,
+            i.item_brand,
+            i.item_price,
+            i.item_photo,
+            i.item_description,
+            s.store_name,
+            s.store_address,
+            sv.service_name,
+            ss.store_service_id,
+            sv.fee as service_fee 
+        FROM transactions t 
+        JOIN items i ON t.item_id = i.item_id 
+        JOIN stores s ON t.store_id = s.store_id 
+        LEFT JOIN store_services ss ON t.store_service_id = ss.store_service_id
+        LEFT JOIN services sv ON ss.service_id = sv.service_id
+        WHERE t.user_id = ?
+        ORDER BY t.transaction_date DESC 
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
