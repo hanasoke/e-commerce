@@ -85,9 +85,15 @@
                         </p>
 
                         <p class="card-text mb-1">
-                            <b>Service Name:</b> <%= @transaction['service_name'] || '-' %>
-                            <br>
-                            <b>Service Fee:</b> <%= rupiah_currency(@transaction['fee']) if @transaction['fee'] %>
+                            <% if @transaction['service_name'] %>
+                                <b>Service Name:</b> <%= @transaction['service_name'] %>
+                                <br>
+                                <b>Service Fee:</b> <%= rupiah_currency(@transaction['service_fee']) %>
+                            <% else %>
+                                <p>
+                                    <strong>Service:</strong> N/A
+                                </p>
+                            <% end %>
                         </p>
                         
                         <p class="card-text">

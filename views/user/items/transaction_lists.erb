@@ -294,15 +294,9 @@
                                                 Delivery 
                                             </label>
                                             <div class="col-sm-10">
-                                                <% if trx['store_service_id'] %>
-                                                    <% service = DB.execute(<<-SQL, [trx['store_service_id']]).first
-                                                            SELECT s.service_name
-                                                            FROM store_services ss
-                                                            JOIN services s ON s.service_id = ss.service_id
-                                                            WHERE ss.store_service_id = ?
-                                                        SQL
-                                                    %>
-                                                    <input type="text" readonly class="form-control-plaintext" value="<%= service ? service['service_name'] : 'N/A' %>">
+                                                <% if trx['service_name'] %>
+                                                    <input type="text" readonly class="form-control-plaintext" 
+                                                    value="<%= trx['service_name'] %> - <%= rupiah_currency(trx['service_fee']) %>">
                                                 <% else %>
                                                     <input type="text" readonly class="form-control-plaintext" value="N/A">
                                                 <% end %>

@@ -2037,29 +2037,7 @@ get '/transaction_lists' do
     redirect '/login' unless logged_in?
 
     @title = "My Transaction Lists"
-    @transactions = DB.execute(<<-SQL, [current_user['user_id']])
-        SELECT 
-            t.transaction_id,
-            t.transaction_date,
-            t.quantity,
-            t.total_price,
-            t.payment_status,
-            t.payment_name,
-            t.payment_method,
-            t.payment_photo,
-            t.account_number,
-            t.note,
-            i.item_name,
-            i.item_photo,
-            i.item_price,
-            s.store_name,
-            s.store_id
-        FROM transactions t
-        JOIN items i ON t.item_id = i.item_id
-        JOIN stores s ON t.store_id = s.store_id
-        WHERE t.user_id = ?
-        ORDER BY t.transaction_id DESC
-    SQL
+    @transactions = get_user_transactions(session[:user_id])
 
     # If previous submission failed, restore the form data 
     if session[:form_data]
@@ -2374,40 +2352,33 @@ get '/transaction/:transaction_id' do
 
     # Query full transaction details
 
-    @transaction = DB.execute(<<-SQL, [transaction_id, session[:user_id]]).first
+    @transaction = DB.execute(<<-SQL, [transaction_id]).first
         SELECT 
-                t.transaction_id,
-                t.transaction_date,
-                t.quantity,
-                t.total_price,
-                t.payment_status,
-                t.payment_method,
-                t.payment_name,
-                t.account_number,
-                t.note,
-                t.payment_photo,
-                i.item_id,
-                i.item_name,
-                i.item_brand,
-                i.item_photo,
-                i.item_description,
-                i.item_price,
-                i.item_unit,
-                s.store_name,
-                s.store_photo,
-                s.store_address,
-                ss.store_service_id
+            t.*,
+            i.item_name,
+            i.item_brand,
+            i.item_price,
+            i.item_photo,
+            i.item_description,
+            s.store_name,
+            s.store_address,
+            s.cs_number,
+            sv.service_name,
+            ss.store_service_id,
+            sv.fee as service_fee
             FROM transactions t
             JOIN items i ON t.item_id = i.item_id
             JOIN stores s ON t.store_id = s.store_id
             LEFT JOIN store_services ss ON t.store_service_id = ss.store_service_id 
             LEFT JOIN services sv ON ss.service_id = sv.service_id
-            WHERE t.transaction_id = ? AND t.user_id = ?
+            WHERE t.transaction_id = ?
         SQL
-
-    halt 404, "Transaction not found" if @transaction.nil?
-
-    erb :'user/items/transaction', layout: :'layouts/user/template'
+    if @transaction 
+        erb :'user/items/transaction', layout: :'layouts/user/template'
+    else 
+        flash[:error] = "Transaction not found"
+        redirect '/transaction_lists'
+    end 
 end 
 
 get '/goods_delivery/:user_id' do 
