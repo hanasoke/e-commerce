@@ -2211,8 +2211,16 @@ end
 
 get '/users_wishlist/:user_id' do 
     redirect '/login' unless logged_in?
+
+    # Verify the seller owns this store 
+    seller_user_id = params[:user_id].to_i 
+    if seller_user_id != session[:user_id] && current_user['access'] != 2 
+        flash[:error] = "You Don't have permission to view this page"
+        redirect '/'
+    end 
     
     @title = "Users Wishlist"
+    @wishlish_users = get_seller_wishlist_users(seller_user_id)
 
     erb :'seller/seller_items/users_wishlist', layout: :'layouts/admin/layout'
 end 
