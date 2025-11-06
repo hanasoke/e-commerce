@@ -2196,7 +2196,7 @@ get '/users_wishlist/:user_id' do
     seller_user_id = params[:user_id].to_i 
     if seller_user_id != session[:user_id] && current_user['access'] != 2 
         flash[:error] = "You Don't have permission to view this page"
-        redirect '/'
+        redirect '/account'
     end 
     
     @title = "Users Wishlist"
