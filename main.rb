@@ -662,6 +662,32 @@ def get_user_transactions(user_id)
     SQL
 end 
 
+def get_seller_wishlist_users(seller_user_id) 
+    DB.execute(<<-SQL, [seller_user_id])
+        SELECT 
+            w.wishlist_id,
+            u.user_id,
+            u.name AS user_name,
+            u.username,
+            u.email,
+            i.item_id,
+            i.item_name,
+            i.item_brand,
+            i.item_price,
+            i.item_photo,
+            s.store_name,
+            w.store_id,
+            w.item_id
+        FROM wishlists w 
+        JOIN users u ON w.user_id = u.user_id
+        JOIN items i ON w.item_id = i.item_id
+        JOIN stores s ON w.store_id = s.store_id
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+        ORDER BY w.wishlist_id DESC 
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
