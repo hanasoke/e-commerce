@@ -32,42 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if @baskets.any? %>
-                        <% @baskets.each_with_index do |basket, index| %>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td>
-                                    <%= basket['item_name'] %>
-                                </td>
-                                <td>
-                                    <%= basket['store_name'] %>
-                                </td>
-                                <td>
-                                    <%= basket['user_name'] %>
-                                </td>
-                                <td>
-                                    <%= basket['quantity'] %>
-                                </td>
-                                <td>
-                                    <%= rupiah_currency(basket['unit_price']) %>
-                                </td>
-                                <td>
-                                    <%= rupiah_currency(basket['total_price']) %>
-                                </td>
-                                <td>
-                                    <%= basket['note'] %>
-                                </td>
-                            </tr>
-                        <% end %>
-                    <% else %>
-                        <tr>
-                            <td colspan="8">
-                                No items in basket
-                            </td>
-                        </tr>
-                    <% end %>
+                    
                 </tbody>
             </table>
         </div>

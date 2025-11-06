@@ -2085,26 +2085,6 @@ get '/user_basket_lists/:user_id' do
     @errors = []
     @title = "User Basket Lists"
 
-    user_id = params[:user_id]
-
-    @baskets = DB.execute(<<-SQL, [user_id])
-        SELECT 
-            b.basket_id,
-            i.item_name,
-            st.store_name,
-            u.name AS user_name,
-            b.quantity,
-            i.item_price AS unit_price,
-            b.total_price,
-            b.note
-        FROM baskets b
-        JOIN items i ON b.item_id = i.item_id
-        JOIN stores st ON b.store_id = st.store_id
-        JOIN users u ON b.user_id = u.user_id
-        WHERE b.user_id = ?
-        ORDER BY b.basket_id DESC
-    SQL
-
     erb :'seller/seller_items/user_basket_lists', layout: :'layouts/admin/layout'
 end 
 
