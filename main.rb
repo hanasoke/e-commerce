@@ -2220,7 +2220,7 @@ get '/users_wishlist/:user_id' do
     end 
     
     @title = "Users Wishlist"
-    @wishlish_users = get_seller_wishlist_users(seller_user_id)
+    @wishlist_users = get_seller_wishlist_users(seller_user_id)
 
     erb :'seller/seller_items/users_wishlist', layout: :'layouts/admin/layout'
 end 

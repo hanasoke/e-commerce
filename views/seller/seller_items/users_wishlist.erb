@@ -1,30 +1,101 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Users Wishlist</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Item Lists</li>
+        <li class="breadcrumb-item active">Users who added your items to their wishlist</li>
     </ol>
+
+    <% if flash[:success] %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= flash[:success] %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
+
+    <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%= flash[:error] %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
+
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-heart me-1"></i>
-            Users Wishlist
+            Users Wishlist 
+            <span class="badge bg-primary ms-2">
+                <%= @wishlist_users.count %>
+            </span>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Username</th>
-                        <th>Item</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
-            <div class="alert alert-info">
-                No Users Wishlist Available.
-            </div>
+            <% if @wishlist_users && @wishlist_users.any? %>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>No</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Item Name</th>
+                                <th>Brand</th>
+                                <th>Price</th>
+                                <th>Store</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @wishlist_users.each_with_index do |wishlist, index| %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= wishlist['username'] %>
+                                    </td>
+                                    <td>
+                                        <%= wishlist['email'] %>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <% if wishlist['item_photo'] %>
+                                                <img src="/uploads/items/<%= wishlist['item_photo'] %>"
+                                                    class="img-thumbnail me-2"
+                                                    style=" width: 50px; 
+                                                            height: 50px; 
+                                                            object-fit: cover;" 
+                                                    alt="<%= wishlist['item_name'] %>">
+                                            <% else %>
+                                                <img src="/img/question.png"
+                                                     class="img-thumbnail me-2"
+                                                     style="width: 50px; height: 50px; object-fit: cover;" 
+                                                     alt="No Image">
+                                            <% end %>
+                                            <div>
+                                                <strong>
+                                                    <%= wishlist['item_name'] %>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <%= wishlist['item_brand'] %>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <%= rupiah_currency(wishlist['item_price']) %>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <%= wishlist['store_name'] %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            <% else %>
+                <div class="alert alert-info">
+                    No Users Wishlist Available.
+                </div>
+            <% end %>
         </div>
     </div>
 </div>
