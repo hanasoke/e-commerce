@@ -91,9 +91,68 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Summary Statistics -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-value-lg">
+                                            <%= @wishlist_users.count %>
+                                        </div>
+                                        
+                                        <div>Total Wishlists</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-heart fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-value-lg">
+                                            <%= @wishlist_users.map { |w| w['user_id'] }.uniq.count %>
+                                        </div>
+                                        <div>Unique Users</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-users fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-value-lg">
+                                            <%= @wishlist_users.map { |w| w['item_id'] }.uniq.count %>
+                                        </div>
+                                        <div>
+                                            Unique Items
+                                        </div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-box fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <% else %>
-                <div class="alert alert-info">
-                    No Users Wishlist Available.
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circe me-2"></i>
+                    No Users have added your items to their wishlist yet.
                 </div>
             <% end %>
         </div>
