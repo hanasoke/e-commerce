@@ -53,7 +53,13 @@
                     </a>
                     <a class="nav-link" href="/users_wishlist/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-heart"></i></div>
-                        User Wishlists
+                        User Wishlists &nbsp;
+                        <% wishlist_count = get_seller_wishlist_users(session[:user_id]).count %>
+                        <% if wishlist_count > 0 %>
+                            <span class="badge bg-danger">
+                                <%= format_count_badge(wishlist_count) %>
+                            </span>
+                        <% end %>
                     </a>
                     <a class="nav-link" href="/user_basket_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
