@@ -63,7 +63,13 @@
                     </a>
                     <a class="nav-link" href="/user_basket_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
-                        User Basket Lists
+                        User Basket Lists &nbsp;
+                        <% basket_count = get_seller_basket_users(session[:user_id]).count %>
+                        <% if basket_count > 0 %>
+                            <span class="badge bg-danger">
+                                <%= format_count_badge(basket_count) %>
+                            </span>
+                        <% end %>
                     </a>
                     <a class="nav-link" href="/user_transaction_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
