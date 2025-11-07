@@ -142,8 +142,13 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <div></div>
-                                        <div></div>
+                                        <div class="text-value-lg">
+                                            <%= @basket_users.map { |b| b['user_id'] }.uniq.count %>
+                                        </div>
+                                        <div>Unique Users</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-users fa-2x"></i>
                                     </div>
                                 </div>
                             </div>
@@ -154,13 +159,38 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <div></div>
-                                        <div></div>
+                                        <div class="text-value-lg">
+                                            <%= @basket_users.map { |b| b['item_id'] }.uniq.count %>
+                                        </div>
+                                        <div>Unique Items</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-box fa-2x"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-value-lg">
+                                            <%= rupiah_currency(@basket_users.sum { |b| b['total_price']}) %>
+                                        </div>
+                                        <div>Total Value</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-box fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
             <% else %>
