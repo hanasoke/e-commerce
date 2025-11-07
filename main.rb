@@ -2113,8 +2113,16 @@ end
 get '/user_basket_lists/:user_id' do 
     redirect '/login' unless logged_in?
 
+    # Verify the seller owns this store 
+    seller_user_id = params[:user_id].to_i 
+    if seller_user_id != session[:user_id] && current_user['access'] != 2 
+        flash[:error] = "You don't have permission to view this page"
+        redirect '/account'
+    end 
+
     @errors = []
     @title = "User Basket Lists"
+    @basket_users = get_seller_basket_users(seller_user_id)
 
     erb :'seller/seller_items/user_basket_lists', layout: :'layouts/admin/layout'
 end 
