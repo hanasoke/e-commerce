@@ -1,40 +1,174 @@
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Dashboard</h1>
+    <h1 class="mt-4">User Basket Lists</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">User Basket Lists</li>
+        <li class="breadcrumb-item active">Users who added your items to their basket</li>
     </ol>
+
+    <% if flash[:success] %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><%= flash[:success] %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
+
+    <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%= flash[:error] %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
 
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-sitemap me-1"></i>
-            Basket Lists
+            User Basket Lists
+            <span class="badge bg-primary ms-2">
+                <%= @basket_users.count %>
+            </span>
         </div>
         <div class="card-body">
-            <% if session[:success] %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong><%= session[:success] %></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% session[:success] = nil %>
-            <% end %>
 
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Item Name</th>
-                        <th>Store Name</th>
-                        <th>User</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total Price</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
+            <% if @basket_users && @basket_users.any? %>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr class="text-center">
+                                <th>No</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Item Details</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total Price</th>
+                                <th>Note</th>
+                                <th>Store</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @basket_users.each_with_index do |basket, index| %>
+                                <tr>
+                                    <td class="text-center">
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= basket['username'] %>
+                                    </td>
+                                    <td>
+                                        <%= basket['email'] %>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <% if basket['item_photo'] %>
+                                                <img src="/uploads/items/<%= basket['item_photo'] %>" 
+                                                    class="img-thumbnail me-2" 
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    alt="<%= basket['item_name'] %>">
+                                            <% else %>
+                                                <img src="/img/question.png" 
+                                                    class="img-thumbnail me-2"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    alt="No Image">
+                                            <% end %>
+                                            <div>
+                                                <strong>
+                                                    <%= basket['item_name'] %>
+                                                </strong>
+                                                <br>
+                                                <small class="text-muted">
+                                                    <%= basket['item_brand'] %>
+                                                </small>
+                                                <br>
+                                                <small class="text-muted">
+                                                    <%= truncate(basket['item_description'], length: 50) %>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-primary rounded-pill">
+                                            <%= basket['quantity'] %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <%= rupiah_currency(basket['item_price']) %>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">
+                                            <%= rupiah_currency(basket['total_price']) %>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <% if basket['note'] && !basket['note'].empty? %>
+                                            <span class="text-muted"
+                                                    title="<%= basket['note'] %>"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top">
+                                                <%= truncate(basket['note']) %>
+                                            </span>
+                                        <% else %>
+                                            <span class="text-muted">-</span>
+                                        <% end %>
+                                    </td>
+                                    <td>
+                                        <%= basket['store_name'] %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary Statistics -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-value-lg"><%= @basket_users.count %></div>
+                                        <div>Total Basket Items</div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-shopping-basket fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <% else %>
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No users have added your items to their basket yet.
+                </div>
+            <% end %>
         </div>
     </div>
 </div>

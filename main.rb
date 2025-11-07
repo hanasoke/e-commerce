@@ -719,6 +719,11 @@ def get_seller_wishlist_users(seller_user_id)
     SQL
 end 
 
+def truncate(text, length: 50)
+    return text if text.nil?
+    text.length > length ? text[0...length] + "..." : text
+end 
+
 # Routes 
 
 # Homepage 
