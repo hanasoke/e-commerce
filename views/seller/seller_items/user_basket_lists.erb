@@ -189,8 +189,70 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <!-- Additional Analytics -->
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Top Items in Baskets 
+                            </div>
+                            <div class="card-body">
+                                <% top_items = @basket_users.group_by { |b| b['item_name'] }
+                                    .transform_values { |items| items.sum { |i| i['quantity'] } }
+                                    .sort_by { |_, quantity| -quantity }
+                                    .first(5) %>
 
+                                <% if top_items.any? %>
+                                    <ul class="list-group list-group-flush">
+                                        <% top_items.each do |item_name, quantity| %>
+                                            <li class="list-group-item d-flex justify-content-between align-item-center">
+                                                <%= item_name %>
+                                                <span class="badge bg-primary rounded-pill">
+                                                    <%= quantity %>
+                                                </span>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                <% else %>
+                                    <p class="text-muted">
+                                        No data available
+                                    </p>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-pie me-1"></i>
+                                Top Users by Basket Value 
+                            </div>
+                            <div class="card-body">
+                                <% top_users = @basket_users.group_by {|b| b['user_name'] }
+                                    .transform_values { |items| items.sum { |i| i['total_price'] } }
+                                    .sort_by { |_, total| -total }
+                                    .first(5) %>
+                                <% if top_users.any? %>
+                                    <ul class="list-group list-group-flush">
+                                        <% top_users.each do |user_name, total| %>
+                                            
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <%= user_name %>
+                                                <span class="badge bg-success rounded-pill">
+                                                    <%= rupiah_currency(total) %>
+                                                </span>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                <% else %>
+                                    <p class="text-muted">No data available</p>
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             <% else %>
@@ -202,3 +264,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
