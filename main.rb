@@ -152,6 +152,37 @@ def store_services_for_user(user_id)
     SQL
 end 
 
+def get_seller_basket_users(seller_user_id)
+    DB.execute(<<-SQL, [seller_user_id])
+        SELECT 
+            b.basket_id,
+            b.quantity,
+            b.total_price,
+            b.note,
+            u.user_id,
+            u.name AS user_name,
+            u.username,
+            u.email,
+            i.item_id,
+            i.item_name,
+            i.item_brand,
+            i.item_price,
+            i.item_photo,
+            i.item_description,
+            s.store_id,
+            s.store_name,
+            w.wishlist_id
+        FROM baskets b 
+        JOIN users u ON b.user_id = u.user_id 
+        JOIN items i ON b.item_id = i.item_id
+        JOIN stores s ON b.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        LEFT JOIN wishlists w ON b.wishlist_id = w.wishlist_id
+        WHERE se.user_id = ?
+        ORDER BY b.basket_id DESC 
+    SQL
+end 
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []
