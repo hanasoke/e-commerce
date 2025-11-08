@@ -724,6 +724,15 @@ def truncate(text, length: 50)
     text.length > length ? text[0...length] + "..." : text
 end 
 
+def is_item_in_wishlist?(user_id, item_id) 
+    result = DB.get_first_value(<<-SQL, [user_id, item_id])
+        SELECT COUNT(*)
+        FROM wishlists
+        WHERE user_id = ? AND item_id = ?
+    SQL
+    result.to_i > 0
+end 
+
 # Routes 
 
 # Homepage 
