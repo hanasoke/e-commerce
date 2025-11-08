@@ -2517,3 +2517,23 @@ get '/view_delivery/:user_id' do
 
     erb :'seller/store_panel/view_delivery', layout: :'layouts/admin/layout' 
 end 
+
+# Remove from wishlist
+post '/remove_from_wishlist/:item_id' do 
+    redirect '/login' unless logged_in?
+
+    item_id = params[:item_id]
+    user_id = session[:user_id]
+
+    # check if item exists in wishlist 
+    wishlist_item = DB.execute("SELECT * FROM wishlists WHERE user_id = ? AND item_id = ?", [user_id, item_id]).first 
+
+    if wishlist_item
+        DB.execute("DELETE FROM wishlists WHERE wishlist_id = ?", [wishlish_item['wishlist_id']])
+        flash[:success] = "Item removed from wishlist successfully!"
+    else 
+        flash[:error] = "Item not found in your wishlist!"
+    end
+    
+    redirect back 
+end 
