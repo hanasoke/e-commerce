@@ -2529,7 +2529,7 @@ post '/remove_from_wishlist/:item_id' do
     wishlist_item = DB.execute("SELECT * FROM wishlists WHERE user_id = ? AND item_id = ?", [user_id, item_id]).first 
 
     if wishlist_item
-        DB.execute("DELETE FROM wishlists WHERE wishlist_id = ?", [wishlish_item['wishlist_id']])
+        DB.execute("DELETE FROM wishlists WHERE wishlist_id = ?", [wishlist_item['wishlist_id']])
         flash[:success] = "Item removed from wishlist successfully!"
     else 
         flash[:error] = "Item not found in your wishlist!"
