@@ -122,9 +122,14 @@
                             <img src="/img/icons/chat-left-text.svg" class="mb-1" alt="Chat">
                             <small>Chat</small>
                         </a>
-                        <form action="/add_to_wishlist/<%= @item['item_id'] %>" method="POST" class="text-center">
+                        <form action="<%= @in_wishlist ? '/remove_from_wishlist' : '/add_to_wishlist' %>/<%= @item['item_id'] %>" method="POST" class="text-center">
                             <button type="submit" class="btn btn-link text-dark text-decoration-none p-0 text-center">
-                                <img src="/img/icons/heart.svg" class="mb-1" alt="Wishlist">
+                                <% if @in_wishlist %>
+                                    <!-- Filled heart icon when item is in wishlist  -->
+                                    <img src="/img/icons/heart-fill.svg" class="mb-1" alt="Remove from Wishlist">
+                                <% else %>
+                                    <img src="/img/icons/heart.svg" class="mb-1" alt="Wishlist">
+                                <% end %>
                                 <small>Wishlist</small>
                             </button>
                         </form>

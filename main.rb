@@ -2178,7 +2178,7 @@ end
 post '/add_to_wishlist/:item_id' do 
     redirect '/login' unless logged_in?
 
-    item_id = params[:item_id].to_i 
+    item_id = params[:item_id]
     user_id = session[:user_id]
 
     # Prevent seller from wishlisting their own product 
@@ -2187,23 +2187,23 @@ post '/add_to_wishlist/:item_id' do
         redirect back
     end 
 
-    # Find store_id from the item 
-    store = DB.get_first_row("SELECT store_id FROM items WHERE item_id = ?", [item_id])
+    # Get store_id from the item 
+    item = DB.execute("SELECT store_id FROM items WHERE item_id = ?", [item_id]).first 
 
-    if store.nil?
+    if item.nil?
         flash[:error] = "Item not found."
         redirect back
     end 
 
-    store_id = store['store_id']
+    # Check if the item is already in wishlist 
+    existing_wishlist = DB.execute("SELECT * FROM wishlists WHERE user_id = ? AND item_id = ?", [user_id, item_id]).first
 
-    # Check if the item is already in user's wishlist 
-    existing = DB.get_first_row("SELECT * FROM wishlists WHERE user_id = ? AND item_id = ?", [user_id, item_id])
-    if existing 
-        flash[:notice] = "Item already in your wishlist."
+    if existing_wishlist 
+        flash[:notice] = "Item is already in your wishlist!"
     else 
-        DB.execute("INSERT INTO wishlists (item_id, store_id, user_id) VALUES (?, ?, ?)", [item_id, store_id, user_id])
-        flash[:success] = "Item added to your wishlist!"
+        DB.execute("INSERT INTO wishlists (item_id, store_id, user_id) VALUES (?, ?, ?)", 
+                    [item_id, item['store_id'], user_id])
+        flash[:success] = "Item added to wishlist successfully!"
     end 
 
     redirect back
