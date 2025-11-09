@@ -1,0 +1,55 @@
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Left Sidebar - Store Info and Products -->
+         <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <!-- Store Header -->
+                    <div class="d-flex align-items-center mb-3">
+                        <% if @store['store_photo'] %>
+                            <img src="/uploads/stores/<%= @store['store_photo'] %>" class="rounded-circle me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="Store">
+                        <% else %>
+                            <img src="/img/question.png" class="rounded-circle me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="Store">
+                        <% end %>
+                        <div>
+                            <h6 class="mb-0">
+                                <strong>
+                                    <%= @store['store_name'] %>
+                                </strong>
+                            </h6>
+                            <small class="text-muted">Online</small>
+                        </div>
+                    </div>
+
+                    <!-- Store Stats -->
+                    <div class="row text-center mb-3">
+                        <div class="col-4">
+                            <div class="border-end">
+                                <div class="text-primary">
+                                    <strong>4.8</strong>
+                                </div>
+                                <small class="text-muted">Rating</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="border-end">
+                                <div><strong>2.3K</strong></div>
+                                <small class="text-muted">Followers</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div>
+                                <div>
+                                    <strong>1.2K</strong>
+                                </div>
+                                <small class="text-muted">Products</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+         </div>
+    </div>
+</div>

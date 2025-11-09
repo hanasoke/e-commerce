@@ -2382,7 +2382,7 @@ post '/user_chat/:store_id/share_product'
         redirect "/user_chat/#{store_id}"
     end 
 
-    DB.execute(<<-SQL, [store_id])
+    DB.execute(<<-SQL, [store_id, user_id, 'user', "I'm interested in this product", 'product', product_id])
         INSERT INTO messages (store_id, user_id, sender_type, message_text, message_type, product_id)
         VALUES (?, ?, ?, ?, ?, ?)
     SQL
