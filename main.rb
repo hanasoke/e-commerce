@@ -2343,6 +2343,30 @@ get '/user_chat/:store_id' do
     erb :'user/items/user_chat', layout: :'layouts/admin/layout'
 end 
 
+# Send message route 
+post '/user_chat/:store_id/send' do 
+    redirect '/login' unless logged_in?
+
+    user_id = session[:user_id]
+    store_id = params[:store_id]
+    message_text = params[:message].to_s.strip 
+    product_id = params[:product_id]
+
+    if message_text.empty? && !product_id
+        flash[:error] = "Message cannot be empty!"
+        redirect "/user_chat/#{store_id}"
+    end 
+
+    message_type = product_id ? 'product' : 'text'
+
+    DB.execute(<<-SQL, [store_id, user_id, 'user', message_text, message_type, product_id])
+        INSERT INTO messages (store_id, user_id, sender_type, message_text, message_type, product_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+    SQL
+
+    redirect "/user_chat/#{store_id}"
+end 
+
 post '/payment/:transaction_id' do 
     transaction_id = params[:transaction_id]
 
