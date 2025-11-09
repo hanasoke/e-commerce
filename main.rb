@@ -733,6 +733,20 @@ def is_item_in_wishlist?(user_id, item_id)
     result.to_i > 0
 end 
 
+def get_store_info(store_id)
+    DB.execute("SELECT * FROM stores WHERE store_id = ?", [store_id]).first 
+end 
+
+def get_store_items(store_id) 
+    DB.execute(<<-SQL, [store_id])
+        SELECT item_id, item_name, item_price, item_photo, item_stock
+        FROM items 
+        WHERE store_id = ? AND item_status = 'Active'
+        ORDER BY item_id DESC 
+        LIMIT 10 
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
