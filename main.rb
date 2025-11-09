@@ -747,6 +747,23 @@ def get_store_items(store_id)
     SQL
 end 
 
+def get_chat_messages(store_id, user_id)
+    DB.execute(<<-SQL, [store_id, user_id])
+        SELECT m.*,
+               u.name as user_name,
+               s.store_name,
+               i.item_name,
+               i.item_price,
+               i.item_photo
+        FROM messages m
+        LEFT JOIN users u ON m.user_id = u.user_id
+        LEFT JOIN stores s ON m.store_id = s.store_id 
+        LEFT JOIN items i ON m.product_id = i.item_id
+        WHERE m.store_id = ? AND m.user_id = ?
+        ORDER BY m.created_at ASC 
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
