@@ -2325,6 +2325,22 @@ get '/user_chat/:store_id' do
         flash[:notice] = "You cannot chat with your own store."
         redirect back
     end 
+
+    @store = get_store_info(store_id)
+    if @store.nil?
+        flash[:error] = "Store not found!"
+        redirect '/account'
+    end 
+
+    @store_items = get_store_items(store_id)
+    @messages = get_chat_messages(store_id, user_id)
+    @unread_count = get_unread_count(store_id, user_id)
+
+    # Mark seller messages as read when user opens chat
+    mark_messages_as_read(store_id, user_id, 'seller')
+
+    @title = "Chat with #{@store['store_name']}"
+    erb :'user/items/user_chat', layout: :'layouts/admin/layout'
 end 
 
 post '/payment/:transaction_id' do 
