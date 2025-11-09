@@ -764,6 +764,14 @@ def get_chat_messages(store_id, user_id)
     SQL
 end 
 
+def mark_messages_as_read(store_id, user_id, sender_type)
+    DB.execute(<<-SQL, [store_id, user_id, sender_type])
+        UPDATE messages 
+        SET is_read = TRUE
+        WHERE store_id = ? AND user_id = ? AND sender_type = ? AND is_read = FALSE  
+    SQL
+end 
+
 # Routes 
 
 # Homepage 

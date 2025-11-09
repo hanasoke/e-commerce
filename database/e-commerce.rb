@@ -163,7 +163,7 @@ SQL
 # DB.execute("DROP TABLE shipments");
 
 DB.execute <<-SQL 
-    CREATE TABLE IF NOT EXISTS store_message (
+    CREATE TABLE IF NOT EXISTS messages (
         message_id INTEGER PRIMARY KEY AUTOINCREMENT,
         store_id INTEGER,
         user_id INTEGER,
@@ -178,4 +178,6 @@ DB.execute <<-SQL
         FOREIGN KEY(user_id) REFERENCES users(user_id),
         FOREIGN KEY(product_id) REFERENCES items(item_id)
     );
-SQL 
+SQL
+
+# DB.execute("DROP TABLE messages");
