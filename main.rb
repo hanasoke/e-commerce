@@ -2260,7 +2260,7 @@ get '/users_wishlist/:user_id' do
     erb :'seller/seller_items/users_wishlist', layout: :'layouts/admin/layout'
 end 
 
-get '/chat_seller/:store_id' do 
+get '/user_chat/:store_id' do 
     redirect '/login' unless logged_in?
 
     user_id = session[:user_id]
