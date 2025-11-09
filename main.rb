@@ -772,6 +772,14 @@ def mark_messages_as_read(store_id, user_id, sender_type)
     SQL
 end 
 
+def get_unread_count(store_id, user_id)
+    DB.get_first_value(<<-SQL, [store_id, user_id])
+        SELECT COUNT(*)
+        FROM messages 
+        WHERE store_id = ? AND user_id = ? AND is_read = FALSE AND sender_type = 'seller'
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
