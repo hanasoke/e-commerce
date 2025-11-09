@@ -2367,6 +2367,29 @@ post '/user_chat/:store_id/send' do
     redirect "/user_chat/#{store_id}"
 end 
 
+# Share product in chat 
+post '/user_chat/:store_id/share_product'
+    redirect '/login' unless logged_in?
+
+    user_id = session[:user_id]
+    store_id = params[:store_id].to_i 
+    product_id = params[:product_id].to_i 
+
+    product = DB.execute("SELECT * FROM items WHERE item_id = ? AND store_id = ?", [product_id, store_id]).first
+
+    if product.nil?
+        flash[:error] = "Product not found!"
+        redirect "/user_chat/#{store_id}"
+    end 
+
+    DB.execute(<<-SQL, [store_id])
+        INSERT INTO messages (store_id, user_id, sender_type, message_text, message_type, product_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+    SQL
+
+    redirect "/user_chat/#{store_id}"
+end 
+
 post '/payment/:transaction_id' do 
     transaction_id = params[:transaction_id]
 
