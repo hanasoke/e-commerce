@@ -161,3 +161,21 @@ DB.execute <<-SQL
 SQL
 
 # DB.execute("DROP TABLE shipments");
+
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS store_message (
+        message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        store_id INTEGER,
+        user_id INTEGER,
+        sender_type TEXT, -- 'user' or 'seller'
+        message_text TEXT,
+        message_type TEXT DEFAULT 'text', -- 'text', 'image', 'product'
+        product_id INTEGER, -- if message_type is 'product'
+        image_path TEXT, -- if message_type is 'image'
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(store_id) REFERENCES stores(store_id),
+        FOREIGN KEY(user_id) REFERENCES users(user_id),
+        FOREIGN KEY(product_id) REFERENCES items(item_id)
+    );
+SQL 
