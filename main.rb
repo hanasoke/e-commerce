@@ -2665,5 +2665,30 @@ get '/seller_chat' do
 
     @title = "Seller Chat"
     erb :'seller/seller_chats/store_chat', layout: :'layouts/admin/layout'
+end 
 
+# Seller view specific chat 
+get '/seller_chat/:store_id/:user_id'
+    redirect '/login' unless logged_in?
+
+    store_id = params[:store_id]
+    user_id = params[:user_id]
+
+    # Verify store ownership 
+    owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
+        SELECT COUNT(*) FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ?
+    SQL
+
+    if owns_store.to_i == 0 
+        flash[:error] = "Access denied"
+        redirect '/seller_chat'
+    end 
+
+    @store = get_store_info(store_id)
+    @customer = DB.execute("SELECT * FROM users WHERE user_id = ?", [user_id]).first 
+    @messages = get_chat_messages(store_id, user_id)
+
+    erb :'seller/seller_chats/seller_chat_detail', layout: :'layouts/admin/layout'
 end 
