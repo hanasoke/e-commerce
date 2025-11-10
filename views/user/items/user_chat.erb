@@ -1,7 +1,7 @@
 <div class="container-fluid mt-3">
     <div class="row">
         <!-- Left Sidebar - Store Info and Products -->
-         <div class="col-md-3">
+        <div class="col-md-3">
             <div class="card mb-3">
                 <div class="card-body">
                     <!-- Store Header -->
@@ -12,11 +12,7 @@
                             <img src="/img/question.png" class="rounded-circle me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="Store">
                         <% end %>
                         <div>
-                            <h6 class="mb-0">
-                                <strong>
-                                    <%= @store['store_name'] %>
-                                </strong>
-                            </h6>
+                            <h6 class="mb-0"><strong><%= @store['store_name'] %></strong></h6>
                             <small class="text-muted">Online</small>
                         </div>
                     </div>
@@ -25,9 +21,7 @@
                     <div class="row text-center mb-3">
                         <div class="col-4">
                             <div class="border-end">
-                                <div class="text-primary">
-                                    <strong>4.8</strong>
-                                </div>
+                                <div class="text-primary"><strong>4.8</strong></div>
                                 <small class="text-muted">Rating</small>
                             </div>
                         </div>
@@ -39,135 +33,275 @@
                         </div>
                         <div class="col-4">
                             <div>
-                                <div>
-                                    <strong>1.2K</strong>
-                                </div>
+                                <div><strong>1.2K</strong></div>
                                 <small class="text-muted">Products</small>
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="d-grip gap-2">
+                    <div class="d-grid gap-2">
                         <button class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-store"></i> Visit Store 
+                            <i class="fas fa-store"></i> Visit Store
                         </button>
                         <button class="btn btn-outline-danger btn-sm">
-                            <i class="fas fa-heart"></i> Follow 
+                            <i class="fas fa-heart"></i> Follow
                         </button>
                     </div>
+                </div>
+            </div>
 
-                    <!-- Store Product -->
-                     <div class="card">
-                        <div class="card-header">
-                            <h6 class="mb-0">PRODUK TOKO</h6>
+            <!-- Store Products -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">PRODUK TOKO</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <% @store_items.each do |item| %>
+                            <div class="col-6">
+                                <div class="card product-card" onclick="shareProduct(<%= item['item_id'] %>)">
+                                    <% if item['item_photo'] %>
+                                        <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" style="height: 80px; object-fit: cover;" alt="<%= item['item_name'] %>">
+                                    <% else %>
+                                        <img src="/img/question.png" class="card-img-top" style="height: 80px; object-fit: cover;" alt="Product">
+                                    <% end %>
+                                    <div class="card-body p-2">
+                                        <small class="card-text d-block text-truncate">
+                                            <%= item['item_name'] %>
+                                        </small>
+                                        <small class="text-danger fw-bold">
+                                            <%= rupiah_currency(item['item_price']) %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">Chat dengan <%= @store['store_name'] %></h5>
+                            <small class="text-muted">Biasanya membalas dalam beberapa jam</small>
                         </div>
-                        <div class="card-body">
-                            <div class="row g-2">
-                                <% @store_items.each do |item| %>
-                                    <div class="col-6">
-                                        <div class="card product-card" onclick="shareProduct(<%= item['item_id'] %>)">
-                                            <% if item['item_photo'] %>
-                                                <img src="/uploads/items/<%= item['item_photo'] %>" class="card-img-top" style="height: 80px; object-fit: cover;" alt="<%= item['item_name'] %>">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-ban"></i> Block</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-flag"></i> Report</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Messages Area -->
+            <div class="card-body messages-container" style="height: 500px; overflow-y: auto;">
+                <% if @messages.empty? %>
+                    <div class="text-center text-muted mt-5">
+                        <i class="fas fa-comments fa-3x mb-3"></i>
+                        <p>Start a conversation with <%= @store['store_name'] %></p>
+                    </div>
+                <% else %>
+                    <% @messages.each do |message| %>
+                        <% if message['sender_type'] == 'user' %>
+                            <!-- User Message -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="bg-primary text-white rounded-3 px-3 py-2" style="max-width: 70%;">
+                                    <% if message['message_type'] == 'product' && message['product_id'] %>
+                                        <!-- Product Message -->
+                                        <div class="border bg-white text-dark rounded p-2 mb-2">
+                                            <div class="d-flex">
+                                                <% if message['item_photo'] %>
+                                                    <img src="/uploads/items/<%= message['item_photo'] %>" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
+                                                <% else %>
+                                                    <img src="/img/question.png" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
+                                                <% end %>
+                                                <div>
+                                                    <small class="fw-bold d-block"><%= message['item_name'] %></small>
+                                                    <small class="text-danger fw-bold"><%= rupiah_currency(message['item_price']) %></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div><%= message['message_text'] %></div>
+                                    <% else %>
+                                        <!-- Text Message -->
+                                        <%= message['message_text'] %>
+                                    <% end %>
+                                    <div class="text-end">
+                                        <small class="opacity-75">
+                                            <%= Time.parse(message['created_at']).strftime('%H:%M') %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% else %>
+                            <!-- Seller Message -->
+                            <div class="d-flex justify-content-start mb-3">
+                                <div class="bg-light rounded-3 px-3 py-2" style="max-width: 70%;">
+                                    <% if message['message_type'] == 'product' && message['product_id'] %>
+                                    <!-- Product Message -->
+                                    <div class="border bg-white rounded p-2 mb-2">
+                                        <div class="d-flex">
+                                            <% if message['item_photo'] %>
+                                                <img src="/uploads/items/<%= message['item_photo'] %>" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
                                             <% else %>
-                                                <img src="/img/question.png" class="card-img-top" style="height: 80px; object-fit: cover;" alt="Product">
+                                                <img src="/img/question.png" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
                                             <% end %>
-                                            <div class="card-body p-2">
-                                                <small class="card-text d-block text-truncate">
-                                                    <%= item['item_name'] %>
-                                                </small>
+                                            <div>
+                                                <small class="fw-bold d-block"><%= message['item_name'] %></small>
                                                 <small class="text-danger fw-bold">
-                                                    <%= rupiah_currency(item['item_price']) %>
+                                                    <%= rupiah_currency(message['item_price']) %>
                                                 </small>
                                             </div>
                                         </div>
                                     </div>
-                                <% end %>
-                            </div>
-                        </div>
-                     </div>
-                </div>
-
-                <!-- Chat Area -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-light">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-0">
-                                        Chat dengan <%= @store['store_name'] %>
-                                    </h5>
-                                    <small class="text-muted">Biasanya membalas dalam beberapa jam</small>
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="fas fa-ban"></i> Block
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="fas fa-flag"></i> Report
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Messages Area -->
-                        <div class="card-body messages-container" style="height: 500px; overflow-y: auto;">
-                            <% if @messages.empty? %>
-                                <div class="text-center text-muted mt-5">
-                                    <i class="fas fa-comments fa-3x mb-3"></i>
-                                    <p>Start a conversation with <%= @store['store_name'] %></p>
-                                </div>
-                            <% else %>
-                                <% @messages.each do |message| %>
-                                    <% if message['sender_type'] == 'user' %>
-                                        <!-- User Message -->
-                                        <div class="d-flex justify-content-end mb-3">
-                                            <div class="bg-primary text-white rounded-3 px-3 py-2" style="max-width: 70%;">
-                                                <% if message['message_type'] == 'product' && message['product_id'] %>
-                                                    <!-- Product Message -->
-                                                    <div class="border bg-white text-dark rounded p-2 mb-2">
-                                                        <div class="d-flex">
-                                                            <% if message['item_photo'] %>
-                                                                <img src="/uploads/items/<%= message['item_photo'] %>" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
-                                                            <% else %>
-                                                                <img src="/img/question.png" style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-2" alt="Product">
-                                                            <% end %>
-                                                        <div>
-                                                            <small class="fw-bold d-block"><%= message['item_name'] %></small>
-                                                            <small class="text-danger fw-bold"><%= rupiah_currency(message['item_price']) %></small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <%= message['message_text'] %>
-                                                </div>
-                                                <div class="text-end">
-                                                    <small class="opacity-75">
-                                                        <%= Time.parse(message['created_at']).strftime('%H:%M') %>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% else %>
-
-                                        <% end %>
+                                    <div><%= message['message_text'] %></div>
+                                    <% else %>
+                                        <!-- Text Message -->
+                                        <%= message['message_text'] %>
                                     <% end %>
-                                <% end %>
-                            <% end %>
-                        </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">
+                                            <%= Time.parse(message['created_at']).strftime('%H:%M') %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            </div>
 
+                <!-- Message Input -->
+                <div class="card-footer">
+                    <form action="/user_chat/<%= @store['store_id'] %>/send" method="POST" class="d-flex">
+                        <div class="flex-grow-1 me-2">
+                            <input type="text" name="message" class="form-control" placeholder="Ketik pesan..." required>
+                            <input type="hidden" name="product_id" id="product_id_input">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    
+                    <!-- Quick Actions -->
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-smile"></i> Emoji
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-paperclip"></i> Attach
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-image"></i> Photo
+                        </button>
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
+
+        <!-- Right Sidebar - Additional Info -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">INFORMASI TOKO</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Lokasi</small>
+                        <small><%= @store['store_address'] %></small>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Customer Service</small>
+                        <small><%= @store['cs_number'] %></small>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Jam Operasional</small>
+                        <small>09:00 - 17:00 WIB</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Tips -->
+            <div class="card mt-3">
+                <div class="card-header">
+                <h6 class="mb-0">TIPS AMAN</h6>
+                </div>
+                <div class="card-body">
+                <small class="text-muted">
+                    • Jangan bagikan data pribadi<br>
+                    • Selalu transaksi di platform<br>
+                    • Waspada penipuan<br>
+                    • Laporkan perilaku mencurigakan
+                </small>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    // Auto-scroll to bottom of messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const messagesContainer = document.querySelector('.messages-container');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+
+    // Share product in chat
+    function shareProduct(productId) {
+        document.getElementById('product_id_input').value = productId;
+        
+        // Create form and submit
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/user_chat/<%= @store['store_id'] %>/share_product';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'product_id';
+        input.value = productId;
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    // Auto-focus message input
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.querySelector('input[name="message"]');
+        if (messageInput) {
+        messageInput.focus();
+        }
+    });
+</script>
+
+<style>
+    .product-card {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .messages-container {
+        background-color: #f8f9fa;
+    }
+
+    .bg-primary {
+        background-color: #007bff !important;
+    }
+</style>
