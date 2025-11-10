@@ -2340,7 +2340,7 @@ get '/user_chat/:store_id' do
     mark_messages_as_read(store_id, user_id, 'seller')
 
     @title = "Chat with #{@store['store_name']}"
-    erb :'user/items/user_chat', layout: :'layouts/admin/layout'
+    erb :'user/items/user_chat', layout: :'layouts/user/template'
 end 
 
 # Send message route 
@@ -2368,7 +2368,7 @@ post '/user_chat/:store_id/send' do
 end 
 
 # Share product in chat 
-post '/user_chat/:store_id/share_product'
+post '/user_chat/:store_id/share_product' do 
     redirect '/login' unless logged_in?
 
     user_id = session[:user_id]
