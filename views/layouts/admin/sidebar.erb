@@ -47,10 +47,6 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
                         Goods Delivery 
                     </a>
-                    <a class="nav-link" href="/view_delivery/<%= current_user['user_id'] %>">
-                        <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
-                        View Delivery 
-                    </a>
                     <a class="nav-link" href="/users_wishlist/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-heart"></i></div>
                         User Wishlists &nbsp;
@@ -74,6 +70,11 @@
                     <a class="nav-link" href="/user_transaction_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
                         User Transaction Lists
+                    </a>
+
+                    <a class="nav-link" href="/seller_chat/<%= current_user['user_id'] %>">
+                        <div class="sb-nav-link-icon"><i class="fas fa-message"></i></div>
+                        User Chats
                     </a>
                 <% end %>
             </div>

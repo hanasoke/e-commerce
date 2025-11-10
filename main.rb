@@ -2618,16 +2618,6 @@ post '/toggle_service' do
     "Service #{new_status}"
 end 
 
-get '/view_delivery/:user_id' do 
-    redirect '/login' unless logged_in?
-
-    user_id = params[:user_id]
-    @title = "View Delivery"
-    @store_services = store_services_for_user(user_id)
-
-    erb :'seller/store_panel/view_delivery', layout: :'layouts/admin/layout' 
-end 
-
 # Remove from wishlist
 post '/remove_from_wishlist/:item_id' do 
     redirect '/login' unless logged_in?
@@ -2649,7 +2639,7 @@ post '/remove_from_wishlist/:item_id' do
 end 
 
 # Seller chat dashboard 
-get '/seller_chat' do 
+get '/seller_chat/:user_id' do 
     redirect '/login' unless logged_in?
     
     user_id = session[:user_id]
