@@ -2668,7 +2668,7 @@ get '/seller_chat' do
 end 
 
 # Seller view specific chat 
-get '/seller_chat/:store_id/:user_id'
+get '/seller_chat/:store_id/:user_id' do
     redirect '/login' unless logged_in?
 
     store_id = params[:store_id]
