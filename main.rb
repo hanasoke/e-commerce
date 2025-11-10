@@ -2647,3 +2647,23 @@ post '/remove_from_wishlist/:item_id' do
     
     redirect back 
 end 
+
+# Seller chat dashboard 
+get '/seller_chat' do 
+    redirect '/login' unless logged_in?
+    
+    user_id = session[:user_id]
+
+    # Get stores owned by this seller 
+    @stores = DB.execute(<<-SQL, [user_id])
+        SELECT s.*,
+            (SELECT COUNT(DISTINCT user_id) FROM messages WHERE store_id = s.store_id) as chat_count
+        FROM stores s
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+    SQL
+
+    @title = "Seller Chat"
+    erb :'seller/seller_chats/store_chat', layout: :'layouts/admin/layout'
+
+end 
