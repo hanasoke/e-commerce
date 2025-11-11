@@ -823,6 +823,15 @@ def get_store_chat_conversations(store_id)
     SQL
 end 
 
+def send_seller_message(store_id, user_id, message_text, product_id = nil)
+    message_type = product_id ? 'product' : 'text'
+
+    DB.execute(<<-SQL, [store_id, user_id, 'seller', message_text, message_type, product_id])
+        INSERT INTO messages (store_id, user_id, sender_type, message_text, message_type, product_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+    SQL
+end
+
 # Routes 
 
 # Homepage 
