@@ -780,6 +780,30 @@ def get_unread_count(store_id, user_id)
     SQL
 end 
 
+def get_seller_chat_conversations(seller_user_id) 
+    DB.execute(<<-SQL, [seller_user_id])
+        SELECT 
+            m.store_id,
+            m.user_id,
+            u.name as user_name,
+            u.photo as user_photo,
+            s.store_name,
+            s.store_photo,
+            MAX(m.created_at) as last_message_time,
+            COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type = 'user' THEN 1 END) as unread_count,
+            (SELECT message_text FROM messages m2 
+                WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id
+                ORDER BY m2.created_at DESC LIMIT 1) as last_message 
+        FROM messages m 
+        JOIN users u ON m.user_id = u.user_id 
+        JOIN stores s ON m.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id
+        WHERE se.user_id = ?
+        GROUP BY m.store_id, m.user_id 
+        ORDER BY last_message_time DESC     
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
