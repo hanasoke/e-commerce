@@ -2694,7 +2694,13 @@ end
 get '/seller_chat/:user_id' do 
     redirect '/login' unless logged_in?
     
-    user_id = session[:user_id]
+    user_id = session[:user_id].to_i 
+
+    # Verify the user is accessing their own chat or is admin
+    if user_id != session[:user_id] && current_user['access'] != 2
+        flash[:error] = "Access denied"
+        redirect '/account'
+    end
 
     # Get stores owned by this seller 
     @stores = DB.execute(<<-SQL, [user_id])
