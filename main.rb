@@ -2705,10 +2705,13 @@ get '/seller_chat/:user_id' do
     # Get stores owned by this seller 
     @stores = DB.execute(<<-SQL, [user_id])
         SELECT s.*,
-            (SELECT COUNT(DISTINCT user_id) FROM messages WHERE store_id = s.store_id) as chat_count
+            (SELECT COUNT(DISTINCT m.user_id) FROM messages m WHERE m.store_id = s.store_id) as total_conversations,
+            (SELECT COUNT(*) FROM messages m 
+                WHERE m.store_id = s.store_id AND m.is_read = FALSE AND m.sender_type = 'user') as total_unread
         FROM stores s
         JOIN sellers se ON s.seller_id = se.seller_id
         WHERE se.user_id = ?
+        ORDER BY s.store_id DESC 
     SQL
 
     @title = "Seller Chat"
