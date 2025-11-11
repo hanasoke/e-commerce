@@ -804,6 +804,25 @@ def get_seller_chat_conversations(seller_user_id)
     SQL
 end 
 
+def get_store_chat_conversations(store_id) 
+    DB.execute(<<-SQL, [store_id])
+        SELECT 
+            m.user_id,
+            u.name as user_name,
+            u.photo as user_photo,
+            MAX(m.created_at) as last_message_time,
+            COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type 'user' THEN 1 END) as unread_count,
+            (SELECT message_text FROM messages m2 
+            WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id
+            ORDER BY m2.created_at DESC LIMIT 1) as last_message 
+        FROM messages m 
+        JOIN users u ON m.user_id = u.user_id 
+        WHERE m.store_id = ?
+        GROUP BY m.user_id 
+        ORDER BY last_message_time DESC 
+    SQL
+end 
+
 # Routes 
 
 # Homepage 
