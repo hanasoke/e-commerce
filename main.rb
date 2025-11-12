@@ -2775,3 +2775,34 @@ get '/seller_chat/:store_id/:user_id' do
     @title = "Chat with #{@customer['name']}"
     erb :'seller/seller_chats/seller_chat_detail', layout: :'layouts/admin/layout'
 end 
+
+# Seller send message route 
+post '/seller_chat/:store_id/:user_id/send' do 
+    redirect '/login' unless logged_in?
+
+    store_id = params[:store_id].to_i 
+    user_id = params[:user_id].to_i 
+    message_text = params[:message].to_s.strip 
+    product_id = params[:product_id]
+
+    # Verify store ownership 
+    owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
+        SELECT COUNT(*) FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ?
+    SQL
+
+    if owns_store.to_i == 0 
+        flash[:error] = "Access Denied"
+        redirect '/seller_chat/' + session[:user_id].to_s 
+    end 
+
+    if message_text.empty? && !product_id
+        flash[:error] = "Message cannot be empty!"
+        redirect '/seller_chat/#{store_id}/#{user_id}'
+    end 
+
+    send_seller_message(store_id, user_id, message_text, product_id)
+
+    redirect "/seller_chat/#{store_id}/#{user_id}"
+end 
