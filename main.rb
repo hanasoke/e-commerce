@@ -2694,10 +2694,10 @@ end
 get '/seller_chat/:user_id' do 
     redirect '/login' unless logged_in?
     
-    user_id = session[:user_id].to_i 
+    user_id = params[:user_id].to_i 
 
     # Verify the user is accessing their own chat or is admin
-    if user_id != session[:user_id] && current_user['access'] != 2
+    if user_id != session[:user_id] && current_user['access'] != 1
         flash[:error] = "Access denied"
         redirect '/account'
     end
@@ -2731,6 +2731,17 @@ get '/store_chat/:store_id' do
         WHERE se.user_id = ? AND s.store_id = ?
     SQL
 
+    if owns_store.to_i == 0 
+        flash[:error] = "Access Denied"
+        redirect '/seller_chat/' + session[:user_id].to_s 
+    end 
+
+    @store = get_store_info(store_id)
+    @conversations = get_store_chat_conversations(store_id)
+    @store_items = get_store_items(store_id)
+
+    @title = "Chat Conversations - #{@store['store_name']}"
+    erb :'/seller/seller_chats/store_chat_conversations', layout: :'layouts/admin/layout'
 end 
 
 
@@ -2738,8 +2749,8 @@ end
 get '/seller_chat/:store_id/:user_id' do
     redirect '/login' unless logged_in?
 
-    store_id = params[:store_id]
-    user_id = params[:user_id]
+    store_id = params[:store_id].to_i 
+    user_id = params[:user_id].to_i
 
     # Verify store ownership 
     owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
@@ -2750,12 +2761,17 @@ get '/seller_chat/:store_id/:user_id' do
 
     if owns_store.to_i == 0 
         flash[:error] = "Access denied"
-        redirect '/seller_chat'
+        redirect '/seller_chat/' + session[:user_id].to_s 
     end 
 
     @store = get_store_info(store_id)
     @customer = DB.execute("SELECT * FROM users WHERE user_id = ?", [user_id]).first 
     @messages = get_chat_messages(store_id, user_id)
+    @store_items = get_store_items(store_id)
 
+    # Mark user messages as read when seller opens chat 
+    mark_messages_as_read(store_id, user_id, 'user')
+
+    @title = "Chat with #{@customer['name']}"
     erb :'seller/seller_chats/seller_chat_detail', layout: :'layouts/admin/layout'
 end 
