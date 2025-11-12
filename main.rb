@@ -2806,3 +2806,29 @@ post '/seller_chat/:store_id/:user_id/send' do
 
     redirect "/seller_chat/#{store_id}/#{user_id}"
 end 
+
+# Seller share product in chat 
+post '/seller_chat/:store_id/:user_id/share_product' do 
+    redirect '/login' unless logged_in?
+
+    store_id = params[:store_id].to_i 
+    user_id = params[:user_id].to_i 
+    product_id = params[:product_id].to_i \
+
+    # Verify store ownership and product ownership 
+    owns_store_and_product = DB.get_first_value(<<-SQL, [session[:user_id], store_id, product_id])
+        SELECT COUNT(*) FROM items i 
+        JOIN stores s ON i.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ? AND i.item_id = ?
+    SQL
+
+    if owns_store_and_product.to_i == 0 
+        flash[:error] = "Access denied or product not found!"
+        redirect "/seller_chat/#{store_id}/#{user_id}"
+    end 
+
+    send_seller_message(store_id, user_id, "Check out this product!", product_id)
+
+    redirect "/seller_chat/#{store_id}/#{user_id}"
+end 
