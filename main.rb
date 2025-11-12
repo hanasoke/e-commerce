@@ -2718,6 +2718,22 @@ get '/seller_chat/:user_id' do
     erb :'seller/seller_chats/store_chat', layout: :'layouts/admin/layout'
 end 
 
+# Store-specific chat conversations 
+get '/store_chat/:store_id' do 
+    redirect '/login' unless logged_in?
+
+    store_id = params[:store_id].to_i 
+
+    # Verify store ownership 
+    owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
+        SELECT COUNT(*) FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ?
+    SQL
+
+end 
+
+
 # Seller view specific chat 
 get '/seller_chat/:store_id/:user_id' do
     redirect '/login' unless logged_in?
