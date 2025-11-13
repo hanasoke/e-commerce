@@ -63,6 +63,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-value-lg">
+                                <%= @stores.sum { |s| s['total_unread'].to_i } %>
+                            </div>
+                            <div>Unread Messages</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-envelope fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-store me-1"></i>
+            Your Store 
+        </div>
+        <div class="card-body">
+            <% @stores.empty? %>
+
+            <% else %>
+
+            <% end %>
+        </div>
     </div>
 
 </div>
