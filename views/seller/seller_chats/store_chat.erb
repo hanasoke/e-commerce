@@ -95,7 +95,7 @@
                     <h5>No Stores Found</h5>
                     <p>You don't have any stores yet. Create a store to start receiving messages from customers.</p>
 
-                    <a href="/add_my_store" class="btn btn-primary">Create Store</a>
+                    <a href="/add_my_store/<% current_user['user_id'] %>" class="btn btn-primary">Create Store</a>
                 </div>
 
             <% else %>
