@@ -90,6 +90,13 @@
         </div>
         <div class="card-body">
             <% @stores.empty? %>
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-store fa-3x mb-3"></i>
+                    <h5>No Stores Found</h5>
+                    <p>You don't have any stores yet. Create a store to start receiving messages from customers.</p>
+
+                    <a href="/add_my_store" class="btn btn-primary">Create Store</a>
+                </div>
 
             <% else %>
 
