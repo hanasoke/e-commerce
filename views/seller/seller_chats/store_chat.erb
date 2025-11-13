@@ -15,4 +15,36 @@
         </div>
     <% end %>
 
+    <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>
+                <%= flash[:error] %>
+            </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
+
+    <div class="row">
+        <!-- Statiscs Cards -->
+         <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-value-lg">
+                                <%= @stores.count %>
+                            </div>
+                            <div>
+                                Total Stores 
+                            </div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-store fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+
 </div>
