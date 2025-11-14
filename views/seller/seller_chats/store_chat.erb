@@ -125,9 +125,40 @@
                                                 <%= store['store_status'] %>
                                             </small>
                                         </div>
+                                    </div>
 
-                                        
+                                    <div class="store-stats mb-3">
+                                        <div class="row text-center">
+                                            <div class="col-6">
+                                                <div class="border-end">
+                                                    <div class="h6 mb-0">
+                                                        <%= store['total_conversations'] %>
+                                                    </div>
+                                                    <small class="text-muted">Conversations</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div>
+                                                    <div class="h6 mb-0 text-warning">
+                                                        <%= store['total_unread'] %>
+                                                    </div>
+                                                    <small class="text-muted">Unread</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="d-grip gap-2">
+                                        <a href="/store_chat/<%= store['store_id'] %>"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="fas fa-comments me-1"></i>
+                                            View Conversations
+                                            <% if store['total_unread'].to_i > 0 %>
+                                                <span class="badge bg-danger ms-1">
+                                                    <%= store['total_unread'] %>
+                                                </span>
+                                            <% end %>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -137,5 +168,4 @@
             <% end %>
         </div>
     </div>
-
 </div>
