@@ -97,9 +97,43 @@
 
                     <a href="/add_my_store/<% current_user['user_id'] %>" class="btn btn-primary">Create Store</a>
                 </div>
-
             <% else %>
+                <div class="row">
+                    <% @stores.each do |store| %>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <% if store['store_photo'] %>
+                                            <img 
+                                                src="/uploads/stores/<%= store['store_photo'] %>" 
+                                                class="rounded-circle me-3" 
+                                                style="width: 60px; height: 60px; object-fit: cover;"
+                                                alt="<%= store['store_name'] %>">
+                                        <% else %>
+                                            <img 
+                                                src="/img/question.png"
+                                                class="rounded-circle me-3"
+                                                style="width: 60px; height: 60px; object-fit: cover;" 
+                                                alt="Store">
+                                        <% end %>
+                                        <div>
+                                            <h5 class="card-title mb-0">
+                                                <%= store['store_name'] %>
+                                            </h5>
+                                            <small class="text-muted">
+                                                <%= store['store_status'] %>
+                                            </small>
+                                        </div>
 
+                                        
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
             <% end %>
         </div>
     </div>
