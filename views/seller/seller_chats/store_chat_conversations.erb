@@ -31,7 +31,28 @@
                     <% else %>
                         <div class="list-group list-group-flush">
                             <% @conversations.each do |conv| %>
+                                <a href="/seller_chat/<%= @store['store_id'] %>/<%= conv['user_id'] %>"
+                                   class="list-group-item list-group-item-action <%= 'bg-light' if params[:user_id].to_i == conv['user_id'] %>">
 
+                                    <div class="d-flex align-items-center">
+                                        <% if conv['user_photo'] %>
+                                            <img src="/uploads/users/<%= conv['user_photo'] %>" 
+                                                class="rounded-circle me-3"
+                                                style="width: 45px; height: 45px; object-fit: cover;"
+                                                alt="<%= conv['user_name'] %>">
+                                        <% else %>
+                                            <img src="/img/question.png" 
+                                                 class="rounded-circle me-3"
+                                                 style="width: 45px; height: 45px; object-fit: cover;"
+                                                 alt="User">
+                                        <% end %>
+                                        <div class="flex-grow-1">
+                                            
+                                        </div>
+                                    </div>
+
+
+                                </a>
                             <% end %>
                         </div>
                     <% end %>
