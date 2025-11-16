@@ -73,7 +73,13 @@
         </div>
 
         <div class="col-md-8">
-            
+            <!-- Selected Conversation -->
+            <% if params[:user_id] %>
+                <!-- This will be handled by seller_chat_detail -->
+                <% redirect "/seller_chat/#{@store['store_id']}/#{params[:user_id]}" %>
+            <% else %>
+
+            <% end %>
         </div>
     </div>
 </div>
