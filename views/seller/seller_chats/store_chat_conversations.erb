@@ -78,7 +78,15 @@
                 <!-- This will be handled by seller_chat_detail -->
                 <% redirect "/seller_chat/#{@store['store_id']}/#{params[:user_id]}" %>
             <% else %>
-
+                <div class="card h-100">
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-comments fa-4x mb-3"></i>
+                            <h5>Select a conversation</h5>
+                            <p>Choose a conversation from the list to start chatting</p>
+                        </div>
+                    </div>
+                </div>
             <% end %>
         </div>
     </div>
