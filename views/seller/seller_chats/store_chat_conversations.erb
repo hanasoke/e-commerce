@@ -47,17 +47,33 @@
                                                  alt="User">
                                         <% end %>
                                         <div class="flex-grow-1">
-                                            
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <h6 class="mb-0"><% if conv['user_name'].to_i > 0 %></h6>
+                                                <% if conv['unread_count'].to_i > 0 %>
+                                                    <span class="badge bg-danger rounded-pill">
+                                                        <%= conv['unread_count'] %>
+                                                    </span>
+                                                <% end %>
+                                            </div>
+
+                                            <p class="mb-0 text-muted small text-truncate" style="max-width: 200px;">
+                                                <%= conv['last_message'] %>
+                                            </p>
+                                            <small class="text-muted">
+                                                <%= Time.parse(conv['last_message_time']).strftime('%b %d, %H:%M') %>
+                                            </small>
                                         </div>
                                     </div>
-
-
                                 </a>
                             <% end %>
                         </div>
                     <% end %>
                 </div>
             </div>
+        </div>
+
+        <div class="col-md-8">
+            
         </div>
     </div>
 </div>
