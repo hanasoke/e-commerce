@@ -29,9 +29,45 @@
                                 style="width: 45px; height: 45px; object-fit: cover;" 
                                 alt="User">
                         <% end %>
+                        <div>
+                            <h5 class="mb-0">
+                                <%= @customer['name'] %>
+                            </h5>
+                            <small class="text-muted">
+                                <% if @customer['access'].to_i == 1 %>
+                                    <span class="badge bg-success">Customer</span>
+                                <% else %>
+                                    <span class="badge bg-info">User</span>
+                                <% end %>
+                            </small>
+                        </div>
                     </div>
-                    
+                    <div class="dropdown">
+                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> View Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-cart"></i> Order History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-ban"></i> Block User</a></li>
+                        </ul>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="card-body messages-container" style="height: 500px; overflow-y: auto; background-color: #f8f9fa;">
+                <% if @messages.empty? %>
+                    <div class="text-center text-muted mt-5">
+                        <i class="fas fa-comments fa-3x mb-3"></i>
+                        <p>No messages yet. Start the conversation!</p>
+                    </div>
+                <% else %>
+
+                <% end %>
+
+
             </div>
         </div>
     </div>
