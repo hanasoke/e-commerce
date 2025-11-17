@@ -1,61 +1,56 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Chat Conversations</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb">
+        <li class="breadcrumb-item">
             <a href="/seller_chat/<%= session[:user_id] %>">Seller Chat</a>
         </li>
-        <li class="breadcrumb-item active">
-            <%= @store['store_name'] %>
-        </li>
+        <li class="breadcrumb-item active"><%= @store['store_name'] %></li>
     </ol>
 
     <div class="row">
         <div class="col-md-4">
-            <!-- Conversations Lists -->
+            <!-- Conversations List -->
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <div class="d-flex justify-content-between align-items center">
+                    <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Conversations</h5>
                         <span class="badge bg-light text-dark">
                             <%= @conversations.count %>
                         </span>
                     </div>
                 </div>
-
                 <div class="card-body p-0">
                     <% if @conversations.empty? %>
                         <div class="text-center p-4">
                             <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No Conversations Yet</p>
+                            <p class="text-muted">No conversations yet</p>
                         </div>
                     <% else %>
                         <div class="list-group list-group-flush">
                             <% @conversations.each do |conv| %>
-                                <a href="/seller_chat/<%= @store['store_id'] %>/<%= conv['user_id'] %>"
+                                <a href="/seller_chat/<%= @store['store_id'] %>/<%= conv['user_id'] %>" 
                                    class="list-group-item list-group-item-action <%= 'bg-light' if params[:user_id].to_i == conv['user_id'] %>">
-
                                     <div class="d-flex align-items-center">
                                         <% if conv['user_photo'] %>
                                             <img src="/uploads/users/<%= conv['user_photo'] %>" 
-                                                class="rounded-circle me-3"
-                                                style="width: 45px; height: 45px; object-fit: cover;"
-                                                alt="<%= conv['user_name'] %>">
+                                                 class="rounded-circle me-3" 
+                                                 style="width: 45px; height: 45px; object-fit: cover;" 
+                                                 alt="<%= conv['user_name'] %>">
                                         <% else %>
-                                            <img src="/img/question.png" 
-                                                 class="rounded-circle me-3"
-                                                 style="width: 45px; height: 45px; object-fit: cover;"
+                                            <img src="/img/user-default.png" 
+                                                 class="rounded-circle me-3" 
+                                                 style="width: 45px; height: 45px; object-fit: cover;" 
                                                  alt="User">
                                         <% end %>
                                         <div class="flex-grow-1">
                                             <div class="d-flex justify-content-between align-items-start">
-                                                <h6 class="mb-0"><% if conv['user_name'].to_i > 0 %></h6>
+                                                <h6 class="mb-0"><%= conv['user_name'] %></h6>
                                                 <% if conv['unread_count'].to_i > 0 %>
                                                     <span class="badge bg-danger rounded-pill">
                                                         <%= conv['unread_count'] %>
                                                     </span>
                                                 <% end %>
                                             </div>
-
                                             <p class="mb-0 text-muted small text-truncate" style="max-width: 200px;">
                                                 <%= conv['last_message'] %>
                                             </p>
