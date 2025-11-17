@@ -1,6 +1,38 @@
 <div class="container-fluid px-4">
     <div class="mt-4">Chat with Customer</div>
-    <div class="breadcrumb mb-4">
-        
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+            <a href="/seller_chat/<%= session[:user_id] %>">Seller Chat</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="/store_chat/<%= @store['store_id'] %>">
+                <%= @store['store_name'] %>
+            </a>
+        </li>
+        <li class="breadcrumb-item active"><%= @customer['name'] %></li>
+    </ol>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <!-- Chat Header -->
+                <div class="card-header bg-light">
+                    <div class="d-flex align-items-center">
+                        <% if @customer['photo'] %>
+                            <img src="/uploads/users/<% @customer['photo'] %>" 
+                                class="rounded-circle me-3"
+                                style=" width: 45px; height: 45px; object-fit: cover;"
+                                alt="<%= @customer['name'] %>">
+                        <% else %>
+                            <img src="/img/question.png"
+                                class="rounded-circle me-3"
+                                style="width: 45px; height: 45px; object-fit: cover;" 
+                                alt="User">
+                        <% end %>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
