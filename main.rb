@@ -780,52 +780,52 @@ def get_unread_count(store_id, user_id)
     SQL
 end 
 
-def get_seller_chat_conversations(seller_user_id) 
+def get_seller_chat_conversations(seller_user_id)
     DB.execute(<<-SQL, [seller_user_id])
         SELECT 
-            m.store_id,
-            m.user_id,
-            u.name as user_name,
-            u.photo as user_photo,
-            s.store_name,
-            s.store_photo,
-            MAX(m.created_at) as last_message_time,
-            COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type = 'user' THEN 1 END) as unread_count,
-            (SELECT message_text FROM messages m2 
-                WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id
-                ORDER BY m2.created_at DESC LIMIT 1) as last_message 
-        FROM messages m 
-        JOIN users u ON m.user_id = u.user_id 
-        JOIN stores s ON m.store_id = s.store_id 
+        m.store_id,
+        m.user_id,
+        u.name as user_name,
+        u.photo as user_photo,
+        s.store_name,
+        s.store_photo,
+        MAX(m.created_at) as last_message_time,
+        COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type = 'user' THEN 1 END) as unread_count,
+        (SELECT message_text FROM messages m2 
+        WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id 
+        ORDER BY m2.created_at DESC LIMIT 1) as last_message
+        FROM messages m
+        JOIN users u ON m.user_id = u.user_id
+        JOIN stores s ON m.store_id = s.store_id
         JOIN sellers se ON s.seller_id = se.seller_id
         WHERE se.user_id = ?
-        GROUP BY m.store_id, m.user_id 
-        ORDER BY last_message_time DESC     
+        GROUP BY m.store_id, m.user_id
+        ORDER BY last_message_time DESC
     SQL
-end 
+end
 
-def get_store_chat_conversations(store_id) 
+def get_store_chat_conversations(store_id)
     DB.execute(<<-SQL, [store_id])
         SELECT 
-            m.user_id,
-            u.name as user_name,
-            u.photo as user_photo,
-            MAX(m.created_at) as last_message_time,
-            COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type 'user' THEN 1 END) as unread_count,
-            (SELECT message_text FROM messages m2 
-            WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id
-            ORDER BY m2.created_at DESC LIMIT 1) as last_message 
-        FROM messages m 
-        JOIN users u ON m.user_id = u.user_id 
+        m.user_id,
+        u.name as user_name,
+        u.photo as user_photo,
+        MAX(m.created_at) as last_message_time,
+        COUNT(CASE WHEN m.is_read = FALSE AND m.sender_type = 'user' THEN 1 END) as unread_count,
+        (SELECT message_text FROM messages m2 
+        WHERE m2.store_id = m.store_id AND m2.user_id = m.user_id 
+        ORDER BY m2.created_at DESC LIMIT 1) as last_message
+        FROM messages m
+        JOIN users u ON m.user_id = u.user_id
         WHERE m.store_id = ?
-        GROUP BY m.user_id 
-        ORDER BY last_message_time DESC 
+        GROUP BY m.user_id
+        ORDER BY last_message_time DESC
     SQL
-end 
+end
 
 def send_seller_message(store_id, user_id, message_text, product_id = nil)
     message_type = product_id ? 'product' : 'text'
-
+    
     DB.execute(<<-SQL, [store_id, user_id, 'seller', message_text, message_type, product_id])
         INSERT INTO messages (store_id, user_id, sender_type, message_text, message_type, product_id)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -2690,12 +2690,12 @@ post '/remove_from_wishlist/:item_id' do
     redirect back 
 end 
 
-# Seller chat dashboard 
+# Seller chat dashboard - shows all stores and conversations
 get '/seller_chat/:user_id' do 
     redirect '/login' unless logged_in?
     
-    user_id = params[:user_id].to_i 
-
+    user_id = params[:user_id].to_i
+    
     # Verify the user is accessing their own chat or is admin
     if user_id != session[:user_id] && current_user['access'] != 1
         flash[:error] = "Access denied"
@@ -2711,46 +2711,18 @@ get '/seller_chat/:user_id' do
         FROM stores s
         JOIN sellers se ON s.seller_id = se.seller_id
         WHERE se.user_id = ?
-        ORDER BY s.store_id DESC 
+        ORDER BY s.store_id DESC
     SQL
 
-    @title = "Seller Chat"
+    @title = "Seller Chat Dashboard"
     erb :'seller/seller_chats/store_chat', layout: :'layouts/admin/layout'
 end 
 
-# Store-specific chat conversations 
-get '/store_chat/:store_id' do 
+# Store-specific chat conversations
+get '/store_chat/:store_id' do
     redirect '/login' unless logged_in?
-
-    store_id = params[:store_id].to_i 
-
-    # Verify store ownership 
-    owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
-        SELECT COUNT(*) FROM stores s 
-        JOIN sellers se ON s.seller_id = se.seller_id 
-        WHERE se.user_id = ? AND s.store_id = ?
-    SQL
-
-    if owns_store.to_i == 0 
-        flash[:error] = "Access Denied"
-        redirect '/seller_chat/' + session[:user_id].to_s 
-    end 
-
-    @store = get_store_info(store_id)
-    @conversations = get_store_chat_conversations(store_id)
-    @store_items = get_store_items(store_id)
-
-    @title = "Chat Conversations - #{@store['store_name']}"
-    erb :'/seller/seller_chats/store_chat_conversations', layout: :'layouts/admin/layout'
-end 
-
-
-# Seller view specific chat 
-get '/seller_chat/:store_id/:user_id' do
-    redirect '/login' unless logged_in?
-
-    store_id = params[:store_id].to_i 
-    user_id = params[:user_id].to_i
+    
+    store_id = params[:store_id].to_i
 
     # Verify store ownership 
     owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
@@ -2761,29 +2733,23 @@ get '/seller_chat/:store_id/:user_id' do
 
     if owns_store.to_i == 0 
         flash[:error] = "Access denied"
-        redirect '/seller_chat/' + session[:user_id].to_s 
+        redirect '/seller_chat/' + session[:user_id].to_s
     end 
 
     @store = get_store_info(store_id)
-    @customer = DB.execute("SELECT * FROM users WHERE user_id = ?", [user_id]).first 
-    @messages = get_chat_messages(store_id, user_id)
+    @conversations = get_store_chat_conversations(store_id)
     @store_items = get_store_items(store_id)
 
-    # Mark user messages as read when seller opens chat 
-    mark_messages_as_read(store_id, user_id, 'user')
+    @title = "Chat Conversations - #{@store['store_name']}"
+    erb :'seller/seller_chats/store_chat_conversations', layout: :'layouts/admin/layout'
+end
 
-    @title = "Chat with #{@customer['name']}"
-    erb :'seller/seller_chats/seller_chat_detail', layout: :'layouts/admin/layout'
-end 
-
-# Seller send message route 
-post '/seller_chat/:store_id/:user_id/send' do 
+# Seller view specific chat conversation
+get '/seller_chat/:store_id/:user_id' do
     redirect '/login' unless logged_in?
 
-    store_id = params[:store_id].to_i 
-    user_id = params[:user_id].to_i 
-    message_text = params[:message].to_s.strip 
-    product_id = params[:product_id]
+    store_id = params[:store_id].to_i
+    user_id = params[:user_id].to_i
 
     # Verify store ownership 
     owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
@@ -2791,44 +2757,77 @@ post '/seller_chat/:store_id/:user_id/send' do
         JOIN sellers se ON s.seller_id = se.seller_id 
         WHERE se.user_id = ? AND s.store_id = ?
     SQL
-
+    
     if owns_store.to_i == 0 
-        flash[:error] = "Access Denied"
-        redirect '/seller_chat/' + session[:user_id].to_s 
+        flash[:error] = "Access denied"
+        redirect '/seller_chat/' + session[:user_id].to_s
     end 
+
+    @store = get_store_info(store_id)
+    @customer = DB.execute("SELECT * FROM users WHERE user_id = ?", [user_id]).first 
+    @messages = get_chat_messages(store_id, user_id)
+    @store_items = get_store_items(store_id)
+
+    # Mark user messages as read when seller opens chat
+    mark_messages_as_read(store_id, user_id, 'user')
+
+    @title = "Chat with #{@customer['name']}"
+    erb :'seller/seller_chats/seller_chat_detail', layout: :'layouts/admin/layout'
+end
+
+# Seller send message route
+post '/seller_chat/:store_id/:user_id/send' do
+    redirect '/login' unless logged_in?
+
+    store_id = params[:store_id].to_i
+    user_id = params[:user_id].to_i
+    message_text = params[:message].to_s.strip
+    product_id = params[:product_id]
+
+    # Verify store ownership
+    owns_store = DB.get_first_value(<<-SQL, [session[:user_id], store_id])
+        SELECT COUNT(*) FROM stores s 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ? AND s.store_id = ?
+    SQL
+    
+    if owns_store.to_i == 0 
+        flash[:error] = "Access denied"
+        redirect '/seller_chat/' + session[:user_id].to_s
+    end
 
     if message_text.empty? && !product_id
         flash[:error] = "Message cannot be empty!"
-        redirect '/seller_chat/#{store_id}/#{user_id}'
-    end 
+        redirect "/seller_chat/#{store_id}/#{user_id}"
+    end
 
     send_seller_message(store_id, user_id, message_text, product_id)
 
     redirect "/seller_chat/#{store_id}/#{user_id}"
-end 
+end
 
-# Seller share product in chat 
-post '/seller_chat/:store_id/:user_id/share_product' do 
+# Seller share product in chat
+post '/seller_chat/:store_id/:user_id/share_product' do
     redirect '/login' unless logged_in?
 
-    store_id = params[:store_id].to_i 
-    user_id = params[:user_id].to_i 
-    product_id = params[:product_id].to_i \
+    store_id = params[:store_id].to_i
+    user_id = params[:user_id].to_i
+    product_id = params[:product_id].to_i
 
-    # Verify store ownership and product ownership 
+    # Verify store ownership and product ownership
     owns_store_and_product = DB.get_first_value(<<-SQL, [session[:user_id], store_id, product_id])
-        SELECT COUNT(*) FROM items i 
-        JOIN stores s ON i.store_id = s.store_id 
-        JOIN sellers se ON s.seller_id = se.seller_id 
+        SELECT COUNT(*) FROM items i
+        JOIN stores s ON i.store_id = s.store_id
+        JOIN sellers se ON s.seller_id = se.seller_id
         WHERE se.user_id = ? AND s.store_id = ? AND i.item_id = ?
     SQL
-
-    if owns_store_and_product.to_i == 0 
+    
+    if owns_store_and_product.to_i == 0
         flash[:error] = "Access denied or product not found!"
         redirect "/seller_chat/#{store_id}/#{user_id}"
-    end 
+    end
 
     send_seller_message(store_id, user_id, "Check out this product!", product_id)
 
     redirect "/seller_chat/#{store_id}/#{user_id}"
-end 
+end
