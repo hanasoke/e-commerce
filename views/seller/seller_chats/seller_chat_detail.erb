@@ -64,11 +64,253 @@
                         <p>No messages yet. Start the conversation!</p>
                     </div>
                 <% else %>
+                    <% @messages.each do |message| %>
+                        <% if message['sender_type'] == 'user' %>
+                            <!-- Customer Message -->
+                                <div class="d-flex justify-content-start mb-3">
+                                    <div class="bg-white rounded-3 px-3 py-2 shadow-sm" style="max-width: 70%;">
+                                        <% if message['message_type'] == 'product' && message['product_id'] %>
 
+                                            <!-- Product Message -->
+                                            <div class="border bg-light rounded p-2 mb-2">
+                                                <div class="d-flex">
+                                                    <% if message['item_photo'] %>
+                                                        <img src="/uploads/items/<%= message['item_photo'] %>" 
+                                                                style="width: 50px; height: 50px; object-fit: cover;" 
+                                                                class="rounded me-2" alt="Product">
+                                                    <% else %>
+                                                        <img src="/img/question.png" 
+                                                                style="width: 50px; height: 50px; object-fit: cover;" 
+                                                                class="rounded me-2" alt="Product">
+                                                    <% end %>
+                                                    <div>
+                                                        <small class="fw-bold d-block"><%= message['item_name'] %></small>
+                                                        <small class="text-danger fw-bold"><%= rupiah_currency(message['item_price']) %></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% else %>
+                                            <!-- Text Message -->
+                                            <%= message['message_text'] %>
+                                        <% end %>
+
+                                        <div class="text-end">
+                                            <small class="text-muted">
+                                                <%= Time.parse(message['created_at']).strftime('%H:%M') %>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                        <% else %>
+                            <!-- Seller Message -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="bg-primary text-white rounded-3 px-3 py-2" style="max-width: 70%;">
+                                    <% if message['message_type'] == 'product' && message['product_id'] %>
+                                        <!-- Product Message -->
+                                        <div class="border bg-white text-dark rounded p-2 mb-2">
+                                            <div class="d-flex">
+                                                <% if message['item_photo'] %>
+                                                    <img src="/uploads/items/<%= message['item_photo'] %>" 
+                                                            style="width: 50px; height: 50px; object-fit: cover;" 
+                                                            class="rounded me-2" alt="Product">
+                                                <% else %>
+                                                    <img src="/img/question.png" 
+                                                            style="width: 50px; height: 50px; object-fit: cover;" 
+                                                            class="rounded me-2" alt="Product">
+                                                <% end %>
+                                                <div>
+                                                    <small class="fw-bold d-block"><%= message['item_name'] %></small>
+                                                    <small class="text-danger fw-bold"><%= rupiah_currency(message['item_price']) %></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div><%= message['message_text'] %></div>
+                                    <% else %>
+                                        <!-- Text Message -->
+                                        <%= message['message_text'] %>
+                                    <% end %>
+                                    <div class="text-end">
+                                        <small class="opacity-75">
+                                            <%= Time.parse(message['created_at']).strftime('%H:%M') %>
+                                            <% if message['is_read'] %>
+                                                <i class="fas fa-check-double ms-1" title="Read"></i>
+                                            <% else %>
+                                                <i class="fas fa-check ms-1" title="Sent"></i>
+                                            <% end %>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% end %>
                 <% end %>
+            </div>
 
+            <!-- Message Input -->
+             <div class="card-footer">
+                <form action="/seller_chat/<%= @store['store_id'] %>/<%= @customer['user_id'] %>/send" method="POST" class="d-flex">
+                    <div class="flex-grow-1 me-2">
+                        <input type="text" name="message" class="form-control" placeholder="Type your message..." required>
+                        <input type="hidden" name="product_id" id="product_id_input">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <!-- Right Sidebar - Customer Info & Quick Actions -->
+    <div class="col-md-4">
+        <!-- Customer Information -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">CUSTOMER INFORMATION</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <small class="text-muted d-block">Name</small>
+                    <strong><%= @customer['name'] %></strong>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted d-block">Email</small>
+                    <strong><%= @customer['email'] %></strong>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted d-block">Phone</small>
+                    <strong><%= @customer['phone'] || 'Not provided' %></strong>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted d-block">Location</small>
+                    <strong><%= @customer['address'] || 'Not provided' %></strong>
+                </div>
+            </div>
+        </div>
+
+         <!-- Quick Products -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">QUICK PRODUCT SHARE</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <% @store_items.each do |item| %>
+                            <div class="col-6">
+                                <div class="card product-card" onclick="shareProduct(<%= item['item_id'] %>)">
+                                    <% if item['item_photo'] %>
+                                        <img src="/uploads/items/<%= item['item_photo'] %>" 
+                                             class="card-img-top" 
+                                             style="height: 80px; object-fit: cover;" 
+                                             alt="<%= item['item_name'] %>">
+                                    <% else %>
+                                        <img src="/img/question.png" 
+                                             class="card-img-top" 
+                                             style="height: 80px; object-fit: cover;" 
+                                             alt="Product">
+                                    <% end %>
+                                    <div class="card-body p-2">
+                                        <small class="card-text d-block text-truncate"><%= item['item_name'] %></small>
+                                        <small class="text-danger fw-bold"><%= rupiah_currency(item['item_price']) %></small>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Replies -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">QUICK REPLIES</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm quick-reply" data-message="Hello! How can I help you today?">
+                            Hello! How can I help you?
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm quick-reply" data-message="Thank you for your interest in our products!">
+                            Thank you for your interest
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm quick-reply" data-message="The product is available and ready to ship.">
+                            Product is available
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Auto-scroll to bottom of messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const messagesContainer = document.querySelector('.messages-container');
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    });
+
+    // Share product in chat
+    function shareProduct(productId) {
+        document.getElementById('product_id_input').value = productId;
+        
+        // Create form and submit
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/seller_chat/<%= @store['store_id'] %>/<%= @customer['user_id'] %>/share_product';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'product_id';
+        input.value = productId;
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    // Quick replies
+    document.addEventListener('DOMContentLoaded', function() {
+        const quickReplyButtons = document.querySelectorAll('.quick-reply');
+        const messageInput = document.querySelector('input[name="message"]');
+        
+        quickReplyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                messageInput.value = this.getAttribute('data-message');
+                messageInput.focus();
+            });
+        });
+    });
+
+    // Auto-focus message input
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.querySelector('input[name="message"]');
+        if (messageInput) {
+            messageInput.focus();
+        }
+    });
+</script>
+
+<style>
+    .product-card {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .messages-container {
+        background-color: #f8f9fa;
+    }
+
+    .quick-reply {
+        font-size: 0.8rem;
+        text-align: left;
+        white-space: normal;
+    }
+</style>
