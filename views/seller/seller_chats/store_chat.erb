@@ -1,42 +1,32 @@
 <div class="container-fluid px-4">
     <h1 class="mt-4">Seller Chat Dashboard</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">
-            Manage your store conversations
-        </li>
+        <li class="breadcrumb-item active">Manage your store conversations</li>
     </ol>
 
     <% if flash[:success] %>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>
-                <%= flash[:success] %>
-            </strong>
+            <strong><%= flash[:success] %></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <% end %>
 
     <% if flash[:error] %>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>
-                <%= flash[:error] %>
-            </strong>
+            <strong><%= flash[:error] %></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <% end %>
 
     <div class="row">
-        <!-- Statiscs Cards -->
+        <!-- Statistics Cards -->
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <div class="text-value-lg">
-                                <%= @stores.count %>
-                            </div>
-                            <div>
-                                Total Stores 
-                            </div>
+                            <div class="text-value-lg"><%= @stores.count %></div>
+                            <div>Total Stores</div>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-store fa-2x"></i>
@@ -45,14 +35,13 @@
                 </div>
             </div>
         </div>
-
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="text-value-lg">
-                                <%= @stores.sum { |s| s['total_conversation'].to_i } %>
+                                <%= @stores.sum { |s| s['total_conversations'].to_i } %>
                             </div>
                             <div>Total Conversations</div>
                         </div>
@@ -63,7 +52,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-xl-3 col-md-6">
             <div class="card bg-warning text-white mb-4">
                 <div class="card-body">
@@ -86,16 +74,15 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-store me-1"></i>
-            Your Store 
+            Your Stores
         </div>
         <div class="card-body">
-            <% @stores.empty? %>
+            <% if @stores.empty? %>
                 <div class="alert alert-info text-center">
                     <i class="fas fa-store fa-3x mb-3"></i>
                     <h5>No Stores Found</h5>
                     <p>You don't have any stores yet. Create a store to start receiving messages from customers.</p>
-
-                    <a href="/add_my_store/<% current_user['user_id'] %>" class="btn btn-primary">Create Store</a>
+                    <a href="/create_store" class="btn btn-primary">Create Store</a>
                 </div>
             <% else %>
                 <div class="row">
@@ -105,51 +92,41 @@
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-3">
                                         <% if store['store_photo'] %>
-                                            <img 
-                                                src="/uploads/stores/<%= store['store_photo'] %>" 
-                                                class="rounded-circle me-3" 
-                                                style="width: 60px; height: 60px; object-fit: cover;"
-                                                alt="<%= store['store_name'] %>">
+                                            <img src="/uploads/stores/<%= store['store_photo'] %>" 
+                                                 class="rounded-circle me-3" 
+                                                 style="width: 60px; height: 60px; object-fit: cover;" 
+                                                 alt="<%= store['store_name'] %>">
                                         <% else %>
-                                            <img 
-                                                src="/img/question.png"
-                                                class="rounded-circle me-3"
-                                                style="width: 60px; height: 60px; object-fit: cover;" 
-                                                alt="Store">
+                                            <img src="/img/store-default.png" 
+                                                 class="rounded-circle me-3" 
+                                                 style="width: 60px; height: 60px; object-fit: cover;" 
+                                                 alt="Store">
                                         <% end %>
                                         <div>
-                                            <h5 class="card-title mb-0">
-                                                <%= store['store_name'] %>
-                                            </h5>
-                                            <small class="text-muted">
-                                                <%= store['store_status'] %>
-                                            </small>
+                                            <h5 class="card-title mb-0"><%= store['store_name'] %></h5>
+                                            <small class="text-muted"><%= store['store_status'] %></small>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="store-stats mb-3">
                                         <div class="row text-center">
                                             <div class="col-6">
                                                 <div class="border-end">
-                                                    <div class="h6 mb-0">
-                                                        <%= store['total_conversations'] %>
-                                                    </div>
+                                                    <div class="h6 mb-0"><%= store['total_conversations'] %></div>
                                                     <small class="text-muted">Conversations</small>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div>
-                                                    <div class="h6 mb-0 text-warning">
-                                                        <%= store['total_unread'] %>
-                                                    </div>
+                                                    <div class="h6 mb-0 text-warning"><%= store['total_unread'] %></div>
                                                     <small class="text-muted">Unread</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="d-grip gap-2">
-                                        <a href="/store_chat/<%= store['store_id'] %>"
+                                    <div class="d-grid gap-2">
+                                        <a href="/store_chat/<%= store['store_id'] %>" 
                                            class="btn btn-primary btn-sm">
                                             <i class="fas fa-comments me-1"></i>
                                             View Conversations
