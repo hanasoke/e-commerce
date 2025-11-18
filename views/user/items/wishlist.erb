@@ -16,25 +16,26 @@
             <% @wishlists.each do |w| %>
                 <div class="col-md-3 md-4">
                     <div class="card">
-                        <% if w['item_photo'] && !w['item_photo'].empty? %>
-                            <img src="/uploads/items/<%= w['item_photo'] %>" class="card-img-top" alt="<%= w['item_name'] %>">
-                        <% else %>
-                            <img src="/img/question.png" class="card-img-top" alt="No image">
-                        <% end %>
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                <%= w['item_name'] %>
-                            </h6>
-                            <p><%= rupiah_currency(w['item_price']) %></p>
-                            <p>
-                                <small><%= w['store_name'] %></small>
-                            </p>
-                        </div>
+                        <a href="/view_detail_item/<%= w['item_id'] %>" class="text-decoration-none text-dark">
+                            <% if w['item_photo'] && !w['item_photo'].empty? %>
+                                <img src="/uploads/items/<%= w['item_photo'] %>" class="card-img-top" alt="<%= w['item_name'] %>">
+                            <% else %>
+                                <img src="/img/question.png" class="card-img-top" alt="No image">
+                            <% end %>
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <%= w['item_name'] %>
+                                </h6>
+                                <p><%= rupiah_currency(w['item_price']) %></p>
+                                <p>
+                                    <small><%= w['store_name'] %></small>
+                                </p>
+                            </div>
+                        </a>
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-outline-secondary float-left" data-bs-toggle="modal" data-bs-target="#deleteAwishlist<%= w['item_id'] %>">
                                 <img src="/img/icons/trash.svg" alt="Trash">
                             </button>
-                            <a href="/view_detail_item/<%= w['item_id'] %>" class="btn btn-danger float-right">Detail</a>
                         </div>
                     </div>
                     <!-- Modal -->
