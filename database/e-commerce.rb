@@ -4,35 +4,48 @@ DB = SQLite3::Database.new('e_commerce.db')
 DB.results_as_hash = true
 
 # Profiles Table 
-# DB.execute <<-SQL 
-#     CREATE TABLE IF NOT EXISTS users (
-#         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         name TEXT UNIQUE,
-#         username TEXT UNIQUE,
-#         email TEXT UNIQUE,
-#         password TEXT,
-#         birthdate TEXT,
-#         address TEXT,
-#         phone INT,
-#         photo TEXT,
-#         reset_token TEXT,
-#         access INTEGER
-#     );
-# SQL
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS users (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE,
+        username TEXT UNIQUE,
+        email TEXT UNIQUE,
+        password TEXT,
+        birthdate TEXT,
+        address TEXT,
+        phone TEXT,
+        photo TEXT,
+        reset_token TEXT,
+        access INTEGER
+    );
+SQL
 
-DB.execute("DROP TABLE users");
+# DB.execute("DROP TABLE users");
 
 # Sellers Table
+DB.execute <<-SQL 
+    CREATE TABLE IF NOT EXISTS sellers (
+        seller_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        identity_photo TEXT,
+        status TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(user_id)
+    );
+SQL
+
+# DB.execute("DROP TABLE sellers");
+
+# Alert Messages 
 # DB.execute <<-SQL 
-#     CREATE TABLE IF NOT EXISTS sellers (
-#         seller_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#     CREATE TABLE IF NOT EXISTS alert_messages (
+#         alert_message_id INTEGER,
 #         user_id INTEGER,
-#         identity_photo TEXT,
+#         message TEXT,
 #         FOREIGN KEY(user_id) REFERENCES users(user_id)
 #     );
 # SQL
 
-DB.execute("DROP TABLE sellers");
+# DB.execute("DROP TABLE alert_messages");
 
 # Stores Table 
 # DB.execute <<-SQL 
@@ -49,7 +62,7 @@ DB.execute("DROP TABLE sellers");
 #     );
 # SQL
 
-DB.execute("DROP TABLE stores");
+# DB.execute("DROP TABLE stores");
 
 # Items Table
 # DB.execute <<-SQL 
@@ -69,7 +82,7 @@ DB.execute("DROP TABLE stores");
 #     );
 # SQL
 
-DB.execute("DROP TABLE items");
+# DB.execute("DROP TABLE items");
 
 # DB.execute <<-SQL 
 #     CREATE TABLE IF NOT EXISTS wishlists (
@@ -83,7 +96,7 @@ DB.execute("DROP TABLE items");
 #     );
 # SQL
 
-DB.execute("DROP TABLE wishlists");
+# DB.execute("DROP TABLE wishlists");
 
 # DB.execute <<-SQL
 #     CREATE TABLE IF NOT EXISTS baskets (
@@ -102,7 +115,7 @@ DB.execute("DROP TABLE wishlists");
 #     )
 # SQL
 
-DB.execute("DROP TABLE baskets");
+# DB.execute("DROP TABLE baskets");
 
 # DB.execute <<-SQL 
 #     CREATE TABLE IF NOT EXISTS services (
@@ -112,7 +125,7 @@ DB.execute("DROP TABLE baskets");
 #     )
 # SQL
 
-DB.execute("DROP TABLE services");
+# DB.execute("DROP TABLE services");
 
 # DB.execute <<-SQL 
 #     CREATE TABLE IF NOT EXISTS store_services (
@@ -125,7 +138,7 @@ DB.execute("DROP TABLE services");
 #     );
 # SQL
 
-DB.execute("DROP TABLE store_services");
+# DB.execute("DROP TABLE store_services");
 
 # DB.execute <<-SQL 
 #     CREATE TABLE IF NOT EXISTS transactions (
@@ -154,7 +167,7 @@ DB.execute("DROP TABLE store_services");
 #     );
 # SQL
 
-DB.execute("DROP TABLE transactions");
+# DB.execute("DROP TABLE transactions");
 
 # DB.execute <<-SQL
 #     CREATE TABLE IF NOT EXISTS shipments (
@@ -166,7 +179,7 @@ DB.execute("DROP TABLE transactions");
 #     );
 # SQL
 
-DB.execute("DROP TABLE shipments");
+# DB.execute("DROP TABLE shipments");
 
 # DB.execute <<-SQL 
 #     CREATE TABLE IF NOT EXISTS messages (
@@ -186,4 +199,4 @@ DB.execute("DROP TABLE shipments");
 #     );
 # SQL
 
-DB.execute("DROP TABLE messages");
+# DB.execute("DROP TABLE messages");
