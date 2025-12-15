@@ -1342,7 +1342,7 @@ post '/seller_register/:user_id' do
                 DB.execute("UPDATE users SET access = 2 WHERE user_id = ?", [user_id])
 
                 session[:success] = "Seller account registered."
-                redirect '/seller' 
+                redirect '/account' 
             rescue SQLite3::ConstraintException => e 
                 @errors << "Registration failed: #{e.message}"
             end 
