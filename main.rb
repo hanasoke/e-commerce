@@ -328,7 +328,7 @@ def validate_user(name, username, email, password, birthdate, address, phone, ac
     errors
 end 
 
-def validate_item(item_name, item_brand, item_description, item_price, item_stock, item_category, item_unit, item_status, item_id = nil) 
+def validate_item(item_name, item_brand, item_description, item_price, item_stock, item_category, item_unit, item_status, store_id, item_id = nil) 
     errors = []
 
     # Item Name Validation
@@ -337,16 +337,22 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
     # Check for unique item_name (only if it's a new item or name is being changed)
     if item_name && !item_name.strip.empty?
         if item_id 
-            # For updated: check if another item (with different ID) has the same name 
+            # UPDATE ITEM 
             existing_item = DB.execute(
-                "SELECT item_id FROM items WHERE LOWER(item_name) = ? AND item_id != ?", 
-                [item_name.downcase, item_id]
+                "
+                    SELECT item_id FROM items 
+                    WHERE LOWER(item_name) = ?
+                    AND store_id = ? 
+                    AND item_id != ?", 
+                [item_name.downcase, store_id, item_id]
             ).first 
         else 
             # For new items: check if any item has the same name
             existing_item = DB.execute(
-                "SELECT item_id FROM items WHERE LOWER(item_name) = ?",
-                [item_name.downcase]
+                "SELECT item_id FROM items 
+                WHERE LOWER(item_name) = ?
+                AND store_id = ?",
+                [item_name.downcase, store_id,]
             ).first 
         end 
         errors << "Item Name Already exist. Please choose a different item name." if existing_item
@@ -1654,16 +1660,22 @@ get '/add_an_item/:user_id' do
 end 
 
 post '/add_an_item/:user_id' do 
-    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status])
+
+    # Get current store for this seller 
+    seller = DB.execute(
+        "SELECT * FROM sellers WHERE user_id = ?", 
+        [params[:user_id]]
+    ).first 
+    store = DB.execute("SELECT * FROM stores WHERE seller_id = ?", 
+        [seller['seller_id']]
+    ).first 
+
+    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], store['store_id'])
 
     item_photo = params['item_photo']
 
     # Add item_photo validation errors 
     @errors += validate_item_photo(item_photo)
-
-    # Get current store for this seller 
-    seller = DB.execute("SELECT * FROM sellers WHERE user_id = ?", [params[:user_id]]).first 
-    store = DB.execute("SELECT * FROM stores WHERE seller_id = ?", [seller['seller_id']]).first 
 
     photo_filename = nil
 
