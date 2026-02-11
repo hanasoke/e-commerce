@@ -2247,9 +2247,9 @@ get '/user_transaction_lists/:user_id' do
 
     @errors = []
     @title = "User Transaction Lists"
-    user_id = params[:user_id]
+    seller_user_id = params[:user_id]
 
-    @transactions = DB.execute(<<-SQL, [user_id])
+    @transactions = DB.execute(<<-SQL, [seller_user_id])
         SELECT 
             t.transaction_id,
             s.store_name,
@@ -2262,13 +2262,18 @@ get '/user_transaction_lists/:user_id' do
             t.account_number,
             t.payment_photo,
             t.payment_status,
-            t.transaction_date
+            t.transaction_date,
+            ss.store_service_id,
+            sv.service_name
         FROM transactions t 
         JOIN items i ON t.item_id = i.item_id
         JOIN stores s ON t.store_id = s.store_id
+        JOIN sellers se ON s.seller_id  = se.seller_id 
+        LEFT JOIN store_services ss ON t.store_service_id = ss.store_service_id 
+        LEFT JOIN services sv ON ss.service_id = sv.service_id
         JOIN users u ON t.user_id = u.user_id 
-        WHERE t.user_id = ?
-        ORDER BY t.transaction_id DESC
+        WHERE se.user_id = ?
+        ORDER BY t.transaction_date DESC
     SQL
 
     erb :'seller/seller_items/user_transaction_lists', layout: :'layouts/admin/layout'
