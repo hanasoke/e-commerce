@@ -352,7 +352,7 @@ def validate_item(item_name, item_brand, item_description, item_price, item_stoc
                 "SELECT item_id FROM items 
                 WHERE LOWER(item_name) = ?
                 AND store_id = ?",
-                [item_name.downcase, store_id,]
+                [item_name.downcase, store_id]
             ).first 
         end 
         errors << "Item Name Already exist. Please choose a different item name." if existing_item
@@ -1896,7 +1896,9 @@ end
 
 # Update an item
 post '/edit_an_item/:item_id' do 
-    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], params[:item_id])
+    item = DB.execute("SELECT * FROM items WHERE item_id = ?", [params[:item_id]]).first 
+
+    @errors = validate_item(params[:item_name], params[:item_brand], params[:item_description], params[:item_price], params[:item_stock], params[:item_category], params[:item_unit], params[:item_status], item['store_id'], params[:item_id])
 
     # item_photo
     item_photo = params['item_photo']
