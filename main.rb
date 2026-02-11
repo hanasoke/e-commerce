@@ -70,6 +70,39 @@ def seller_item_count_for(user_id)
     result.to_i
 end 
 
+def seller_wishlist_count_for(user_id)
+    result = DB.get_first_value(<<-SQL, [user_id])
+    SELECT COUNT(*)
+        FROM wishlists w
+        JOIN stores s ON w.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ?
+    SQL
+    result.to_i
+end 
+
+def seller_basket_count_for(user_id)
+    result = DB.get_first_value(<<-SQL, [user_id])
+    SELECT COUNT(*)
+        FROM baskets b
+        JOIN stores s ON b.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ?
+    SQL
+    result.to_i
+end 
+
+def seller_transaction_count_for(user_id)
+    result = DB.get_first_value(<<-SQL, [user_id])
+    SELECT COUNT(*)
+        FROM transactions t
+        JOIN stores s ON t.store_id = s.store_id 
+        JOIN sellers se ON s.seller_id = se.seller_id 
+        WHERE se.user_id = ?
+    SQL
+    result.to_i
+end 
+
 def store_exists_for?(user_id)
     result = DB.get_first_value(<<-SQL, [user_id])
         SELECT COUNT(*)
