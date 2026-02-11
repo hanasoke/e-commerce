@@ -183,6 +183,17 @@ def get_seller_basket_users(seller_user_id)
     SQL
 end 
 
+def get_seller_transactions(seller_user_id)
+  DB.execute(<<-SQL, [seller_user_id])
+    SELECT t.transaction_id
+    FROM transactions t
+    JOIN stores s ON t.store_id = s.store_id
+    JOIN sellers se ON s.seller_id = se.seller_id
+    WHERE se.user_id = ?
+  SQL
+end
+
+
 # validate email 
 def validate_email(email, user_id = nil)
     errors = []

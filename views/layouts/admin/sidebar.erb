@@ -69,7 +69,13 @@
                     </a>
                     <a class="nav-link" href="/user_transaction_lists/<%= current_user['user_id'] %>">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-sitemap"></i></div>
-                        User Transaction Lists
+                        User Transactions &nbsp;
+                        <% transaction_count = get_seller_transactions(session[:user_id]).count %>
+                        <% if transaction_count > 0 %>
+                            <span class="badge bg-danger">
+                                <%= format_count_badge(transaction_count) %>
+                            </span>
+                        <% end %>
                     </a>
 
                     <a class="nav-link" href="/seller_chat/<%= current_user['user_id'] %>">
