@@ -17,25 +17,26 @@
             <div class="card bg-warning text-white mb-4">
                 <div class="card-body"><i class="fa-solid fa-heart"></i> User Wishlists</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white text-decoration-none" href="/admin">View Details</a>
+                    <a class="small text-white stretched-link" href="/users_wishlist/<%= current_user['user_id'] %>">View Details</a>
+                    
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">Success Card</div>
+                <div class="card-body"><i class="fa-solid fa-sitemap"></i> User Basket Lists</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="/user_basket_lists/<%= current_user['user_id'] %>">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Danger Card</div>
+                <div class="card-body"><i class="fa-solid fa-sitemap"></i> User Transaction Lists</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="/user_transaction_lists/<%= current_user['user_id'] %>">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
