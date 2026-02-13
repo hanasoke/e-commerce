@@ -199,7 +199,7 @@
     function shareItem() {
         if (navigator.share) {
             navigator.share({
-                title: '<%= @item['item_name'] %>',
+                title: `<%= @item['item_name'] %>`,
                 text: 'Lihat produk menarik ini di toko kami!',
                 url: window.location.href 
             });
